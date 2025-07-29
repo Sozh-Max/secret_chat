@@ -7,7 +7,8 @@ const tintColorLight = '#0a7ea4';
 const tintColorDark = '#fff';
 
 // export const subColor = '#6b4431';
-export const subColor = '#494949';
+export const SUB_COLOR = '#494949';
+export const MAIN_COLOR = '#6f6e6e';
 
 export const Colors = {
   light: {
@@ -17,7 +18,7 @@ export const Colors = {
     icon: '#687076',
     tabIconDefault: '#687076',
     tabIconSelected: tintColorLight,
-    subColor,
+    subColor: SUB_COLOR,
   },
   dark: {
     text: '#ECEDEE',
@@ -26,6 +27,6 @@ export const Colors = {
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
     tabIconSelected: tintColorDark,
-    subColor,
+    subColor: SUB_COLOR,
   },
 };

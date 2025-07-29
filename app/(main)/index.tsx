@@ -1,8 +1,9 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import Footer from '@/components/Footer/Footer';
 import Header from '@/components/Header/Header';
+import MainChatList from '@/components/MainChatList/MainChatList';
 
 export default function HomeScreen() {
   return (
@@ -13,10 +14,7 @@ export default function HomeScreen() {
       style={styles.wrapper}
     >
       <Header></Header>
-      <View
-        style={styles.body}
-      >
-      </View>
+      <MainChatList></MainChatList>
       <Footer></Footer>
     </LinearGradient>
   );
@@ -29,8 +27,4 @@ const styles = StyleSheet.create({
     // backgroundColor: 'linear-gradient(to bottom, #050404, #240700)',
     // backgroundColor: 'red',
   },
-  body: {
-    flexDirection: 'column',
-    flexGrow: 1,
-  }
 });

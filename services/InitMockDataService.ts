@@ -1,3 +1,4 @@
+import { AGENT_KEYS } from "@/constants/AgentsData";
 import {
 	AsyncStorageService
 } from "@/services/AsyncStorageService";
@@ -37,61 +38,61 @@ export class InitMockDataService {
 
 	async setInitDialogs() {
 		return await AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.DIALOGS, JSON.stringify({
-			"wendy": {
-				"dialog": [],
-				"id": "wendy",
-				"name": "",
-				"createTime": 1753381996889,
-				"lastReplyTime": 0
+			[AGENT_KEYS.wendy]: {
+				dialog: [],
+				id: AGENT_KEYS.wendy,
+				name: "",
+				createTime: 1753381996889,
+				lastReplyTime: 0,
 			},
-			"ashley": {
-				"dialog": [],
-				"id": "ashley",
-				"name": "",
-				"createTime": 1753381996889,
-				"lastReplyTime": 0
+			[AGENT_KEYS.ashley]: {
+				dialog: [],
+				id: AGENT_KEYS.ashley,
+				name: "",
+				createTime: 1753381996889,
+				lastReplyTime: 0,
 			},
-			"jane": {
-				"dialog": [],
-				"id": "jane",
-				"name": "",
-				"createTime": 1753381996889,
-				"lastReplyTime": 0
+			[AGENT_KEYS.jane]: {
+				dialog: [],
+				id: AGENT_KEYS.jane,
+				name: "",
+				createTime: 1753381996889,
+				lastReplyTime: 0
 			},
-			"elise": {
-				"dialog": [],
-				"id": "elise",
-				"name": "",
-				"createTime": 1753381996889,
-				"lastReplyTime": 0
+			[AGENT_KEYS.elise]: {
+				dialog: [],
+				id: AGENT_KEYS.elise,
+				name: "",
+				createTime: 1753381996889,
+				lastReplyTime: 0,
 			},
-			"dakota": {
-				"dialog": [],
-				"id": "dakota",
-				"name": "",
-				"createTime": 1753381996889,
-				"lastReplyTime": 0
+			[AGENT_KEYS.dakota]: {
+				dialog: [],
+				id: AGENT_KEYS.dakota,
+				name: "",
+				createTime: 1753381996889,
+				lastReplyTime: 0,
 			},
-			"lumi": {
-				"dialog": [],
-				"id": "lumi",
-				"name": "",
-				"createTime": 1753381996889,
-				"lastReplyTime": 0
+			[AGENT_KEYS.lumi]: {
+				dialog: [],
+				id: AGENT_KEYS.lumi,
+				name: "",
+				createTime: 1753381996889,
+				lastReplyTime: 0,
 			},
-			"yumi": {
-				"dialog": [],
-				"id": "yumi",
-				"name": "",
-				"createTime": 1753381996889,
-				"lastReplyTime": 0
+			[AGENT_KEYS.yumi]: {
+				dialog: [],
+				id: AGENT_KEYS.yumi,
+				name: "",
+				createTime: 1753381996889,
+				lastReplyTime: 0
 			},
-			"lola": {
-				"dialog": [],
-				"id": "lola",
-				"name": "",
-				"createTime": 1753381996889,
-				"lastReplyTime": 0
+			[AGENT_KEYS.lola]: {
+				dialog: [],
+				id: AGENT_KEYS.lola,
+				name: "",
+				createTime: 1753381996889,
+				lastReplyTime: 0
 			}
 		}))
 	}

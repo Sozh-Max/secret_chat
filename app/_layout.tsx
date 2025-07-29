@@ -1,5 +1,4 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
@@ -9,17 +8,32 @@ import { GlobalProvider } from '@/contexts/GlobalContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { InitMockDataService } from '@/services/InitMockDataService';
 
+import {
+  useFonts,
+  NotoSans_400Regular,
+  NotoSans_600SemiBold,
+  NotoSans_700Bold,
+  NotoSans_800ExtraBold,
+} from '@expo-google-fonts/noto-sans';
+
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+  // const [loaded] = useFonts({
+  //   SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+  // });
+  const [fontsLoaded] = useFonts({
+    NotoSans_400Regular,
+    NotoSans_600SemiBold,
+    NotoSans_700Bold,
+    NotoSans_800ExtraBold,
   });
+
   
   useEffect(() => {
     new InitMockDataService();
   }, [])
 
-  if (!loaded) {
+  if (!fontsLoaded) {
     // Async font loading only occurs in development.
     return null;
   }
@@ -30,7 +44,6 @@ export default function RootLayout() {
     <GlobalProvider>
       <Stack>
         <Stack.Screen name="(main)" options={{ headerShown: false }} />
-
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />

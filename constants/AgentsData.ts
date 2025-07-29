@@ -9,7 +9,7 @@ export const enum AGENT_KEYS {
   lola = 'lola',
 }
 
-export const AGENTS_DATA = {
+export const AGENTS_DATA: Record<AGENT_KEYS, string> = {
   [AGENT_KEYS.wendy]: 'Wendy’s a cool young girl from Ireland✨ She’s got an awesome sense of humor 😆 and always sees the bright side of life 🌞💖 DM her if you wanna know more… 👀💬',
   [AGENT_KEYS.ashley]: 'Ashley’s a sweet, curvy babe from the USA 🇺🇸💖 Always upbeat and down to chat about anything — no filters! 🎉💬 Don’t be shy, hit her up! 😊✨',
   [AGENT_KEYS.jane]: 'Jane — a classy, independent Aussie woman 🌊🇦🇺📖 Loses herself in classic novels and sunset beach walks. Your move, gentleman. 😉🌅✨',
