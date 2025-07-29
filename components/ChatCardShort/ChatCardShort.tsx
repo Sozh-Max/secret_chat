@@ -1,33 +1,32 @@
 import { Image } from 'expo-image';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, View, Pressable } from 'react-native';
 
-import { AGENT_KEYS } from '@/constants/AgentsData';
-import { MAIN_COLOR, SUB_COLOR } from '@/constants/Colors';
+import { AGENT_KEYS, IMG_THUMB_MAP } from '@/constants/AgentsData';
+import { MAIN_COLOR } from '@/constants/Colors';
 import { IDialogPreview } from '@/contexts/GlobalContext';
 import { IconPlayShort } from '@/components/icons/IconPlayShort';
 import { IconRating } from '@/components/icons/IconRating';
+import { router } from 'expo-router';
 
-const IMG_THUMB_MAP: Record<AGENT_KEYS, string> = {
-  [AGENT_KEYS.wendy]: require(`@/assets/images/wendy/thumb.jpg`),
-  [AGENT_KEYS.ashley]: require(`@/assets/images/ashley/thumb.jpg`),
-  [AGENT_KEYS.jane]: require(`@/assets/images/jane/thumb.jpg`),
-  [AGENT_KEYS.elise]: require(`@/assets/images/elise/thumb.jpg`),
-  [AGENT_KEYS.dakota]: require(`@/assets/images/dakota/thumb.jpg`),
-  [AGENT_KEYS.lumi]: require(`@/assets/images/lumi/thumb.jpg`),
-  [AGENT_KEYS.yumi]: require(`@/assets/images/yumi/thumb.jpg`),
-  [AGENT_KEYS.lola]: require(`@/assets/images/lola/thumb.jpg`),
-};
+const screenWidth = Dimensions.get('window').width;
 
-  const screenWidth = Dimensions.get('window').width;
 const ChatCardShort = ({
   data,
 }: {
   data: IDialogPreview;
 }) => {
-  // const url = `@/assets/images/${data.id}/thumb.jpg`;
-  
+  const handlePress = () => {
+    router.push({
+      pathname: '/screen-chat',
+      params: { id: data.id },
+    });
+  }
+
   return (
-    <View style={styles.item}>
+    <Pressable
+      style={styles.item}
+      onPress={handlePress}
+    >
       <View style={styles.avatar_container}>
         <Image
           source={IMG_THUMB_MAP[data.id]}
@@ -46,7 +45,7 @@ const ChatCardShort = ({
             {data.id}
           </Text>
           {data.id === AGENT_KEYS.ashley && (
-            <IconPlayShort />
+            <IconPlayShort/>
           )}
         </View>
         <Text style={styles.description} numberOfLines={1} ellipsizeMode="tail">
@@ -54,12 +53,12 @@ const ChatCardShort = ({
         </Text>
       </View>
       <View style={styles.rating}>
-        <IconRating />
+        <IconRating/>
         <Text style={styles.rating_value}>{data.id === AGENT_KEYS.ashley ? 25 : 10}</Text>
       </View>
-    </View>
-  )
-}
+    </Pressable>
+  );
+};
 
 const styles = StyleSheet.create({
   avatar_container: {

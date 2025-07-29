@@ -5,7 +5,8 @@ import Footer from '@/components/Footer/Footer';
 import Header from '@/components/Header/Header';
 import MainChatList from '@/components/MainChatList/MainChatList';
 
-export default function HomeScreen() {
+export default function ScreenChatLobby() {
+
   return (
     <LinearGradient
       colors={['rgb(5, 4, 4)', 'rgb(22, 22, 22)']}
@@ -24,7 +25,5 @@ const styles = StyleSheet.create({
   wrapper: {
     flexDirection: 'column',
     height: '100%',
-    // backgroundColor: 'linear-gradient(to bottom, #050404, #240700)',
-    // backgroundColor: 'red',
   },
 });

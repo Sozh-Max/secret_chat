@@ -29,4 +29,27 @@ export const INIT_AGENT_LIST = [
   AGENT_KEYS.lumi,
   AGENT_KEYS.yumi,
   AGENT_KEYS.lola
-]
+];
+
+export const IMG_THUMB_MAP: Record<AGENT_KEYS, string> = {
+  [AGENT_KEYS.wendy]: require(`@/assets/images/wendy/thumb.jpg`),
+  [AGENT_KEYS.ashley]: require(`@/assets/images/ashley/thumb.jpg`),
+  [AGENT_KEYS.jane]: require(`@/assets/images/jane/thumb.jpg`),
+  [AGENT_KEYS.elise]: require(`@/assets/images/elise/thumb.jpg`),
+  [AGENT_KEYS.dakota]: require(`@/assets/images/dakota/thumb.jpg`),
+  [AGENT_KEYS.lumi]: require(`@/assets/images/lumi/thumb.jpg`),
+  [AGENT_KEYS.yumi]: require(`@/assets/images/yumi/thumb.jpg`),
+  [AGENT_KEYS.lola]: require(`@/assets/images/lola/thumb.jpg`),
+};
+
+export const IMG_POSTER_MAP: Record<AGENT_KEYS, string> = {
+  [AGENT_KEYS.wendy]: require(`@/assets/images/wendy/poster.webp`),
+  [AGENT_KEYS.ashley]: require(`@/assets/images/ashley/poster.webp`),
+  [AGENT_KEYS.jane]: require(`@/assets/images/jane/poster.webp`),
+  [AGENT_KEYS.elise]: require(`@/assets/images/elise/poster.webp`),
+  [AGENT_KEYS.dakota]: require(`@/assets/images/dakota/poster.webp`),
+  [AGENT_KEYS.lumi]: require(`@/assets/images/lumi/poster.webp`),
+  [AGENT_KEYS.yumi]: require(`@/assets/images/yumi/poster.webp`),
+  [AGENT_KEYS.lola]: require(`@/assets/images/lola/poster.webp`),
+};
+

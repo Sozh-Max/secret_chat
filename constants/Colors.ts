@@ -9,6 +9,7 @@ const tintColorDark = '#fff';
 // export const subColor = '#6b4431';
 export const SUB_COLOR = '#494949';
 export const MAIN_COLOR = '#6f6e6e';
+export const LOW_COLOR = '#323232';
 
 export const Colors = {
   light: {

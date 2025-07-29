@@ -7,7 +7,6 @@ import { useGlobal } from '@/contexts/GlobalContext';
 const MainChatList = () => {
   const { dialogPreview } = useGlobal();
 
-
   return (
     <View style={styles.body}>
       <View style={styles.body_inner}>

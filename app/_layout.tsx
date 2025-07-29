@@ -28,10 +28,10 @@ export default function RootLayout() {
     NotoSans_800ExtraBold,
   });
 
-  
+
   useEffect(() => {
     new InitMockDataService();
-  }, [])
+  }, []);
 
   if (!fontsLoaded) {
     // Async font loading only occurs in development.
@@ -41,13 +41,19 @@ export default function RootLayout() {
 //        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-    <GlobalProvider>
-      <Stack>
-        <Stack.Screen name="(main)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </GlobalProvider>
+      <GlobalProvider>
+        <Stack
+          screenOptions={{
+            animation: 'fade', // или 'fade', 'simple_push', 'default', 'slide_from_right'
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="screen-chat" />
+          <Stack.Screen name="settings" />
+          <Stack.Screen name="+not-found"/>
+        </Stack>
+        <StatusBar style="auto"/>
+      </GlobalProvider>
     </ThemeProvider>
   );
 }

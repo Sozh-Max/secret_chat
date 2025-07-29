@@ -38,6 +38,7 @@ export interface IDialogPreview {
   description: string;
 }
 
+
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
 
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
