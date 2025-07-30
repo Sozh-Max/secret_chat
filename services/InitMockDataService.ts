@@ -1,4 +1,4 @@
-import { AGENT_KEYS } from "@/constants/AgentsData";
+import { AGENT_KEYS } from "@/constants/agents-data";
 import {
 	AsyncStorageService
 } from "@/services/AsyncStorageService";

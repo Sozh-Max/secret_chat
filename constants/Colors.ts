@@ -10,6 +10,7 @@ const tintColorDark = '#fff';
 export const SUB_COLOR = '#494949';
 export const MAIN_COLOR = '#6f6e6e';
 export const LOW_COLOR = '#323232';
+export const CHAT_COLOR = '#111111db';
 
 export const Colors = {
   light: {

@@ -7,8 +7,4 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     height: screenHeight,
   },
-  image_background: {
-    flexDirection: 'column',
-    flexGrow: 1,
-  },
 });

@@ -1,17 +1,15 @@
 import { Platform, Pressable, StyleSheet, TextInput, View, Text } from 'react-native';
-import { AGENT_KEYS } from '@/constants/AgentsData';
 import IconSend from '@/components/icons/IconSend';
 import IconSmile from '@/components/icons/IconSmile';
 import { useState } from 'react';
 import { MAIN_COLOR } from '@/constants/Colors';
-import { EMOJI_LIST } from '@/components/ChatInput/constants';
+import { EMOJI_LIST } from '@/pages/ChatPage/content/chat-input/constants';
 import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
+import { IdTypeProps } from '@/interfaces/global';
 
 const ChatInput = ({
   id,
-}: {
-  id: AGENT_KEYS
-}) => {
+}: IdTypeProps) => {
   const [text, setText] = useState<string>('');
   const [isVisiblePicker, setIsVisiblePicker] = useState<boolean>(false);
 

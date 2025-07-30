@@ -53,3 +53,14 @@ export const IMG_POSTER_MAP: Record<AGENT_KEYS, string> = {
   [AGENT_KEYS.lola]: require(`@/assets/images/lola/poster.webp`),
 };
 
+export const IMG_PREVIEW_MAP: Record<AGENT_KEYS, string> = {
+  [AGENT_KEYS.wendy]: require(`@/assets/images/wendy/preview.jpg`),
+  [AGENT_KEYS.ashley]: require(`@/assets/images/ashley/preview.jpg`),
+  [AGENT_KEYS.jane]: require(`@/assets/images/jane/preview.jpg`),
+  [AGENT_KEYS.elise]: require(`@/assets/images/elise/preview.jpg`),
+  [AGENT_KEYS.dakota]: require(`@/assets/images/dakota/preview.jpg`),
+  [AGENT_KEYS.lumi]: require(`@/assets/images/lumi/preview.jpg`),
+  [AGENT_KEYS.yumi]: require(`@/assets/images/yumi/preview.jpg`),
+  [AGENT_KEYS.lola]: require(`@/assets/images/lola/preview.jpg`),
+};
+

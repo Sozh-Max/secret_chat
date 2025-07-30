@@ -1,7 +1,7 @@
 import { Image } from 'expo-image';
 import { Dimensions, StyleSheet, Text, View, Pressable } from 'react-native';
 
-import { AGENT_KEYS, IMG_THUMB_MAP } from '@/constants/AgentsData';
+import { AGENT_KEYS, IMG_THUMB_MAP } from '@/constants/agents-data';
 import { MAIN_COLOR } from '@/constants/Colors';
 import { IDialogPreview } from '@/contexts/GlobalContext';
 import { IconPlayShort } from '@/components/icons/IconPlayShort';

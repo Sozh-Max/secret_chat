@@ -1,12 +1,11 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { AGENT_KEYS, IMG_POSTER_MAP } from '@/constants/AgentsData';
+import { AGENT_KEYS } from '@/constants/agents-data';
 import { useEffect } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
-import HeaderChat from '@/components/HeaderChat/HeaderChat';
-import { ImageBackground } from 'expo-image';
-import { View } from 'react-native';
-import ChatInput from '@/components/ChatInput/ChatInput';
+import Header from '@/pages/ChatPage/content/header/Header';
+import ChatInput from '@/pages/ChatPage/content/chat-input/ChatInput';
 import { styles } from '@/pages/ChatPage/styles';
+import { ChatWrapper } from '@/pages/ChatPage/content/chat-wrapper/ChatWrapper';
 
 export const ChatPage = () => {
 
@@ -25,17 +24,8 @@ export const ChatPage = () => {
       end={{ x: 0, y: 1 }}
       style={styles.wrapper}
     >
-      <HeaderChat
-        id={id}
-      />
-      <ImageBackground
-        source={IMG_POSTER_MAP[id]}
-        style={styles.image_background}
-      >
-        <View>
-
-        </View>
-      </ImageBackground>
+      <Header id={id} />
+      <ChatWrapper id={id} />
       <ChatInput id={id} />
     </LinearGradient>
   );

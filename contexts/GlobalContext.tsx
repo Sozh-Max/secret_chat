@@ -1,4 +1,4 @@
-import { AGENT_KEYS, AGENTS_DATA, INIT_AGENT_LIST } from '@/constants/AgentsData';
+import { AGENT_KEYS, AGENTS_DATA, INIT_AGENT_LIST } from '@/constants/agents-data';
 import { AsyncStorageService } from '@/services/AsyncStorageService';
 import { LOCAL_STORAGE_KEYS } from '@/services/constants';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
