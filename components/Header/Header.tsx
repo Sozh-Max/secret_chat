@@ -1,15 +1,17 @@
 import { Image } from 'expo-image';
-import { Animated, Pressable, StyleSheet, View } from 'react-native';
-import { useRef } from 'react';
+import { StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { IconMenu } from '../icons/IconMenu';
 import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
+import { router } from 'expo-router';
 
 const Header = () => {
   const { tokens } = useGlobal();
+
+  const handlePressSettings = () => router.push('/settings')
 
   return (
     <ThemedView
@@ -52,7 +54,7 @@ const Header = () => {
         {/*    <IconMenu/>*/}
         {/*  </Animated.View>*/}
         {/*</Pressable>*/}
-        <AnimatedPressBtn style={styles.setting}>
+        <AnimatedPressBtn style={styles.setting} onPress={handlePressSettings}>
           <IconMenu />
         </AnimatedPressBtn>
       </View>
