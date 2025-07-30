@@ -4,20 +4,22 @@ import { ReactNode, useRef } from 'react';
 type AnimatedPressBtnProps = {
   style?: StyleProp<ViewStyle>;
   children: ReactNode;
-  onPress?: PressableProps['onPress']; // Это правильный тип для onPress
+  onPress?: PressableProps['onPress'];
+  scaleEnd?: number;
 };
 
 export const AnimatedPressBtn = ({
   style,
   children,
   onPress = () => {},
+  scaleEnd = 0.85,
 }: AnimatedPressBtnProps) => {
 
   const scale = useRef(new Animated.Value(1)).current;
 
   const handlePressIn = () => {
     Animated.spring(scale, {
-      toValue: 0.85,
+      toValue: scaleEnd,
       useNativeDriver: true,
     }).start();
   };

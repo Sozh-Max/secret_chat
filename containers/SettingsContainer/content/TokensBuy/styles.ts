@@ -49,4 +49,7 @@ export const styles = StyleSheet.create({
   l: {
     fontSize: 24,
   },
+  btn_container: {
+    marginTop: 6,
+  },
 });
