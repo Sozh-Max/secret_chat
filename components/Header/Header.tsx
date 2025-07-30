@@ -6,25 +6,10 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { IconMenu } from '../icons/IconMenu';
+import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
 
 const Header = () => {
   const { tokens } = useGlobal();
-
-  const scale = useRef(new Animated.Value(1)).current;
-
-  const handlePressIn = () => {
-    Animated.spring(scale, {
-      toValue: 0.85,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const handlePressOut = () => {
-    Animated.spring(scale, {
-      toValue: 1,
-      useNativeDriver: true,
-    }).start();
-  };
 
   return (
     <ThemedView
@@ -62,25 +47,14 @@ const Header = () => {
         {tokens}
       </ThemedText>
       <View>
-        {/*<View*/}
-        {/*  style={styles.setting}*/}
-        {/*>*/}
-        {/*  /!* <Image*/}
-        {/*    source={require('@/assets/images/ico-menu.svg')}*/}
-        {/*    style={{*/}
-        {/*      alignSelf: 'center',*/}
-        {/*      width: 24,*/}
-        {/*      height: 24,*/}
-        {/*      */}
-        {/*    }}*/}
-        {/*  /> *!/*/}
-        {/*  <IconMenu/>*/}
-        {/*</View>*/}
-        <Pressable onPressIn={handlePressIn} onPressOut={handlePressOut}>
-          <Animated.View style={[styles.setting, { transform: [{ scale }] }]}>
-            <IconMenu/>
-          </Animated.View>
-        </Pressable>
+        {/*<Pressable onPressIn={handlePressIn} onPressOut={handlePressOut}>*/}
+        {/*  <Animated.View style={[styles.setting, { transform: [{ scale }] }]}>*/}
+        {/*    <IconMenu/>*/}
+        {/*  </Animated.View>*/}
+        {/*</Pressable>*/}
+        <AnimatedPressBtn style={styles.setting}>
+          <IconMenu />
+        </AnimatedPressBtn>
       </View>
     </ThemedView>
   );
