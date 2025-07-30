@@ -1,6 +1,6 @@
 import { Pressable, View, Text } from 'react-native';
 import { IconBackBtn } from '@/components/icons/IconBackBtn';
-import { styles } from '@/containers/SettingsContainer/content/Header/styles';
+import { styles } from '@/pages/SettingsPage/content/Header/styles';
 import { router } from 'expo-router';
 
 export const Header = () => {

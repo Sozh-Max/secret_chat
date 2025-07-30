@@ -1,13 +1,13 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { View, Text } from 'react-native';
-import { Header } from '@/containers/SettingsContainer/content/Header/Header';
-import { SettingsContent } from '@/containers/SettingsContainer/content/SettingsContent/SettingsContent';
+import { Header } from '@/pages/SettingsPage/content/Header/Header';
+import { SettingsContent } from '@/pages/SettingsPage/content/SettingsContent/SettingsContent';
 import { useGlobal } from '@/contexts/GlobalContext';
-import { TokensBuy } from '@/containers/SettingsContainer/content/TokensBuy/TokensBuy';
-import { styles } from '@/containers/SettingsContainer/styles';
-import { LogAccount } from '@/containers/SettingsContainer/content/LogAccount/LogAccount';
+import { TokensBuy } from '@/pages/SettingsPage/content/TokensBuy/TokensBuy';
+import { styles } from '@/pages/SettingsPage/styles';
+import { LogAccount } from '@/pages/SettingsPage/content/LogAccount/LogAccount';
 
-export const SettingsContainer = () => {
+export const SettingsPage = () => {
   const { tokens } = useGlobal();
 
   return (
@@ -47,9 +47,7 @@ export const SettingsContainer = () => {
         <SettingsContent
           title='System info'
           description='Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1'
-        >
-
-        </SettingsContent>
+        />
 
       </View>
     </LinearGradient>

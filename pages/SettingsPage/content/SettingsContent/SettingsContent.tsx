@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { View, Text } from 'react-native';
 
-import { styles } from '@/containers/SettingsContainer/content/SettingsContent/style';
+import { styles } from '@/pages/SettingsPage/content/SettingsContent/style';
 
 type SettingsContentProps = {
   title: string;

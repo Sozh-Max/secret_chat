@@ -1,5 +1,5 @@
 import { PressableProps, Text } from 'react-native';
-import { styles } from '@/containers/SettingsContainer/content/CustomButton/styles';
+import { styles } from '@/pages/SettingsPage/content/CustomButton/styles';
 import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
 import { ReactNode } from 'react';
 

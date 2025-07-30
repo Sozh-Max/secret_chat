@@ -1,8 +1,8 @@
-import { SettingsContainer } from '@/containers/SettingsContainer/SettingsContainer';
+import { SettingsPage } from '@/pages/SettingsPage/SettingsPage';
 
 export default function Settings() {
 
   return (
-    <><SettingsContainer /></>
+    <><SettingsPage /></>
   );
 }

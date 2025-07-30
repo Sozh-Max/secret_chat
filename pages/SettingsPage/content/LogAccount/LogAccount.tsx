@@ -1,6 +1,6 @@
 import { View } from 'react-native';
-import { styles } from '@/containers/SettingsContainer/content/LogAccount/styles';
-import { CustomButton } from '@/containers/SettingsContainer/content/CustomButton/CustomButton';
+import { styles } from '@/pages/SettingsPage/content/LogAccount/styles';
+import { CustomButton } from '@/pages/SettingsPage/content/CustomButton/CustomButton';
 import { IconGoogle } from '@/components/icons/IconGoogle';
 import { IconApple } from '@/components/icons/IconApple';
 
