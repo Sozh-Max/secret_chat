@@ -7,12 +7,10 @@ export const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     gap: '2%',
-    overflow: 'hidden',
     paddingBottom: 6,
     paddingTop: 6,
   },
   item: {
-    width: '23.5%',
     backgroundColor: '#171717',
     cursor: 'pointer',
     paddingLeft: 8,
@@ -25,6 +23,9 @@ export const styles = StyleSheet.create({
   item_active: {
     backgroundColor: '#313131',
     borderColor: '#707070',
+  },
+  item_wrapper: {
+    width: '23.5%',
   },
   emoji: {
     textAlign: 'center',
