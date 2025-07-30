@@ -5,6 +5,7 @@ import { SettingsContent } from '@/containers/SettingsContainer/content/Settings
 import { useGlobal } from '@/contexts/GlobalContext';
 import { TokensBuy } from '@/containers/SettingsContainer/content/TokensBuy/TokensBuy';
 import { styles } from '@/containers/SettingsContainer/styles';
+import { LogAccount } from '@/containers/SettingsContainer/content/LogAccount/LogAccount';
 
 export const SettingsContainer = () => {
   const { tokens } = useGlobal();
@@ -40,12 +41,12 @@ export const SettingsContainer = () => {
           title='Account'
           description="To ensure privacy, message history is stored only on this device, we do not collect or store this type of data. Certain hidden features are available depending on the user's account level"
         >
-
+          <LogAccount />
         </SettingsContent>
 
         <SettingsContent
           title='System info'
-          description='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36'
+          description='Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1'
         >
 
         </SettingsContent>

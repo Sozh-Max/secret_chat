@@ -5,7 +5,7 @@ import { styles } from '@/containers/SettingsContainer/content/SettingsContent/s
 
 type SettingsContentProps = {
   title: string;
-  description?: string;
+  description?: string | ReactNode;
   children?: ReactNode;
 }
 

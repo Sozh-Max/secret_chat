@@ -17,8 +17,15 @@ export const styles = StyleSheet.create({
     borderColor: '#1e1e1e',
     borderTopColor: '#373737',
   },
+  button_disabled: {
+    backgroundColor: '#181818',
+  },
   text: {
     fontSize: 14,
     color: '#fff',
+    fontFamily: 'NotoSans_400Regular',
   },
+  text_disabled: {
+    color: '#535353',
+  }
 });

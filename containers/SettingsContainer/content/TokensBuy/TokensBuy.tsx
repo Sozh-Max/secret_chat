@@ -81,6 +81,7 @@ export const TokensBuy = () => {
       <View style={styles.btn_container}>
         <CustomButton
           text="Buy"
+          disabled={true}
         />
       </View>
     </View>
