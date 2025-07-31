@@ -36,6 +36,26 @@ export interface IDialogPreview {
   lastMessageTime: number | null;
 }
 
+const refreshChats = ({
+  dialogs,
+  setDialogPreview,
+}: {
+  dialogs: Dialogs;
+  setDialogPreview: Dispatch<SetStateAction<IDialogPreview[]>>;
+}) => {
+  setDialogPreview(INIT_AGENT_LIST.map((key: AGENT_KEYS) => {
+    const dialog: IDialog = dialogs[key] as IDialog;
+
+    const lastMessage: IDialogItem | undefined = dialog?.dialog?.[dialog.dialog.length - 1];
+
+    return {
+      id: key,
+      description: AGENTS_DATA[key],
+      message: lastMessage?.replic?.content || '',
+      lastMessageTime: lastMessage?.createTime ?? null,
+    };
+  }).sort((a, b) => b.lastMessageTime - a.lastMessageTime));
+}
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
 
@@ -58,28 +78,25 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
       setDialogs(dialogs);
 
-      setDialogPreview(INIT_AGENT_LIST.map((key: AGENT_KEYS) => {
-        const dialog: IDialog = dialogs[key];
-
-        const lastMessage: IDialogItem | undefined = dialog?.dialog?.[dialog.dialog.length - 1];
-
-        return {
-          id: key,
-          description: AGENTS_DATA[key],
-          message: lastMessage?.replic?.content || '',
-          lastMessageTime: lastMessage?.createTime ?? null,
-        };
-      }).sort((a, b) => b.lastMessageTime - a.lastMessageTime));
+      refreshChats({
+        dialogs,
+        setDialogPreview,
+      });
     };
 
     getInitData();
   }, []);
-  console.log(dialogPreview);
+
   useEffect(() => {
     if (dialogs[AGENT_KEYS.wendy] && dialogs[AGENT_KEYS.ashley]) {
       AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.DIALOGS, JSON.stringify(dialogs));
+
+      refreshChats({
+        dialogs,
+        setDialogPreview,
+      });
     }
-  }, [dialogs]);
+  }, [dialogs, setDialogPreview]);
 
   useEffect(() => {
     AsyncStorageService.storeDataBySubKey(LOCAL_STORAGE_KEYS.USER_DATA, LOCAL_STORAGE_KEYS.TOKENS, tokens);
