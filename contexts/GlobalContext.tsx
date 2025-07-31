@@ -83,7 +83,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         setDialogPreview,
       });
     };
-
+    // AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.IS_INIT, '');
     getInitData();
   }, []);
 

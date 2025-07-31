@@ -13,9 +13,11 @@ export const ChatPage = () => {
 
   useEffect(() => {
     if (!id) {
-      router.push('/');
+      console.log(1111111, id);
+
+      router.navigate('/');
     }
-  }, [id]);
+  }, []);
 
   return (
     <LinearGradient

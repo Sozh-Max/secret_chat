@@ -48,7 +48,8 @@ export default function RootLayout() {
             headerShown: false,
           }}
         >
-          <Stack.Screen name="screen-chat" />
+          <Stack.Screen name="index" />
+          <Stack.Screen name="chat" />
           <Stack.Screen name="settings" />
           <Stack.Screen name="+not-found"/>
         </Stack>

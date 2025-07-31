@@ -6,13 +6,14 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     height: 80,
+    maxWidth: '100%',
   },
-  container: {
-    flexDirection: 'row',
-    paddingLeft: 13,
-    paddingRight: 13,
-    flexGrow: 1,
-  },
+  // container: {
+  //   flexDirection: 'row',
+  //   paddingLeft: 13,
+  //   paddingRight: 13,
+  //   flexGrow: 1,
+  // },
   button: {
     width: 50,
     height: 80,
@@ -42,11 +43,13 @@ export const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
+    marginLeft: 13,
   },
   info: {
     paddingLeft: 13,
     flexGrow: 1,
     justifyContent: 'center',
+    marginRight: 13,
   },
   label: {
     fontSize: 14,

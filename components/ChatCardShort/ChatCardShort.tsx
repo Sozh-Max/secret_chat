@@ -17,7 +17,7 @@ const ChatCardShort = ({
 }) => {
   const handlePress = () => {
     router.push({
-      pathname: '/screen-chat',
+      pathname: '/chat',
       params: { id: data.id },
     });
   }

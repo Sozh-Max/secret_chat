@@ -53,21 +53,21 @@ const Header = ({
         <IconBackBtn/>
       </Pressable>
 
-      <View
-        style={styles.container}
-      >
-        <Image
-          source={IMG_THUMB_MAP[id]}
-          style={styles.img}
-        />
-        <View style={styles.info}>
-          <ThemedText style={styles.label}>{id}</ThemedText>
-          <View style={styles.rating}>
-            <IconRating/>
-            <Text style={styles.rating_value}>{id === AGENT_KEYS.ashley ? 25 : 10}</Text>
-          </View>
+      {/*<View*/}
+      {/*  style={styles.container}*/}
+      {/*>*/}
+      <Image
+        source={IMG_THUMB_MAP[id]}
+        style={styles.img}
+      />
+      <View style={styles.info}>
+        <ThemedText style={styles.label}>{id}</ThemedText>
+        <View style={styles.rating}>
+          <IconRating/>
+          <Text style={styles.rating_value}>{id === AGENT_KEYS.ashley ? 25 : 10}</Text>
         </View>
       </View>
+      {/*</View>*/}
 
       {isShowNotice
         ? (
