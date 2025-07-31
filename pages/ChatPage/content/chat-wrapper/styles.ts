@@ -22,7 +22,4 @@ export const styles = StyleSheet.create({
     paddingBottom: 20,
     // scrollBehavior: 'smooth',
   },
-  typing: {
-    color: '#fff',
-  },
 });

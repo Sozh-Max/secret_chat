@@ -9,7 +9,7 @@ import { ChatWrapper } from '@/pages/ChatPage/content/chat-wrapper/ChatWrapper';
 
 export const ChatPage = () => {
   const { id } = useLocalSearchParams<{ id: AGENT_KEYS }>();
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (!id) {

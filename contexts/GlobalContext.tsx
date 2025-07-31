@@ -19,7 +19,7 @@ export interface IDialog {
   name: string;
 }
 
-type Dialogs = { [key in AGENT_KEYS]?: IDialog }
+export type Dialogs = { [key in AGENT_KEYS]?: IDialog }
 
 type GlobalContextType = {
   tokens: number;

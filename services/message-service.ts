@@ -25,7 +25,7 @@ const setData = ({
   setDialogs: Dispatch<SetStateAction<Dialogs>>;
   timestamp: number;
 }) => {
-  setDialogs((d) => {
+  setDialogs((d: Dialogs) => {
     const current = {...d[id]};
     current.dialog = [
       ...(current.dialog || []),
