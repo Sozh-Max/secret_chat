@@ -24,7 +24,7 @@ const setData = ({
   id: AGENT_KEYS;
   setDialogs: Dispatch<SetStateAction<Dialogs>>;
   timestamp: number;
-}) => {
+}): void => {
   setDialogs((d: Dialogs) => {
     const current = {...d[id]};
     current.dialog = [
@@ -56,7 +56,7 @@ class MessageService {
     setDialogs: Dispatch<SetStateAction<Dialogs>>;
     assistantDialog: IDialogItem[];
     setLoading: (state: boolean) => void;
-  }) {
+  }): Promise<void> {
     const replic: IMessage = {
       content: message,
       role: ROLES.USER,
@@ -88,6 +88,23 @@ class MessageService {
         }
       }
     }).finally(() => setLoading(false));
+  }
+
+  removeHistoryById({
+    id,
+    setDialogs
+  }:  {
+    id: AGENT_KEYS;
+    setDialogs: Dispatch<SetStateAction<Dialogs>>;
+  }): void {
+    setDialogs((d: Dialogs) => {
+      const current = {...d[id]};
+      current.dialog = [];
+      return {
+        ...d,
+        [id]: current,
+      }
+    });
   }
 }
 

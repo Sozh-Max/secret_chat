@@ -1,7 +1,7 @@
 import { AGENT_KEYS, AGENTS_DATA, INIT_AGENT_LIST } from '@/constants/agents-data';
 import { AsyncStorageService } from '@/services/AsyncStorageService';
 import { LOCAL_STORAGE_KEYS } from '@/services/constants';
-import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import React, { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react';
 import { IMessage } from '@/api/interfaces';
 
 export interface IDialogItem {
@@ -25,7 +25,7 @@ type GlobalContextType = {
   tokens: number;
   dialogs: Dialogs;
   dialogPreview: IDialogPreview[];
-  setDialogs: (dialogs: Dialogs) => void;
+  setDialogs: Dispatch<SetStateAction<Dialogs>>;
 };
 
 export interface IDialogPreview {

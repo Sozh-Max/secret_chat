@@ -19,6 +19,25 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  button_clear: {
+    width: 80,
+    height: 80,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button_clear_notice: {
+    backgroundColor: '#ff0033',
+    paddingLeft: 12,
+    paddingRight: 12,
+    borderRadius: 12,
+  },
+  text_clear: {
+    fontSize: 10,
+    lineHeight: 24,
+    fontFamily: 'NotoSans_600SemiBold',
+    color: '#fff',
+    textTransform: 'uppercase',
+  },
   img: {
     width: 60,
     height: 60,

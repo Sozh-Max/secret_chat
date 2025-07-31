@@ -1,4 +1,4 @@
-import { styles } from '@/pages/ChatPage/content/TypingComponent/styles';
+import { styles } from '@/pages/ChatPage/content/typing-component/styles';
 import { useEffect, useRef } from 'react';
 import { Animated, Easing } from 'react-native';
 

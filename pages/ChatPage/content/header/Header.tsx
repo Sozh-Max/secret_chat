@@ -8,14 +8,40 @@ import { IconRating } from '@/components/icons/IconRating';
 import { ThemedText } from '@/components/ThemedText';
 import { IdTypeProps } from '@/interfaces/global';
 import { styles } from '@/pages/ChatPage/content/header/styles';
+import { useRef, useState } from 'react';
+import { messageService } from '@/services/message-service';
+import { useGlobal } from '@/contexts/GlobalContext';
 
 const Header = ({
   id,
 }: IdTypeProps) => {
+  const [isShowNotice, setShowNotice] = useState(false);
+  const timeoutIdRef = useRef<number | null>(null);
+  const { setDialogs } = useGlobal();
 
   const handlePressBackBtn = () => {
     router.push('/');
-  }
+  };
+
+  const handlePressClear = () => {
+    setShowNotice(true);
+
+    if (timeoutIdRef.current !== null) {
+      clearTimeout(timeoutIdRef.current);
+    }
+
+    timeoutIdRef.current = setTimeout(() => {
+      setShowNotice(false);
+    }, 3500);
+  };
+
+  const handleRemoveHistory = () => {
+    setShowNotice(false);
+    messageService.removeHistoryById({
+      id,
+      setDialogs,
+    });
+  };
 
   return (
     <View style={styles.wrapper}>
@@ -23,7 +49,7 @@ const Header = ({
         style={styles.button}
         onPress={handlePressBackBtn}
       >
-        <IconBackBtn />
+        <IconBackBtn/>
       </Pressable>
 
       <View
@@ -42,13 +68,27 @@ const Header = ({
         </View>
       </View>
 
-      <Pressable
-        style={styles.button}
-      >
-        <IconRemove />
-      </Pressable>
+      {isShowNotice
+        ? (
+          <Pressable
+            style={styles.button_clear}
+            onPress={handleRemoveHistory}
+          >
+            <View style={styles.button_clear_notice}>
+              <Text style={styles.text_clear}>Sure?</Text>
+            </View>
+          </Pressable>
+        )
+        : (
+          <Pressable
+            style={styles.button}
+            onPress={handlePressClear}
+          >
+            <IconRemove/>
+          </Pressable>
+        )}
     </View>
-  )
-}
+  );
+};
 
 export default Header;

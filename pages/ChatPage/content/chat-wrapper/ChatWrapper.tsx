@@ -7,7 +7,7 @@ import { IdTypeProps } from '@/interfaces/global';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { CombinerMessage } from '@/pages/ChatPage/content/combiner-message/CombinerMessage';
 import { useMemo, useEffect, useRef } from 'react';
-import { TypingComponent } from '@/pages/ChatPage/content/TypingComponent/TypingComponent';
+import { TypingComponent } from '@/pages/ChatPage/content/typing-component/TypingComponent';
 
 interface IChatWrapperProps extends IdTypeProps {
   loading: boolean;
