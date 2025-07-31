@@ -5,15 +5,24 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     flexGrow: 1,
     overflow: 'hidden',
+    position: 'relative',
   },
   wrapper: {
     paddingLeft: 13,
     paddingRight: 13,
-    height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   inner: {
     flexDirection: 'column-reverse',
     flexGrow: 1,
+    paddingBottom: 20,
     // scrollBehavior: 'smooth',
+  },
+  typing: {
+    color: '#fff',
   },
 });

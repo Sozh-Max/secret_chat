@@ -2,16 +2,10 @@ import { AGENT_KEYS, AGENTS_DATA, INIT_AGENT_LIST } from '@/constants/agents-dat
 import { AsyncStorageService } from '@/services/AsyncStorageService';
 import { LOCAL_STORAGE_KEYS } from '@/services/constants';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-
-export type RoleType = 'assistant' | 'user';
-
-export interface IReplic {
-  role: RoleType;
-  content: string;
-}
+import { IMessage } from '@/api/interfaces';
 
 export interface IDialogItem {
-  replic: IReplic;
+  replic: IMessage;
   isFWord: number;
   create: string;
   createTime: number;
@@ -31,6 +25,7 @@ type GlobalContextType = {
   tokens: number;
   dialogs: Dialogs;
   dialogPreview: IDialogPreview[];
+  setDialogs: (dialogs: Dialogs) => void;
 };
 
 export interface IDialogPreview {
@@ -49,11 +44,19 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const getInitData = async () => {
       const userData = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.USER_DATA);
+      const userDialogs = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.DIALOGS);
       
       if (userData) {
         const parsedData = JSON.parse(userData);
         setTokens(parsedData.tokens || 0);
-        setDialogs(parsedData.setDialogs || {});
+      }
+
+      if (userDialogs) {
+        const dialogs = JSON.parse(userDialogs);
+
+        if (dialogs) {
+          setDialogs(dialogs)
+        }
       }
 
       setDialogPreview(INIT_AGENT_LIST.map((key: AGENT_KEYS) => ({
@@ -63,10 +66,16 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     }
 
     getInitData();
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    if (dialogs[AGENT_KEYS.wendy] && dialogs[AGENT_KEYS.ashley]) {
+      AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.DIALOGS, JSON.stringify(dialogs));
+    }
+  }, [dialogs])
 
   return (
-    <GlobalContext.Provider value={{ tokens, dialogs, dialogPreview }}>
+    <GlobalContext.Provider value={{ tokens, dialogs, setDialogs, dialogPreview }}>
       {children}
     </GlobalContext.Provider>
   );
