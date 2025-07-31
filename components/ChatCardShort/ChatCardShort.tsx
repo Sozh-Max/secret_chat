@@ -48,8 +48,8 @@ const ChatCardShort = ({
             <IconPlayShort/>
           )}
         </View>
-        <Text style={styles.description} numberOfLines={1} ellipsizeMode="tail">
-          {data.description}
+        <Text style={[styles.description, data.message && styles.message]} numberOfLines={1} ellipsizeMode="tail">
+          {data.message || data.description}
         </Text>
       </View>
       <View style={styles.rating}>
@@ -105,6 +105,9 @@ const styles = StyleSheet.create({
     width: '100%',
     fontSize: 14,
     fontFamily: 'NotoSans_400Regular',
+  },
+  message: {
+    color: '#ffffff',
   },
   rating: {
     position: 'absolute',

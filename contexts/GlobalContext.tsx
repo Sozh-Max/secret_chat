@@ -26,11 +26,14 @@ type GlobalContextType = {
   dialogs: Dialogs;
   dialogPreview: IDialogPreview[];
   setDialogs: Dispatch<SetStateAction<Dialogs>>;
+  setTokens: Dispatch<SetStateAction<number>>;
 };
 
 export interface IDialogPreview {
   id: AGENT_KEYS;
   description: string;
+  message: string;
+  lastMessageTime: number | null;
 }
 
 
@@ -45,37 +48,45 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     const getInitData = async () => {
       const userData = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.USER_DATA);
       const userDialogs = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.DIALOGS);
-      
+
       if (userData) {
         const parsedData = JSON.parse(userData);
         setTokens(parsedData.tokens || 0);
       }
 
-      if (userDialogs) {
-        const dialogs = JSON.parse(userDialogs);
+      const dialogs = JSON.parse(userDialogs || '') || {};
 
-        if (dialogs) {
-          setDialogs(dialogs)
-        }
-      }
+      setDialogs(dialogs);
 
-      setDialogPreview(INIT_AGENT_LIST.map((key: AGENT_KEYS) => ({
-        id: key,
-        description: AGENTS_DATA[key]
-      })));
-    }
+      setDialogPreview(INIT_AGENT_LIST.map((key: AGENT_KEYS) => {
+        const dialog: IDialog = dialogs[key];
+
+        const lastMessage: IDialogItem | undefined = dialog?.dialog?.[dialog.dialog.length - 1];
+
+        return {
+          id: key,
+          description: AGENTS_DATA[key],
+          message: lastMessage?.replic?.content || '',
+          lastMessageTime: lastMessage?.createTime ?? null,
+        };
+      }).sort((a, b) => b.lastMessageTime - a.lastMessageTime));
+    };
 
     getInitData();
   }, []);
-
+  console.log(dialogPreview);
   useEffect(() => {
     if (dialogs[AGENT_KEYS.wendy] && dialogs[AGENT_KEYS.ashley]) {
       AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.DIALOGS, JSON.stringify(dialogs));
     }
-  }, [dialogs])
+  }, [dialogs]);
+
+  useEffect(() => {
+    AsyncStorageService.storeDataBySubKey(LOCAL_STORAGE_KEYS.USER_DATA, LOCAL_STORAGE_KEYS.TOKENS, tokens);
+  }, [tokens]);
 
   return (
-    <GlobalContext.Provider value={{ tokens, dialogs, setDialogs, dialogPreview }}>
+    <GlobalContext.Provider value={{ tokens, dialogs, setDialogs, dialogPreview, setTokens }}>
       {children}
     </GlobalContext.Provider>
   );

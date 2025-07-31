@@ -49,11 +49,6 @@ const Header = () => {
         {tokens}
       </ThemedText>
       <View>
-        {/*<Pressable onPressIn={handlePressIn} onPressOut={handlePressOut}>*/}
-        {/*  <Animated.View style={[styles.setting, { transform: [{ scale }] }]}>*/}
-        {/*    <IconMenu/>*/}
-        {/*  </Animated.View>*/}
-        {/*</Pressable>*/}
         <AnimatedPressBtn style={styles.setting} onPress={handlePressSettings}>
           <IconMenu />
         </AnimatedPressBtn>

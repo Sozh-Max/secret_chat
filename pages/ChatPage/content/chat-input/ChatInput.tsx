@@ -12,7 +12,7 @@ import { styles } from '@/pages/ChatPage/content/chat-input/styles';
 
 interface ChatInputProps extends IdTypeProps {
   setLoading: (loading: boolean) => void;
-};
+}
 
 const ChatInput = ({
   id,
@@ -20,7 +20,7 @@ const ChatInput = ({
 }: ChatInputProps) => {
   const [text, setText] = useState<string>('');
   const [isVisiblePicker, setIsVisiblePicker] = useState<boolean>(false);
-  const { dialogs, setDialogs } = useGlobal()
+  const { dialogs, setDialogs, setTokens } = useGlobal()
 
   const handlePressEmoji = (emoji: string) => {
     setText(text => text + emoji);
@@ -30,7 +30,7 @@ const ChatInput = ({
 
   const sendMessage = async () => {
     setText('');
-
+    setTokens(val => val -  10);
     await messageService.sendMessage({
       id,
       message: text,

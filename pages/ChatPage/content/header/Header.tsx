@@ -11,6 +11,7 @@ import { styles } from '@/pages/ChatPage/content/header/styles';
 import { useRef, useState } from 'react';
 import { messageService } from '@/services/message-service';
 import { useGlobal } from '@/contexts/GlobalContext';
+import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
 
 const Header = ({
   id,
@@ -80,12 +81,12 @@ const Header = ({
           </Pressable>
         )
         : (
-          <Pressable
+          <AnimatedPressBtn
             style={styles.button}
             onPress={handlePressClear}
           >
             <IconRemove/>
-          </Pressable>
+          </AnimatedPressBtn>
         )}
     </View>
   );
