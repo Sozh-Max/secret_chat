@@ -3,10 +3,12 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { GlobalProvider } from '@/contexts/GlobalContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { InitMockDataService } from '@/services/InitMockDataService';
+
 
 import {
   useFonts,
@@ -18,9 +20,6 @@ import {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  // const [loaded] = useFonts({
-  //   SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  // });
   const [fontsLoaded] = useFonts({
     NotoSans_400Regular,
     NotoSans_600SemiBold,
@@ -34,27 +33,27 @@ export default function RootLayout() {
   }, []);
 
   if (!fontsLoaded) {
-    // Async font loading only occurs in development.
     return null;
   }
 
-//        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <GlobalProvider>
-        <Stack
-          screenOptions={{
-            animation: 'fade', // или 'fade', 'simple_push', 'default', 'slide_from_right'
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen name="index" />
-          <Stack.Screen name="chat" />
-          <Stack.Screen name="settings" />
-          <Stack.Screen name="+not-found"/>
-        </Stack>
-        <StatusBar style="auto"/>
-      </GlobalProvider>
+      <SafeAreaProvider>
+        <GlobalProvider>
+          <Stack
+            screenOptions={{
+              animation: 'fade', // или 'fade', 'simple_push', 'default', 'slide_from_right'
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen name="index"/>
+            <Stack.Screen name="chat"/>
+            <Stack.Screen name="settings"/>
+            <Stack.Screen name="+not-found"/>
+          </Stack>
+          <StatusBar style="auto"/>
+        </GlobalProvider>
+      </SafeAreaProvider>
     </ThemeProvider>
   );
 }

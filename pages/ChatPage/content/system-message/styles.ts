@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
   wrapper: {
     paddingRight: "23%",
     paddingTop: 12,
-    paddingBottom: 24,
+    paddingBottom: 16,
   },
   container: {
     backgroundColor: CHAT_COLOR,
@@ -36,6 +36,24 @@ export const styles = StyleSheet.create({
     marginBottom: 8,
     marginTop: 12,
     width: 240,
-    height: 240,
+    height: undefined,
+    aspectRatio: 1,
+    maxWidth: '100%',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.9)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalImageWrapper: {
+    width: '90%',
+    aspectRatio: 1
+  },
+  modalImage: {
+    width: '100%',
+    height: undefined,
+    aspectRatio: 1,
+    borderRadius: 10,
   },
 });

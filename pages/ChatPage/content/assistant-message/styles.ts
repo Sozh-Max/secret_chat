@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
   wrapper: {
     paddingRight: '23%',
     paddingTop: 12,
-    paddingBottom: 24,
+    paddingBottom: 16,
   },
   container: {
     backgroundColor: CHAT_COLOR,
@@ -29,6 +29,7 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'NotoSans_600SemiBold',
     color: '#fff',
+    textTransform: 'capitalize',
   },
   time: {
     fontSize: 13,

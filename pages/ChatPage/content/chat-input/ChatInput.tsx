@@ -29,16 +29,18 @@ const ChatInput = ({
   const handleToggleEmojiPicker = () => setIsVisiblePicker(val => !val);
 
   const sendMessage = async () => {
-    setText('');
-    setTokens(val => val -  10);
-    await messageService.sendMessage({
-      id,
-      message: text,
-      setDialogs,
-      assistantDialog: dialogs[id]?.dialog || [],
-      setLoading,
-    });
+    if (text.trim()) {
+      setText('');
+      setTokens(val => val -  10);
 
+      await messageService.sendMessage({
+        id,
+        message: text.trim(),
+        setDialogs,
+        assistantDialog: dialogs[id]?.dialog || [],
+        setLoading,
+      });
+    }
   };
 
   return (
@@ -46,6 +48,7 @@ const ChatInput = ({
       <AnimatedPressBtn style={styles.button} onPress={handleToggleEmojiPicker}>
         <IconSmile />
       </AnimatedPressBtn>
+
       <TextInput
         style={styles.input}
         placeholder="Type your message here..."
@@ -58,9 +61,11 @@ const ChatInput = ({
         returnKeyType="send"
         blurOnSubmit={false}
       />
+
       <Pressable style={styles.button} onPress={sendMessage}>
         <IconSend />
       </Pressable>
+
       {isVisiblePicker && (
         <View style={styles.emoji_picker}>
           {EMOJI_LIST.map((emoji) => (

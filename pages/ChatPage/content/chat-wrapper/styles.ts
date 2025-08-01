@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
   inner: {
     flexDirection: 'column-reverse',
     flexGrow: 1,
-    paddingBottom: 20,
+    // paddingBottom: 20,
     // scrollBehavior: 'smooth',
   },
 });

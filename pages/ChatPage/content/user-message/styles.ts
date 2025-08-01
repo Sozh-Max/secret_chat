@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
   wrapper: {
     paddingLeft: '23%',
     paddingTop: 12,
-    paddingBottom: 24,
+    paddingBottom: 16,
   },
   container: {
     backgroundColor: CHAT_COLOR,
