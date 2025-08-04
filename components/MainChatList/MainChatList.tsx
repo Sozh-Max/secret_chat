@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 import ChatCardShort from '@/components/ChatCardShort/ChatCardShort';
 import { useGlobal } from '@/contexts/GlobalContext';
@@ -9,14 +9,14 @@ const MainChatList = () => {
 
   return (
     <View style={styles.body}>
-      <View style={styles.body_inner}>
+      <ScrollView style={styles.body_inner}>
         {dialogPreview.map((dialog) => (
           <ChatCardShort
             key={dialog.id}
             data={dialog}
           />
         ))}
-      </View>
+      </ScrollView>
     </View>
   )
 }
@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     flexGrow: 1,
     position: 'relative',
+    overflow: 'hidden',
   },
   body_inner: {
     flexDirection: 'column',
