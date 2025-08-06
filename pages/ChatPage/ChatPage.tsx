@@ -9,6 +9,7 @@ import { ChatWrapper } from '@/pages/ChatPage/content/chat-wrapper/ChatWrapper';
 import { FormScreenWrapper } from '@/components/FormScreenWrapper/FormScreenWrapper';
 import { AGENT_KEYS } from '@/constants/agents-data';
 import { SafeAreaInsectComponent } from '@/components/SafeAreaInsectComponent/SafeAreaInsectComponent';
+import { KeyboardAvoidingView, Platform, View } from 'react-native';
 
 export const ChatPage = () => {
   const { id } = useLocalSearchParams<{ id: AGENT_KEYS }>();
@@ -27,11 +28,26 @@ export const ChatPage = () => {
           colors={['rgb(5, 4, 4)', 'rgb(22, 22, 22)']}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
-          style={styles.wrapper}
+          style={{ flex: 1 }} // Вместо фиксированного screenHeight
         >
-          <Header id={id} />
-          <ChatWrapper id={id} loading={loading} />
-          <ChatInput id={id} setLoading={setLoading} />
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            keyboardVerticalOffset={80} // если хедер фиксированный, отступ = его высоте
+          >
+            <View style={{ flex: 1 }}>
+              {/* Header фиксированный */}
+              <Header id={id} />
+
+              {/* Scrollable chat area */}
+              <View style={{ flex: 1 }}>
+                <ChatWrapper id={id} loading={loading} />
+              </View>
+
+              {/* Input закреплён снизу */}
+              <ChatInput id={id} setLoading={setLoading} />
+            </View>
+          </KeyboardAvoidingView>
         </LinearGradient>
       </FormScreenWrapper>
     </SafeAreaInsectComponent>

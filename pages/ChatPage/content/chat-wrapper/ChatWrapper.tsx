@@ -36,15 +36,20 @@ export const ChatWrapper = ({
       source={IMG_POSTER_MAP[id]}
       style={styles.image_background}
     >
-      <ScrollView ref={scrollRef} style={styles.wrapper}>
-        <View style={styles.inner}>
-          {loading && <TypingComponent id={id} />}
-          {currentDialog.map((dialog, i) => (
-            <CombinerMessage key={i} dialog={dialog} id={id} />
-          ))}
-          <SystemMessage id={id} />
-        </View>
-      </ScrollView>
+    <ScrollView
+      ref={scrollRef}
+      style={styles.wrapper}
+      contentContainerStyle={{ flexGrow: 1 }}
+      keyboardShouldPersistTaps="handled"
+    >
+      <View style={styles.inner}>
+        {loading && <TypingComponent id={id} />}
+        {currentDialog.map((dialog, i) => (
+          <CombinerMessage key={i} dialog={dialog} id={id} />
+        ))}
+        <SystemMessage id={id} />
+      </View>
+    </ScrollView>
     </ImageBackground>
   );
 };
