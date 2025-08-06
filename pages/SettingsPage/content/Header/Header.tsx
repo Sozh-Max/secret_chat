@@ -1,21 +1,24 @@
-import { Pressable, View, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import { IconBackBtn } from '@/components/icons/IconBackBtn';
 import { styles } from '@/pages/SettingsPage/content/Header/styles';
 import { router } from 'expo-router';
+import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
 
 export const Header = () => {
   const handlePressBackBtn = () => {
-    router.push('/');
+    setTimeout(() => {
+      router.push('/');
+    }, 300);
   }
 
   return (
     <View style={styles.container}>
-      <Pressable
+      <AnimatedPressBtn
         style={styles.button}
         onPress={handlePressBackBtn}
       >
         <IconBackBtn color="#c0c0c0" />
-      </Pressable>
+      </AnimatedPressBtn>
       <Text style={styles.title}>App settings</Text>
     </View>
   )

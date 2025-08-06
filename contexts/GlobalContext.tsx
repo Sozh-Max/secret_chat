@@ -17,6 +17,7 @@ export interface IDialog {
   id: AGENT_KEYS;
   lastReplyTime: number;
   name: string;
+  cost: number;
 }
 
 export type Dialogs = { [key in AGENT_KEYS]?: IDialog }
@@ -34,7 +35,8 @@ export interface IDialogPreview {
   description: string;
   message: string;
   lastMessageTime: number | null;
-}
+  cost: number;
+};
 
 const refreshChats = ({
   dialogs,
@@ -53,6 +55,7 @@ const refreshChats = ({
       description: AGENTS_DATA[key],
       message: lastMessage?.replic?.content || '',
       lastMessageTime: lastMessage?.createTime ?? null,
+      cost: dialog.cost,
     };
   }).sort((a, b) => b.lastMessageTime - a.lastMessageTime));
 }

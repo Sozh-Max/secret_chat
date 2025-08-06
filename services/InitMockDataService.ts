@@ -44,6 +44,7 @@ export class InitMockDataService {
 				name: "",
 				createTime: 1753381996889,
 				lastReplyTime: 0,
+				cost: 10,
 			},
 			[AGENT_KEYS.ashley]: {
 				dialog: [],
@@ -51,13 +52,15 @@ export class InitMockDataService {
 				name: "",
 				createTime: 1753381996889,
 				lastReplyTime: 0,
+				cost: 25,
 			},
 			[AGENT_KEYS.jane]: {
 				dialog: [],
 				id: AGENT_KEYS.jane,
 				name: "",
 				createTime: 1753381996889,
-				lastReplyTime: 0
+				lastReplyTime: 0,
+				cost: 10,
 			},
 			[AGENT_KEYS.elise]: {
 				dialog: [],
@@ -65,6 +68,7 @@ export class InitMockDataService {
 				name: "",
 				createTime: 1753381996889,
 				lastReplyTime: 0,
+				cost: 10,
 			},
 			[AGENT_KEYS.dakota]: {
 				dialog: [],
@@ -72,6 +76,7 @@ export class InitMockDataService {
 				name: "",
 				createTime: 1753381996889,
 				lastReplyTime: 0,
+				cost: 10,
 			},
 			[AGENT_KEYS.lumi]: {
 				dialog: [],
@@ -79,20 +84,23 @@ export class InitMockDataService {
 				name: "",
 				createTime: 1753381996889,
 				lastReplyTime: 0,
+				cost: 10,
 			},
 			[AGENT_KEYS.yumi]: {
 				dialog: [],
 				id: AGENT_KEYS.yumi,
 				name: "",
 				createTime: 1753381996889,
-				lastReplyTime: 0
+				lastReplyTime: 0,
+				cost: 10,
 			},
 			[AGENT_KEYS.lola]: {
 				dialog: [],
 				id: AGENT_KEYS.lola,
 				name: "",
 				createTime: 1753381996889,
-				lastReplyTime: 0
+				lastReplyTime: 0,
+				cost: 10,
 			}
 		}))
 	}

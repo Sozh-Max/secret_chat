@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
 
-import ChatCardShort from '@/components/ChatCardShort/ChatCardShort';
+import ChatCardShort from '@/pages/MaiPage/content/ChatCardShort/ChatCardShort';
 import { useGlobal } from '@/contexts/GlobalContext';
 
 

@@ -20,7 +20,9 @@ const ChatInput = ({
 }: ChatInputProps) => {
   const [text, setText] = useState<string>('');
   const [isVisiblePicker, setIsVisiblePicker] = useState<boolean>(false);
-  const { dialogs, setDialogs, setTokens } = useGlobal()
+  const { dialogs, setDialogs, setTokens } = useGlobal();
+
+  const dialog = dialogs[id];
 
   const handlePressEmoji = (emoji: string) => {
     setText(text => text + emoji);
@@ -31,13 +33,13 @@ const ChatInput = ({
   const sendMessage = async () => {
     if (text.trim()) {
       setText('');
-      setTokens(val => val -  10);
+      setTokens(val => val -  (dialog?.cost || 0));
 
       await messageService.sendMessage({
         id,
         message: text.trim(),
         setDialogs,
-        assistantDialog: dialogs[id]?.dialog || [],
+        assistantDialog: dialog?.dialog || [],
         setLoading,
       });
     }

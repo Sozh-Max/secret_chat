@@ -11,7 +11,11 @@ import { router } from 'expo-router';
 export const Header = () => {
   const { tokens } = useGlobal();
 
-  const handlePressSettings = () => router.push('/settings')
+  const handlePressSettings = () => {
+    setTimeout(() => {
+      router.push('/settings');
+    }, 300);
+  }
 
   return (
     <ThemedView

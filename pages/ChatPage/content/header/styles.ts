@@ -55,6 +55,7 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     marginRight: 13,
+    gap: 2,
   },
   label: {
     fontSize: 14,
@@ -71,10 +72,9 @@ export const styles = StyleSheet.create({
   },
   rating_value: {
     fontSize: 11,
-    lineHeight: 22,
+    lineHeight: 17,
     fontFamily: 'NotoSans_600SemiBold',
     color: '#fff',
     position: 'relative',
-    top: 2,
   },
 });
