@@ -29,11 +29,6 @@ export const ChatPage = () => {
           end={{ x: 0, y: 1 }}
           style={{ flex: 1 }} // Вместо фиксированного screenHeight
         >
-          <KeyboardAvoidingView
-            style={{ flex: 1 }}
-            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-            keyboardVerticalOffset={80} // если хедер фиксированный, отступ = его высоте
-          >
             <View style={{ flex: 1 }}>
               {/* Header фиксированный */}
               <Header id={id} />
@@ -46,7 +41,6 @@ export const ChatPage = () => {
               {/* Input закреплён снизу */}
               <ChatInput id={id} setLoading={setLoading} />
             </View>
-          </KeyboardAvoidingView>
         </LinearGradient>
       </FormScreenWrapper>
     </SafeAreaInsectComponent>
