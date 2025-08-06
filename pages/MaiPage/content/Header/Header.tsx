@@ -4,11 +4,11 @@ import { StyleSheet, View } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useGlobal } from '@/contexts/GlobalContext';
-import { IconMenu } from '../icons/IconMenu';
+import { IconMenu } from '@/components/icons/IconMenu';
 import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
 import { router } from 'expo-router';
 
-const Header = () => {
+export const Header = () => {
   const { tokens } = useGlobal();
 
   const handlePressSettings = () => router.push('/settings')
@@ -64,6 +64,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   }
-})
-
-export default Header;
+});

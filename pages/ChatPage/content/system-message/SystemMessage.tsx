@@ -1,10 +1,11 @@
 import { View, Text, Pressable, Modal } from 'react-native';
+import { Image } from 'expo-image';
+import { useState } from 'react';
+
 import { IdTypeProps } from '@/interfaces/global';
 import { styles } from '@/pages/ChatPage/content/system-message/styles';
 import { IconSystem } from '@/components/icons/IconSystem';
 import { AGENTS_DATA, IMG_PREVIEW_MAP } from '@/constants/agents-data';
-import { Image } from 'expo-image';
-import { useState } from 'react';
 
 export const SystemMessage = ({
   id,

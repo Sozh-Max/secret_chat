@@ -21,6 +21,8 @@ export const AnimatedPressBtn = ({
     Animated.spring(scale, {
       toValue: scaleEnd,
       useNativeDriver: true,
+      speed: 50,         // Ускорение анимации
+      bounciness: 0,     // Без лишней упругости
     }).start();
   };
 
@@ -28,6 +30,8 @@ export const AnimatedPressBtn = ({
     Animated.spring(scale, {
       toValue: 1,
       useNativeDriver: true,
+      speed: 50,         // Ускорение анимации
+      bounciness: 0,     // Без лишней упругости
     }).start();
   }
 
