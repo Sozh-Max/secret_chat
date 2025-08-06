@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { CHAT_COLOR, MAIN_COLOR } from '@/constants/Colors';
+import { NotoSans_400Regular } from '@expo-google-fonts/noto-sans';
 
 export const styles = StyleSheet.create({
   wrapper: {
@@ -30,6 +31,7 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     color: MAIN_COLOR,
+    fontFamily: 'NotoSans_400Regular',
   },
   img: {
     borderRadius: 8,
