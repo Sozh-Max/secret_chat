@@ -6,8 +6,8 @@ export const FormScreenWrapper = (
   { children: ReactNode },
 ) => (
   <KeyboardAvoidingView
-    //behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    behavior='padding'
+    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    // behavior='padding'
     style={{ flex: 1 }}
   >
     <ScrollView

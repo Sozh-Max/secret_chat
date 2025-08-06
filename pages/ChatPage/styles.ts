@@ -6,7 +6,8 @@ export const styles = StyleSheet.create({
   wrapper: {
     flexDirection: 'column',
     height: screenHeight,
-    paddingBottom: 50,
-    paddingTop: 80,
+    flexGrow: 1,
+    // paddingBottom: 50,
+    // paddingTop: 80,
   },
 });

@@ -7,10 +7,10 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     height: 80,
     maxWidth: '100%',
-    position: 'fixed',
+    // position: 'fixed',
     zIndex: 3,
-    left: 0,
-    bottom: 0,
+    // left: 0,
+    // top: 0,
     width: '100%',
   },
   // container: {

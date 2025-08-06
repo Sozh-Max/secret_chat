@@ -2,11 +2,11 @@ import { Platform, StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
-    position: 'fixed',
+    // position: 'fixed',
     flexDirection: 'row',
     height: 50,
-    left: 0,
-    bottom: 0,
+    // left: 0,
+    // bottom: 0,
     width: '100%',
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
     zIndex: 3,
