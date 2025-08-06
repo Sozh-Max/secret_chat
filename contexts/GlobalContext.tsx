@@ -28,7 +28,7 @@ type GlobalContextType = {
   dialogPreview: IDialogPreview[];
   setDialogs: Dispatch<SetStateAction<Dialogs>>;
   setTokens: Dispatch<SetStateAction<number>>;
-};
+}
 
 export interface IDialogPreview {
   id: AGENT_KEYS;
@@ -36,7 +36,7 @@ export interface IDialogPreview {
   message: string;
   lastMessageTime: number | null;
   cost: number;
-};
+}
 
 const refreshChats = ({
   dialogs,

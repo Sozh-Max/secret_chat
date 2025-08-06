@@ -4,7 +4,7 @@ import { Image } from 'expo-image';
 import { useRef, useState } from 'react';
 
 import { IconBackBtn } from '@/components/icons/IconBackBtn';
-import { AGENT_KEYS, IMG_THUMB_MAP } from '@/constants/agents-data';
+import { IMG_THUMB_MAP } from '@/constants/agents-data';
 import { IconRemove } from '@/components/icons/IconRemove';
 import { IconRating } from '@/components/icons/IconRating';
 import { ThemedText } from '@/components/ThemedText';
