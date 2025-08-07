@@ -6,7 +6,7 @@ import { AssistantMessage } from '@/pages/ChatPage/content/assistant-message/Ass
 
 type CombinerMessageProps = {
   dialog: IDialogItem;
-  id: AGENT_KEYS,
+  id: AGENT_KEYS;
 }
 
 export const CombinerMessage = ({

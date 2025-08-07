@@ -13,6 +13,7 @@ import { styles } from '@/pages/ChatPage/content/header/styles';
 import { messageService } from '@/services/message-service';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
+import { LOW_COLOR, MAIN_COLOR } from '@/constants/Colors';
 
 const Header = ({
   id,
@@ -23,6 +24,8 @@ const Header = ({
 
   const dialog = dialogs[id];
 
+  const isActiveRemove = Boolean(dialog?.dialog.length) && !dialog?.isBlocked;
+
   const handlePressBackBtn = () => {
     setTimeout(() => {
       router.push('/');
@@ -30,17 +33,19 @@ const Header = ({
   };
 
   const handlePressClear = () => {
-    setTimeout(() => {
-      setShowNotice(true);
+    if (isActiveRemove) {
+      setTimeout(() => {
+        setShowNotice(true);
 
-      if (timeoutIdRef.current !== null) {
-        clearTimeout(timeoutIdRef.current);
-      }
+        if (timeoutIdRef.current !== null) {
+          clearTimeout(timeoutIdRef.current);
+        }
 
-      timeoutIdRef.current = setTimeout(() => {
-        setShowNotice(false);
-      }, 3500);
-    }, 300);
+        timeoutIdRef.current = setTimeout(() => {
+          setShowNotice(false);
+        }, 3500);
+      }, 300);
+    }
   };
 
   const handleRemoveHistory = () => {
@@ -88,7 +93,7 @@ const Header = ({
             style={styles.button}
             onPress={handlePressClear}
           >
-            <IconRemove/>
+            <IconRemove color={isActiveRemove ? MAIN_COLOR : LOW_COLOR}/>
           </AnimatedPressBtn>
         )}
     </View>

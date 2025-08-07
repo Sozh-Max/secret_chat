@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
-import { KeyboardAvoidingView, Platform, View } from 'react-native';
+import { View } from 'react-native';
 
 import Header from '@/pages/ChatPage/content/header/Header';
 import ChatInput from '@/pages/ChatPage/content/chat-input/ChatInput';
@@ -27,18 +27,16 @@ export const ChatPage = () => {
           colors={['rgb(5, 4, 4)', 'rgb(22, 22, 22)']}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
-          style={{ flex: 1 }} // Вместо фиксированного screenHeight
+          style={{ flex: 1 }}
         >
             <View style={{ flex: 1 }}>
-              {/* Header фиксированный */}
+
               <Header id={id} />
 
-              {/* Scrollable chat area */}
               <View style={{ flex: 1 }}>
                 <ChatWrapper id={id} loading={loading} />
               </View>
 
-              {/* Input закреплён снизу */}
               <ChatInput id={id} setLoading={setLoading} />
             </View>
         </LinearGradient>

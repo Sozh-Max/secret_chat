@@ -20,10 +20,12 @@ export const ChatWrapper = ({
   const { dialogs } = useGlobal();
   const scrollRef = useRef<ScrollView>(null);
 
+  const dialog = dialogs[id];
+
   const currentDialog = useMemo(() => {
-    const array = dialogs[id]?.dialog || [];
+    const array = dialog?.dialog || [];
     return [...array].reverse();
-  }, [dialogs[id]?.dialog?.length]);
+  }, [dialog?.dialog?.length]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -41,11 +43,20 @@ export const ChatWrapper = ({
         style={styles.wrapper}
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
       >
         <View style={styles.inner}>
           {loading && <TypingComponent id={id}/>}
-          {currentDialog.map((dialog, i) => (
-            <CombinerMessage key={i} dialog={dialog} id={id}/>
+          {dialog?.isBlocked && (
+            <SystemMessage id={id} isBlocked={true} />
+          )}
+          {currentDialog.map((currentDialog, i) => (
+            <CombinerMessage
+              key={i}
+              dialog={currentDialog}
+              id={id}
+            />
           ))}
           <SystemMessage id={id} />
         </View>

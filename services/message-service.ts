@@ -19,23 +19,31 @@ const setData = ({
   id,
   setDialogs,
   timestamp,
+  isBlocked,
 }: {
   replic: IMessage;
   id: AGENT_KEYS;
   setDialogs: Dispatch<SetStateAction<Dialogs>>;
   timestamp: number;
+  isBlocked: boolean;
 }): void => {
   setDialogs((d: Dialogs) => {
     const current = {...d[id]};
-    current.dialog = [
-      ...(current.dialog || []),
-      {
+    if (isBlocked) {
+      current.isBlocked = isBlocked;
+    }
+
+    current.dialog = [...(current.dialog || [])];
+
+    if (!isBlocked) {
+      current.dialog.push({
         replic,
         isFWord: 0,
         create: getHoursAndMinutesFromMs(timestamp ?? Date.now()),
         createTime: timestamp ?? Date.now(),
-      }
-    ];
+      })
+    }
+
     return {
       ...d,
       [id]: current,
@@ -67,7 +75,9 @@ class MessageService {
       id,
       setDialogs,
       timestamp: Date.now(),
+      isBlocked: false,
     });
+
     await api.sendMessages({
       assistantId: id,
       messages: [
@@ -77,13 +87,16 @@ class MessageService {
     }).then(async (data) => {
       if (data.ok) {
         const response = await data.json();
+        const replic = response.choices[0].message;
+
 
         if (response) {
           setData({
-            replic: response.choices[0].message,
+            replic,
             id,
             setDialogs,
             timestamp: response.created * 1000,
+            isBlocked: replic.content.includes('*blacklist*'),
           });
         }
       }

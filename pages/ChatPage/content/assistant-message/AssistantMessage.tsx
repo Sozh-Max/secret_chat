@@ -9,7 +9,7 @@ export const AssistantMessage = ({
   id,
 }: {
   dialog: IDialogItem;
-  id: AGENT_KEYS,
+  id: AGENT_KEYS;
 }) => (
   <View style={styles.wrapper}>
     <View style={styles.container}>

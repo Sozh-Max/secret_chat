@@ -7,9 +7,16 @@ import { styles } from '@/pages/ChatPage/content/system-message/styles';
 import { IconSystem } from '@/components/icons/IconSystem';
 import { AGENTS_DATA, IMG_PREVIEW_MAP } from '@/constants/agents-data';
 
+const BLOCKED_TEXT = "Uh oh! Something messed up. Looks like this person has blocked you. We're saving this chat and sending it to our moderators. Just a reminder that our rules don't allow talking about violence, drugs, or suicide, and doing so could get your account totally banned.";
+
+interface SystemMessage extends IdTypeProps {
+  isBlocked?: boolean
+}
+
 export const SystemMessage = ({
   id,
-}: IdTypeProps) => {
+  isBlocked = false,
+}: SystemMessage) => {
   const description = AGENTS_DATA[id];
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -23,35 +30,40 @@ export const SystemMessage = ({
         </View>
 
         <Text style={styles.text}>
-          {description}
+          {isBlocked ? BLOCKED_TEXT : description}
         </Text>
-        <Pressable onPress={() => setModalVisible(true)}>
-          <Image
-            source={IMG_PREVIEW_MAP[id]}
-            style={styles.img}
-          />
-        </Pressable>
 
-        <Modal
-          visible={modalVisible}
-          transparent={true}
-          animationType="fade"
-        >
-          <Pressable style={styles.modalOverlay} onPress={() => setModalVisible(false)}>
-            <Pressable
-              style={styles.modalImageWrapper}
-              onPress={(e) => {
-                e.isPropagationStopped();
-              }}
-            >
-              <Image
-                source={IMG_PREVIEW_MAP[id]}
-                style={styles.modalImage}
-                contentFit="contain"
-              />
-            </Pressable>
+        {!isBlocked && (
+          <Pressable onPress={() => setModalVisible(true)}>
+            <Image
+              source={IMG_PREVIEW_MAP[id]}
+              style={styles.img}
+            />
           </Pressable>
-        </Modal>
+        )}
+
+        {!isBlocked && (
+          <Modal
+            visible={modalVisible}
+            transparent={true}
+            animationType="fade"
+          >
+            <Pressable style={styles.modalOverlay} onPress={() => setModalVisible(false)}>
+              <Pressable
+                style={styles.modalImageWrapper}
+                onPress={(e) => {
+                  e.isPropagationStopped();
+                }}
+              >
+                <Image
+                  source={IMG_PREVIEW_MAP[id]}
+                  style={styles.modalImage}
+                  contentFit="contain"
+                />
+              </Pressable>
+            </Pressable>
+          </Modal>
+        )}
       </View>
     </View>
   );

@@ -9,7 +9,11 @@ const MainChatList = () => {
 
   return (
     <View style={styles.body}>
-      <ScrollView style={styles.body_inner}>
+      <ScrollView
+        style={styles.body_inner}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      >
         {dialogPreview.map((dialog) => (
           <ChatCardShort
             key={dialog.id}

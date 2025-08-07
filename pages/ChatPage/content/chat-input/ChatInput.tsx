@@ -1,8 +1,8 @@
 import { Pressable, TextInput, View, Text } from 'react-native';
 import IconSend from '@/components/icons/IconSend';
 import IconSmile from '@/components/icons/IconSmile';
-import { useState } from 'react';
-import { MAIN_COLOR } from '@/constants/Colors';
+import { useEffect, useState } from 'react';
+import { LOW_COLOR, MAIN_COLOR, SUB_COLOR } from '@/constants/Colors';
 import { EMOJI_LIST } from '@/pages/ChatPage/content/chat-input/constants';
 import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
 import { IdTypeProps } from '@/interfaces/global';
@@ -24,14 +24,22 @@ const ChatInput = ({
 
   const dialog = dialogs[id];
 
+  const isBlocked = dialog?.isBlocked;
+
   const handlePressEmoji = (emoji: string) => {
-    setText(text => text + emoji);
+    if (!isBlocked) {
+      setText(text => text + emoji);
+    }
   }
 
-  const handleToggleEmojiPicker = () => setIsVisiblePicker(val => !val);
+  const handleToggleEmojiPicker = () => {
+    if (!isBlocked) {
+      setIsVisiblePicker(val => !val);
+    }
+  }
 
   const sendMessage = async () => {
-    if (text.trim()) {
+    if (!isBlocked && text.trim()) {
       setText('');
       setTokens(val => val -  (dialog?.cost || 0));
 
@@ -45,16 +53,23 @@ const ChatInput = ({
     }
   };
 
+  useEffect(() => {
+    if (isBlocked) {
+      setIsVisiblePicker(false);
+      setText('');
+    }
+  }, [isBlocked, setIsVisiblePicker])
+
   return (
     <View style={styles.container}>
       <AnimatedPressBtn style={styles.button} onPress={handleToggleEmojiPicker}>
-        <IconSmile />
+        <IconSmile color={isBlocked ? LOW_COLOR : SUB_COLOR} />
       </AnimatedPressBtn>
 
       <TextInput
         style={styles.input}
         placeholder="Type your message here..."
-        placeholderTextColor={MAIN_COLOR}
+        placeholderTextColor={isBlocked ? LOW_COLOR : MAIN_COLOR}
         selectionColor={MAIN_COLOR}
         underlineColorAndroid="transparent"
         value={text}
@@ -62,10 +77,11 @@ const ChatInput = ({
         onSubmitEditing={sendMessage}
         returnKeyType="send"
         blurOnSubmit={false}
+        editable={!isBlocked}
       />
 
       <Pressable style={styles.button} onPress={sendMessage}>
-        <IconSend />
+        <IconSend color={isBlocked ? LOW_COLOR : MAIN_COLOR} />
       </Pressable>
 
       {isVisiblePicker && (
