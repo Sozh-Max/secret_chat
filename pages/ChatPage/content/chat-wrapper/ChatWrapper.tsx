@@ -1,13 +1,15 @@
-import { IMG_POSTER_MAP } from '@/constants/agents-data';
 import { View, ScrollView } from 'react-native';
 import { ImageBackground } from 'expo-image';
+import { useMemo, useEffect, useRef } from 'react';
+
+import { IMG_POSTER_MAP } from '@/constants/agents-data';
 import { styles } from '@/pages/ChatPage/content/chat-wrapper/styles';
 import { SystemMessage } from '@/pages/ChatPage/content/system-message/SystemMessage';
 import { IdTypeProps } from '@/interfaces/global';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { CombinerMessage } from '@/pages/ChatPage/content/combiner-message/CombinerMessage';
-import { useMemo, useEffect, useRef } from 'react';
 import { TypingComponent } from '@/pages/ChatPage/content/typing-component/TypingComponent';
+import { useKeyboardStatus } from '@/hooks/useKeyboardStatus';
 
 interface IChatWrapperProps extends IdTypeProps {
   loading: boolean;
@@ -22,6 +24,8 @@ export const ChatWrapper = ({
 
   const dialog = dialogs[id];
 
+  const isKeyboardVisible = useKeyboardStatus();
+
   const currentDialog = useMemo(() => {
     const array = dialog?.dialog || [];
     return [...array].reverse();
@@ -32,6 +36,12 @@ export const ChatWrapper = ({
       scrollRef.current?.scrollToEnd({ animated: true });
     }
   }, [currentDialog.length]);
+
+  useEffect(() => {
+    if (isKeyboardVisible) {
+      scrollRef.current?.scrollToEnd({ animated: false });
+    }
+  }, [isKeyboardVisible]);
 
   return (
     <ImageBackground

@@ -9,7 +9,6 @@ import { GlobalProvider } from '@/contexts/GlobalContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { InitMockDataService } from '@/services/InitMockDataService';
 
-
 import {
   useFonts,
   NotoSans_400Regular,

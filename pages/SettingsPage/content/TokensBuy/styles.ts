@@ -36,6 +36,7 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     color: '#fff',
     textAlign: 'center',
+    fontFamily: 'NotoSans_400Regular',
   },
   xs: {
     fontSize: 16,
