@@ -35,11 +35,13 @@ export const ChatWrapper = ({
     if (scrollRef.current) {
       scrollRef.current?.scrollToEnd({ animated: true });
     }
-  }, [currentDialog.length]);
+  }, [currentDialog.length, dialog?.isBlocked]);
 
   useEffect(() => {
     if (isKeyboardVisible) {
-      scrollRef.current?.scrollToEnd({ animated: false });
+      setTimeout(() => {
+        scrollRef.current?.scrollToEnd({ animated: true });
+      }, 100)
     }
   }, [isKeyboardVisible]);
 

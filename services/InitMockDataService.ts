@@ -46,6 +46,7 @@ export class InitMockDataService {
 				lastReplyTime: 0,
 				cost: 10,
 				isBlocked: false,
+				hasVideo: false,
 			},
 			[AGENT_KEYS.ashley]: {
 				dialog: [],
@@ -55,6 +56,7 @@ export class InitMockDataService {
 				lastReplyTime: 0,
 				cost: 25,
 				isBlocked: false,
+				hasVideo: true,
 			},
 			[AGENT_KEYS.jane]: {
 				dialog: [],
@@ -64,6 +66,7 @@ export class InitMockDataService {
 				lastReplyTime: 0,
 				cost: 10,
 				isBlocked: false,
+				hasVideo: false,
 			},
 			[AGENT_KEYS.elise]: {
 				dialog: [],
@@ -73,6 +76,7 @@ export class InitMockDataService {
 				lastReplyTime: 0,
 				cost: 10,
 				isBlocked: false,
+				hasVideo: false,
 			},
 			[AGENT_KEYS.dakota]: {
 				dialog: [],
@@ -82,6 +86,7 @@ export class InitMockDataService {
 				lastReplyTime: 0,
 				cost: 10,
 				isBlocked: false,
+				hasVideo: false,
 			},
 			[AGENT_KEYS.lumi]: {
 				dialog: [],
@@ -91,6 +96,7 @@ export class InitMockDataService {
 				lastReplyTime: 0,
 				cost: 10,
 				isBlocked: false,
+				hasVideo: false,
 			},
 			[AGENT_KEYS.yumi]: {
 				dialog: [],
@@ -100,6 +106,7 @@ export class InitMockDataService {
 				lastReplyTime: 0,
 				cost: 10,
 				isBlocked: false,
+				hasVideo: false,
 			},
 			[AGENT_KEYS.lola]: {
 				dialog: [],
@@ -109,6 +116,7 @@ export class InitMockDataService {
 				lastReplyTime: 0,
 				cost: 10,
 				isBlocked: false,
+				hasVideo: false,
 			}
 		}))
 	}

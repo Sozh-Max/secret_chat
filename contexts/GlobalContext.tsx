@@ -19,6 +19,7 @@ export interface IDialog {
   name: string;
   cost: number;
   isBlocked: boolean;
+  hasVideo: boolean;
 }
 
 export type Dialogs = { [key in AGENT_KEYS]?: IDialog }
@@ -38,6 +39,7 @@ export interface IDialogPreview {
   lastMessageTime: number | null;
   cost: number;
   isBlocked: boolean;
+  hasVideo: boolean;
 }
 
 const refreshChats = ({
@@ -59,6 +61,7 @@ const refreshChats = ({
       lastMessageTime: lastMessage?.createTime ?? null,
       cost: dialog.cost,
       isBlocked: dialog.isBlocked ?? false,
+      hasVideo: dialog.hasVideo,
     };
   }).sort((a, b) => b.lastMessageTime - a.lastMessageTime));
 }

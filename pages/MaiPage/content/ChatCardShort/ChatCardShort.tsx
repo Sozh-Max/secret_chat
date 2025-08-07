@@ -6,6 +6,7 @@ import { AGENT_KEYS, IMG_THUMB_MAP } from '@/constants/agents-data';
 import { IDialogPreview } from '@/contexts/GlobalContext';
 import { IconPlayShort } from '@/components/icons/IconPlayShort';
 import { IconRating } from '@/components/icons/IconRating';
+import { IconBlock } from '@/components/icons/IconBlock';
 import { styles } from '@/pages/MaiPage/content/ChatCardShort/styles';
 
 const ChatCardShort = ({
@@ -42,8 +43,11 @@ const ChatCardShort = ({
           <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
             {data.id}
           </Text>
-          {data.id === AGENT_KEYS.ashley && (
-            <IconPlayShort/>
+          {data.hasVideo && (
+            <IconPlayShort />
+          )}
+          {data.isBlocked && (
+            <IconBlock />
           )}
         </View>
         <Text style={[styles.description, data.message && styles.message]} numberOfLines={1} ellipsizeMode="tail">
@@ -51,7 +55,7 @@ const ChatCardShort = ({
         </Text>
       </View>
       <View style={styles.rating}>
-        <IconRating/>
+        <IconRating />
         <Text style={styles.rating_value}>{data.cost}</Text>
       </View>
     </Pressable>

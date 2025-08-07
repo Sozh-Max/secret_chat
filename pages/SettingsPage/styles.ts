@@ -9,6 +9,9 @@ export const styles = StyleSheet.create({
     padding: 16,
     flexGrow: 1,
   },
+  inner: {
+    paddingBottom: 30,
+  },
   balance_container: {
     paddingBottom: 22,
   },
