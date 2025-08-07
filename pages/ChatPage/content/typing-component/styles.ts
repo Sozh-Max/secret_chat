@@ -24,10 +24,14 @@ export const styles = StyleSheet.create({
   ico: {
     width: 20,
     height: 20,
-    overflow: 'hidden',
     borderRadius: 10,
-    borderWidth: 3,
-    borderColor: SUB_COLOR,
+    borderTopWidth: 3,
+    borderRightWidth: 3,
+    borderBottomWidth: 3,
+    borderLeftWidth: 3,
     borderTopColor: MAIN_COLOR,
+    borderRightColor: SUB_COLOR,
+    borderBottomColor: SUB_COLOR,
+    borderLeftColor: SUB_COLOR,
   }
 });
