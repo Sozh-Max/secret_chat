@@ -1,8 +1,10 @@
 import { AGENT_KEYS, AGENTS_DATA, INIT_AGENT_LIST } from '@/constants/agents-data';
-import { AsyncStorageService } from '@/services/AsyncStorageService';
+import { AsyncStorageService } from '@/services/async-storage-service';
 import { LOCAL_STORAGE_KEYS } from '@/services/constants';
 import React, { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react';
 import { IMessage } from '@/api/interfaces';
+import { mainUtils } from '@/services/main-utils';
+import { useGooglePlayInstallReferrer } from '@/hooks/useGooglePlayInstallReferrer';
 
 export interface IDialogItem {
   replic: IMessage;
@@ -30,6 +32,7 @@ type GlobalContextType = {
   dialogPreview: IDialogPreview[];
   setDialogs: Dispatch<SetStateAction<Dialogs>>;
   setTokens: Dispatch<SetStateAction<number>>;
+  deviceRegion: string;
 }
 
 export interface IDialogPreview {
@@ -68,10 +71,17 @@ const refreshChats = ({
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
 
-export const GlobalProvider = ({ children }: { children: ReactNode }) => {
+export const GlobalProvider = (
+  { children }:
+  { children: ReactNode }
+) => {
   const [tokens, setTokens] = useState<number>(0);
   const [dialogs, setDialogs] = useState<Dialogs>({});
   const [dialogPreview, setDialogPreview] = useState<IDialogPreview[]>([]);
+  const [deviceRegion] = useState<string>(mainUtils.getDeviceRegion());
+  const [uniqueId, setUniqueId] = useState<string>('');
+
+  useGooglePlayInstallReferrer(deviceRegion, uniqueId);
 
   useEffect(() => {
     const getInitData = async () => {
@@ -108,11 +118,26 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   }, [dialogs, setDialogPreview]);
 
   useEffect(() => {
-    AsyncStorageService.storeDataBySubKey(LOCAL_STORAGE_KEYS.USER_DATA, LOCAL_STORAGE_KEYS.TOKENS, tokens);
+    AsyncStorageService.storeDataBySubKey(
+      LOCAL_STORAGE_KEYS.USER_DATA,
+      LOCAL_STORAGE_KEYS.TOKENS,
+      tokens,
+    );
   }, [tokens]);
 
+  useEffect(() => {
+    mainUtils.getUniqueId().then((id) => setUniqueId(id));
+  }, []);
+
   return (
-    <GlobalContext.Provider value={{ tokens, dialogs, setDialogs, dialogPreview, setTokens }}>
+    <GlobalContext.Provider value={{
+      tokens,
+      dialogs,
+      setDialogs,
+      dialogPreview,
+      setTokens,
+      deviceRegion,
+    }}>
       {children}
     </GlobalContext.Provider>
   );

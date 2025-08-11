@@ -1,7 +1,7 @@
 import { AGENT_KEYS } from "@/constants/agents-data";
 import {
 	AsyncStorageService
-} from "@/services/AsyncStorageService";
+} from "@/services/async-storage-service";
 import {
 	LOCAL_STORAGE_KEYS
 } from "./constants";
