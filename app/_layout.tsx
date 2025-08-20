@@ -41,7 +41,7 @@ export default function RootLayout() {
         <GlobalProvider>
           <Stack
             screenOptions={{
-              animation: 'fade', // или 'fade', 'simple_push', 'default', 'slide_from_right'
+              animation: 'slide_from_right', // или 'fade', 'simple_push', 'default', 'slide_from_right'
               headerShown: false,
             }}
           >

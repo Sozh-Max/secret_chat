@@ -20,7 +20,7 @@ const ChatInput = ({
 }: ChatInputProps) => {
   const [text, setText] = useState<string>('');
   const [isVisiblePicker, setIsVisiblePicker] = useState<boolean>(false);
-  const { dialogs, setDialogs, setTokens } = useGlobal();
+  const { dialogs, setDialogs, tokens, setTokens } = useGlobal();
 
   const dialog = dialogs[id];
 
@@ -39,6 +39,11 @@ const ChatInput = ({
   }
 
   const sendMessage = async () => {
+    if (tokens - (dialog?.cost || 0) < 0) {
+      alert("You haven't tokens!");
+      return;
+    }
+
     if (!isBlocked && text.trim()) {
       setText('');
       setTokens(val => val -  (dialog?.cost || 0));

@@ -8,7 +8,7 @@ class MainUtils {
   getDeviceRegion = (): string => {
     const deviceLocale = Platform.OS === 'ios'
       ? NativeModules.SettingsManager.settings.AppleLocale
-      : NativeModules.I18nManager.localeIdentifier;
+      : NativeModules.I18nManager?.localeIdentifier ?? 'test';
 
     return deviceLocale?.split('_')[0]?.toLowerCase() || '';
   }

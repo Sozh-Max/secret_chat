@@ -40,5 +40,6 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'NotoSans_400Regular',
     color: '#fff',
+    maxWidth: '100%',
   },
 });

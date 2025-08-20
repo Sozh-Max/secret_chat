@@ -38,19 +38,19 @@ export const SettingsPage = () => {
               </View>
             </SettingsContent>
 
-            <SettingsContent
-              title='Star purchase'
-              description='To use chat features, view photos, or watch videos, users must have a sufficient star balance'
-            >
-              <TokensBuy />
-            </SettingsContent>
+            {/*<SettingsContent*/}
+            {/*  title='Star purchase'*/}
+            {/*  description='To use chat features, view photos, or watch videos, users must have a sufficient star balance'*/}
+            {/*>*/}
+            {/*  <TokensBuy />*/}
+            {/*</SettingsContent>*/}
 
-            <SettingsContent
-              title='Account'
-              description="To ensure privacy, message history is stored only on this device, we do not collect or store this type of data. Certain hidden features are available depending on the user's account level"
-            >
-              <LogAccount />
-            </SettingsContent>
+            {/*<SettingsContent*/}
+            {/*  title='Account'*/}
+            {/*  description="To ensure privacy, message history is stored only on this device, we do not collect or store this type of data. Certain hidden features are available depending on the user's account level"*/}
+            {/*>*/}
+            {/*  <LogAccount />*/}
+            {/*</SettingsContent>*/}
 
             <SettingsContent
               title='System info'
