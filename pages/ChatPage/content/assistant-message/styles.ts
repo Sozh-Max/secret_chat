@@ -42,4 +42,20 @@ export const styles = StyleSheet.create({
     color: '#fff',
     maxWidth: '100%',
   },
+  modalImageWrapper: {
+    width: '90%',
+    aspectRatio: 1
+  },
+  modalImage: {
+    width: "100%",
+    maxWidth: "100%",
+    aspectRatio: 9 / 16,
+    borderRadius: 6,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.9)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
