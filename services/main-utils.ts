@@ -2,11 +2,11 @@ import { NativeModules, Platform } from 'react-native';
 import { v4 as uuidv4 } from 'uuid';
 
 import { AsyncStorageService } from '@/services/async-storage-service';
-import { LOCAL_STORAGE_KEYS } from '@/services/constants';
+import { LOCAL_STORAGE_KEYS, PLATFORM } from '@/services/constants';
 
 class MainUtils {
   getDeviceRegion = (): string => {
-    const deviceLocale = Platform.OS === 'ios'
+    const deviceLocale = Platform.OS === PLATFORM.IOS
       ? NativeModules.SettingsManager.settings.AppleLocale
       : NativeModules.I18nManager?.localeIdentifier ?? 'test';
 

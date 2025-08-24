@@ -17,6 +17,7 @@ import {
   NotoSans_700Bold,
   NotoSans_800ExtraBold,
 } from '@expo-google-fonts/noto-sans';
+import { Easing } from 'react-native';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -41,8 +42,26 @@ export default function RootLayout() {
         <GlobalProvider>
           <Stack
             screenOptions={{
-              animation: 'slide_from_right', // или 'fade', 'simple_push', 'default', 'slide_from_right'
+              //animation: 'slide_from_right', // или 'fade', 'simple_push', 'default', 'slide_from_right'
               headerShown: false,
+              cardStyleInterpolator: ({ current, layouts }) => {
+                return {
+                  cardStyle: {
+                    transform: [
+                      {
+                        translateX: current.progress.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: [-layouts.screen.width, 0], // 👈 с -width → 0 = слева направо
+                        }),
+                      },
+                    ],
+                  },
+                };
+              },
+              transitionSpec: {
+                open: { animation: 'spring', config: { duration: 200 } },
+                close: { animation: 'spring', config: { duration: 200 } },
+              },
             }}
           >
             <Stack.Screen name="index"/>

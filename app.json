@@ -11,14 +11,6 @@
     "ios": {
       "supportsTablet": true
     },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/splash-icon.png",
-        "backgroundColor": "#0c003e"
-      },
-      "edgeToEdgeEnabled": true,
-      "package": "com.sozh_max.secret_chat"
-    },
     "web": {
       "bundler": "metro",
       "output": "static",
@@ -44,6 +36,9 @@
       "eas": {
         "projectId": "407ce432-7c85-4086-9c86-727aa64895d8"
       }
+    },
+    "android": {
+      "package": "com.sozh_max.secret_chat"
     }
   }
 }

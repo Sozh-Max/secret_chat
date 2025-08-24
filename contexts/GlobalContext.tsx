@@ -60,7 +60,9 @@ const refreshChats = ({
     return {
       id: key,
       description: AGENTS_DATA[key],
-      message: lastMessage?.replic?.content || '',
+      message: (lastMessage?.replic?.content || '')
+        .replace(/{{2,3}(photo)_(\d+)}{2,3}/, '📸')
+        .replace(/{{2,3}(video)_(\d+)}{2,3}/, '🎥'),
       lastMessageTime: lastMessage?.createTime ?? null,
       cost: dialog.cost,
       isBlocked: dialog.isBlocked ?? false,
@@ -102,7 +104,7 @@ export const GlobalProvider = (
         setDialogPreview,
       });
     };
-    // AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.IS_INIT, '');
+    //AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.IS_INIT, '');
     getInitData();
   }, []);
 

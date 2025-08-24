@@ -43,14 +43,15 @@ export const styles = StyleSheet.create({
     maxWidth: '100%',
   },
   modalImageWrapper: {
-    width: '90%',
-    aspectRatio: 1
+    width: '98%',
+    aspectRatio: 1,
+    paddingBottom: 'calc(98% * (1 / 0.557734))',
   },
   modalImage: {
     width: "100%",
     maxWidth: "100%",
     aspectRatio: 9 / 16,
-    borderRadius: 6,
+    borderRadius: 3,
   },
   modalOverlay: {
     flex: 1,

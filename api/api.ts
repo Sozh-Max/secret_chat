@@ -1,4 +1,5 @@
 import { IMessagesRequest } from '@/api/interfaces';
+import { PLATFORM } from '@/services/constants';
 
 class Api {
   private link = 'https://app.neuronautica.com/api/v1';
@@ -27,7 +28,7 @@ class Api {
         startParamsApp: ref,
         tid: id,
         geo: geo || '',
-        platform: 'Android',
+        platform: PLATFORM.ANDROID,
       }),
     });
   };

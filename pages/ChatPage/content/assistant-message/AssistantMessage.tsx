@@ -1,11 +1,11 @@
 import { View, Text, Image, Pressable, Modal } from 'react-native';
-import { ResizeMode, Video } from 'expo-av';
 
 import { IDialogItem } from '@/contexts/GlobalContext';
 import { IconResponse } from '@/components/icons/IconResponse';
 import { AGENT_KEYS } from '@/constants/agents-data';
 import { styles } from '@/pages/ChatPage/content/assistant-message/styles';
 import { useState } from 'react';
+import { VideoContent } from '@/pages/ChatPage/content/assistant-message/content/VideoContent';
 
 export const AssistantMessage = ({
   dialog,
@@ -17,14 +17,19 @@ export const AssistantMessage = ({
   const [activeUrl, setActiveUrl] = useState<string>('');
   const content = dialog.replic.content || "";
 
-  const parts = content.split(/({{{(?:photo|video)_\d+}}})/g).filter(Boolean);
+  const parts = content
+    .split(/({{2,3}(?:photo|video)_\d+}{2,3})/g)
+    .filter(Boolean);
 
   const renderPart = (part: string, index: number) => {
-    const match = part.match(/{{{(photo|video)_(\d+)}}}/);
+    const match = part.match(/{{2,3}(photo|video)_(\d+)}{2,3}/);
 
     if (!match) {
       return (
-        <Text key={index} style={styles.content}>
+        <Text
+          key={index}
+          style={styles.content}
+        >
           {part.trim()}
         </Text>
       );
@@ -34,10 +39,13 @@ export const AssistantMessage = ({
     const num = match[2].padStart(2, "0");
 
     if (type === "photo") {
-      const url = `https://app.neuronautica.com/storage/${id}/video/posters/${num}.jpg`;
+      const url = `https://app.neuronautica.com/storage/${id}/photo/${num}.jpg`;
       return (
         <Pressable
           onPress={() => setActiveUrl(url)}
+          style={{
+            paddingBottom: 'calc(100% * (1 / 0.557734))',
+          }}
         >
           <Image
             key={index}
@@ -58,23 +66,10 @@ export const AssistantMessage = ({
 
     if (type === "video") {
       return (
-        <Video
-          key={index}
-          source={{
-            uri: `https://app.neuronautica.com/storage/${id}/video/${num}.mp4`,
-          }}
-          style={{
-            width: "100%",
-            maxWidth: "100%",
-            aspectRatio: 9 / 16,
-            borderRadius: 6,
-            marginVertical: 3,
-          }}
-          useNativeControls
-          resizeMode={ResizeMode.COVER}
-          posterSource={{
-            uri: `https://app.neuronautica.com/storage/${id}/video/posters/${num}.jpg`,
-          }}
+        <VideoContent
+          id={id}
+          num={num}
+          index={index}
         />
       );
     }
@@ -99,7 +94,10 @@ export const AssistantMessage = ({
             transparent={true}
             animationType="fade"
           >
-            <Pressable style={styles.modalOverlay} onPress={() => setActiveUrl('')}>
+            <Pressable
+              style={styles.modalOverlay}
+              onPress={() => setActiveUrl('')}
+            >
               <Pressable
                 style={styles.modalImageWrapper}
                 onPress={(e) => {

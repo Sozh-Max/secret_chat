@@ -6,3 +6,8 @@ export const enum LOCAL_STORAGE_KEYS {
 	GOOGLE_REFERRER = 'googleReferrer',
 	UID = 'uid',
 }
+
+export const enum PLATFORM {
+	IOS = 'ios',
+	ANDROID = 'android',
+}
