@@ -17,7 +17,6 @@ import {
   NotoSans_700Bold,
   NotoSans_800ExtraBold,
 } from '@expo-google-fonts/noto-sans';
-import { Easing } from 'react-native';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();

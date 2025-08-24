@@ -36,27 +36,4 @@ export const styles = StyleSheet.create({
     color: SUB_COLOR,
     fontFamily: 'NotoSans_400Regular',
   },
-  content: {
-    fontSize: 14,
-    fontFamily: 'NotoSans_400Regular',
-    color: '#fff',
-    maxWidth: '100%',
-  },
-  modalImageWrapper: {
-    width: '98%',
-    aspectRatio: 1,
-    paddingBottom: 'calc(98% * (1 / 0.557734))',
-  },
-  modalImage: {
-    width: "100%",
-    maxWidth: "100%",
-    aspectRatio: 9 / 16,
-    borderRadius: 3,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.9)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
 });
