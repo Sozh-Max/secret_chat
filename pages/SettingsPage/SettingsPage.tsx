@@ -30,6 +30,8 @@ export const SettingsPage = () => {
 
             <SettingsContent
               title='Balance'
+              description="At launch, we decided to give all users virtually unlimited communication. In the future, we'll expand functionality, including paid features, but at this early stage, that's not our focus"
+              contentTop={true}
             >
               <View style={styles.balance_container}>
                 <Text style={styles.balance}>
@@ -45,17 +47,17 @@ export const SettingsPage = () => {
             {/*  <TokensBuy />*/}
             {/*</SettingsContent>*/}
 
-            {/*<SettingsContent*/}
-            {/*  title='Account'*/}
-            {/*  description="To ensure privacy, message history is stored only on this device, we do not collect or store this type of data. Certain hidden features are available depending on the user's account level"*/}
-            {/*>*/}
-            {/*  <LogAccount />*/}
-            {/*</SettingsContent>*/}
-
             <SettingsContent
-              title='System info'
-              description='Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1'
-            />
+              title='Account'
+              description="To ensure privacy, message history is stored only on this device, we do not collect or store this type of data"
+            >
+              {/*<LogAccount />*/}
+            </SettingsContent>
+
+            {/*<SettingsContent*/}
+            {/*  title='System info'*/}
+            {/*  description='Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1'*/}
+            {/*/>*/}
           </View>
 
 

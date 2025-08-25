@@ -29,7 +29,7 @@ const Header = ({
   const handlePressBackBtn = () => {
     setTimeout(() => {
       router.push('/');
-    }, 300);
+    }, 50);
   };
 
   const handlePressClear = () => {

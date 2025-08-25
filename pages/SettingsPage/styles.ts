@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     paddingBottom: 30,
   },
   balance_container: {
-    paddingBottom: 22,
+    paddingBottom: 15,
   },
   balance: {
     fontSize: 24,

@@ -14,7 +14,7 @@ export const Header = () => {
   const handlePressSettings = () => {
     setTimeout(() => {
       router.push('/settings');
-    }, 300);
+    }, 50);
   }
 
   return (

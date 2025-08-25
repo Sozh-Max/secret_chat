@@ -1,8 +1,13 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
+  wrapper: {
+    flexDirection: 'column',
+    marginBottom: 16,
+  },
   container: {
     flexDirection: 'column',
+    gap: 8,
   },
   title: {
     marginBottom: 16,
@@ -16,7 +21,6 @@ export const styles = StyleSheet.create({
   },
   description: {
     fontSize: 12,
-    paddingBottom: 8,
     color: '#969696',
     fontFamily: 'NotoSans_400Regular',
   },

@@ -17,6 +17,8 @@ import {
   NotoSans_700Bold,
   NotoSans_800ExtraBold,
 } from '@expo-google-fonts/noto-sans';
+import { View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -38,6 +40,12 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <SafeAreaProvider>
+        <LinearGradient
+          colors={['rgb(5, 4, 4)', 'rgb(22, 22, 22)']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          style={{ flex: 1 }}
+        >
         <GlobalProvider>
           <Stack
             screenOptions={{
@@ -70,6 +78,7 @@ export default function RootLayout() {
           </Stack>
           <StatusBar style="auto"/>
         </GlobalProvider>
+        </LinearGradient>
       </SafeAreaProvider>
     </ThemeProvider>
   );
