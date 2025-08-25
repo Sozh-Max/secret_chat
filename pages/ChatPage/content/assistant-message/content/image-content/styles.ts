@@ -7,14 +7,13 @@ export const styles = StyleSheet.create({
   image: {
     width: "100%",
     aspectRatio: 256 / 459,
-    borderRadius: 6,
     marginVertical: 3,
   },
   modalImageWrapper: {
-    width: '98%',
+    width: '90%',
     aspectRatio: 9 / 16,
-    // aspectRatio: 1,
-    // paddingBottom: 'calc(98% * (1 / 0.557734))',
+    borderRadius: 8,
+    overflow: 'hidden',
   },
   modalImage: {
     width: "100%",

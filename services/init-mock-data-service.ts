@@ -24,15 +24,11 @@ export class InitMockDataService {
 	async setInitUserData() {
 		return await AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.USER_DATA, JSON.stringify({
 			userStatus: "basic",
-			tokens: 10000,
+			tokens: 100000,
 			email: "default",
 			accountLevel: "0",
 			tokenVolume: 0,
 			proAccountEndTime: "",
-			settings: {
-				assistantIdCurrent: "wendy",
-				isHideSidebar: 0
-			}
 		}))
 	}
 

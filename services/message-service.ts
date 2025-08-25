@@ -5,6 +5,10 @@ import { api } from '@/api/api';
 import { ROLES } from '@/api/constants';
 import { IMessage } from '@/api/interfaces';
 
+function getRandomInt(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 const getHoursAndMinutesFromMs = (timestamp: number) => {
   const date = new Date(timestamp);
 
@@ -58,12 +62,14 @@ class MessageService {
     setDialogs,
     assistantDialog,
     setLoading,
+    setShowTyping,
   }: {
     id: AGENT_KEYS;
     message: string;
     setDialogs: Dispatch<SetStateAction<Dialogs>>;
     assistantDialog: IDialogItem[];
     setLoading: (state: boolean) => void;
+    setShowTyping: (state: boolean) => void;
   }): Promise<void> {
     const replic: IMessage = {
       content: message,
@@ -78,29 +84,48 @@ class MessageService {
       isBlocked: false,
     });
 
-    await api.sendMessages({
-      assistantId: id,
-      messages: [
-        ...assistantDialog?.map((dialog) => dialog.replic),
-        replic,
-      ]
-    }).then(async (data) => {
-      if (data.ok) {
-        const response = await data.json();
-        const replic = response.choices[0].message;
+    const timeout = getRandomInt(500, 1500);
 
+    const startTime = Date.now();
 
-        if (response) {
-          setData({
-            replic,
-            id,
-            setDialogs,
-            timestamp: response.created * 1000,
-            isBlocked: replic.content.includes('*blacklist*'),
-          });
+    setTimeout(() => {
+      setShowTyping(true);
+      api.sendMessages({
+        assistantId: id,
+        messages: [
+          ...assistantDialog?.map((dialog) => dialog.replic),
+          replic,
+        ]
+      }).then(async (data) => {
+        if (data.ok) {
+          const response = await data.json();
+          const replic = response.choices[0].message;
+
+          const intervalId = setInterval(() => {
+            if (startTime + 600 < Date.now()) {
+              clearInterval(intervalId);
+              setShowTyping(false);
+
+              if (response) {
+                setData({
+                  replic,
+                  id,
+                  setDialogs,
+                  timestamp: response.created * 1000,
+                  isBlocked: replic.content.includes('*blacklist*'),
+                });
+              }
+            }
+          }, 100);
         }
-      }
-    }).finally(() => setLoading(false));
+      }).finally(() => {
+        setLoading(false);
+
+        setTimeout(() => {
+          setShowTyping(false);
+        }, 600)
+      });
+    }, timeout);
   }
 
   removeHistoryById({

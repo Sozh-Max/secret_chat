@@ -5,11 +5,9 @@ import { styles } from '@/pages/ChatPage/content/assistant-message/content/image
 export const ImageContent = ({
   id,
   num,
-  index,
 }: {
   id: string;
   num: string;
-  index: number;
 }) => {
   const [activeUrl, setActiveUrl] = useState<string>('');
   const url = `https://app.neuronautica.com/storage/${id}/photo/${num}.jpg`;
@@ -21,7 +19,6 @@ export const ImageContent = ({
         style={styles.imageWrapper}
       >
         <Image
-          key={index}
           source={{
             uri: url,
           }}

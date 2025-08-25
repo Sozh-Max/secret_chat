@@ -1,5 +1,5 @@
-import { router, useLocalSearchParams } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { useCallback, useEffect, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { View } from 'react-native';
 
@@ -9,16 +9,28 @@ import { ChatWrapper } from '@/pages/ChatPage/content/chat-wrapper/ChatWrapper';
 import { FormScreenWrapper } from '@/components/FormScreenWrapper/FormScreenWrapper';
 import { AGENT_KEYS } from '@/constants/agents-data';
 import { SafeAreaInsectComponent } from '@/components/SafeAreaInsectComponent/SafeAreaInsectComponent';
+import { useGlobal } from '@/contexts/GlobalContext';
 
 export const ChatPage = () => {
   const { id } = useLocalSearchParams<{ id: AGENT_KEYS }>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [isShowTyping, setShowTyping] = useState(false);
+
+  const { setActiveChatVideoId} = useGlobal();
 
   useEffect(() => {
     if (!id) {
       router.navigate('/');
     }
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setActiveChatVideoId('');
+      };
+    }, [])
+  );
 
   return (
     <SafeAreaInsectComponent>
@@ -34,10 +46,15 @@ export const ChatPage = () => {
               <Header id={id} />
 
               <View style={{ flex: 1 }}>
-                <ChatWrapper id={id} loading={loading} />
+                <ChatWrapper id={id} isShowTyping={isShowTyping} />
               </View>
 
-              <ChatInput id={id} setLoading={setLoading} />
+              <ChatInput
+                id={id}
+                setLoading={setLoading}
+                loading={loading}
+                setShowTyping={setShowTyping}
+              />
             </View>
         </LinearGradient>
       </FormScreenWrapper>

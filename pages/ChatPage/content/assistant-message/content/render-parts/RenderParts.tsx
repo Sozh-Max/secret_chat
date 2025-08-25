@@ -36,7 +36,6 @@ export const RenderParts = ({
       <ImageContent
         id={id}
         num={num}
-        index={index}
       />
     );
   }
@@ -46,7 +45,6 @@ export const RenderParts = ({
       <VideoContent
         id={id}
         num={num}
-        index={index}
       />
     );
   }

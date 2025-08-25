@@ -12,11 +12,15 @@ import { styles } from '@/pages/ChatPage/content/chat-input/styles';
 
 interface ChatInputProps extends IdTypeProps {
   setLoading: (loading: boolean) => void;
+  setShowTyping: (show: boolean) => void;
+  loading: boolean;
 }
 
 const ChatInput = ({
   id,
   setLoading,
+  setShowTyping,
+  loading,
 }: ChatInputProps) => {
   const [text, setText] = useState<string>('');
   const [isVisiblePicker, setIsVisiblePicker] = useState<boolean>(false);
@@ -54,16 +58,17 @@ const ChatInput = ({
         setDialogs,
         assistantDialog: dialog?.dialog || [],
         setLoading,
+        setShowTyping,
       });
     }
   };
 
   useEffect(() => {
-    if (isBlocked) {
+    if (isBlocked || loading) {
       setIsVisiblePicker(false);
       setText('');
     }
-  }, [isBlocked, setIsVisiblePicker])
+  }, [isBlocked, loading, setIsVisiblePicker])
 
   return (
     <View style={styles.container}>
@@ -86,7 +91,9 @@ const ChatInput = ({
       />
 
       <Pressable style={styles.button} onPress={sendMessage}>
-        <IconSend color={isBlocked ? LOW_COLOR : MAIN_COLOR} />
+        <IconSend
+          color={(isBlocked || loading) ? LOW_COLOR : MAIN_COLOR}
+        />
       </Pressable>
 
       {isVisiblePicker && (

@@ -1,6 +1,6 @@
-import { View, ScrollView } from 'react-native';
+import { FlatList } from 'react-native';
 import { ImageBackground } from 'expo-image';
-import { useMemo, useEffect, useRef } from 'react';
+import { useMemo, useEffect, useRef, useState } from 'react';
 
 import { IMG_POSTER_MAP } from '@/constants/agents-data';
 import { styles } from '@/pages/ChatPage/content/chat-wrapper/styles';
@@ -12,18 +12,16 @@ import { TypingComponent } from '@/pages/ChatPage/content/typing-component/Typin
 import { useKeyboardStatus } from '@/hooks/useKeyboardStatus';
 
 interface IChatWrapperProps extends IdTypeProps {
-  loading: boolean;
+  isShowTyping: boolean;
 }
 
-export const ChatWrapper = ({
-  id,
-  loading,
-}: IChatWrapperProps) => {
+export const ChatWrapper = ({ id, isShowTyping }: IChatWrapperProps) => {
   const { dialogs } = useGlobal();
-  const scrollRef = useRef<ScrollView>(null);
+  const [page, setPage] = useState(1);
+
+  const PAGE_SIZE = 8;
 
   const dialog = dialogs[id];
-
   const isKeyboardVisible = useKeyboardStatus();
 
   const currentDialog = useMemo(() => {
@@ -31,48 +29,58 @@ export const ChatWrapper = ({
     return [...array].reverse();
   }, [dialog?.dialog?.length]);
 
+  const messagesToRender = useMemo(() => {
+    return currentDialog.slice(0, page * PAGE_SIZE);
+  }, [currentDialog, page]);
+
+  const listRef = useRef<FlatList<any>>(null);
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current?.scrollToEnd({ animated: true });
+    if (listRef.current) {
+      listRef.current.scrollToOffset({ offset: 0, animated: true });
     }
   }, [currentDialog.length, dialog?.isBlocked]);
 
   useEffect(() => {
     if (isKeyboardVisible) {
       setTimeout(() => {
-        scrollRef.current?.scrollToEnd({ animated: true });
-      }, 100)
+        listRef.current?.scrollToOffset({ offset: 0, animated: true });
+      }, 100);
     }
   }, [isKeyboardVisible]);
+
+  const loadMore = () => {
+    if (messagesToRender.length < currentDialog.length) {
+      setPage((prev) => prev + 1);
+    }
+  };
 
   return (
     <ImageBackground
       source={IMG_POSTER_MAP[id]}
       style={styles.image_background}
     >
-      <ScrollView
-        ref={scrollRef}
+      <FlatList
+        ref={listRef}
+        data={messagesToRender}
+        keyExtractor={(_, i) => i.toString()}
+        renderItem={({ item }) => (
+          <CombinerMessage dialog={item} id={id} />
+        )}
+        ListHeaderComponent={
+          <>
+            {isShowTyping && <TypingComponent id={id} />}
+            {dialog?.isBlocked && <SystemMessage id={id} isBlocked />}
+          </>
+        }
         style={styles.wrapper}
+        ListFooterComponent={<SystemMessage id={id} />}
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-      >
-        <View style={styles.inner}>
-          {loading && <TypingComponent id={id}/>}
-          {dialog?.isBlocked && (
-            <SystemMessage id={id} isBlocked={true} />
-          )}
-          {currentDialog.map((currentDialog, i) => (
-            <CombinerMessage
-              key={i}
-              dialog={currentDialog}
-              id={id}
-            />
-          ))}
-          <SystemMessage id={id} />
-        </View>
-      </ScrollView>
+        inverted
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.2}
+      />
     </ImageBackground>
   );
 };
