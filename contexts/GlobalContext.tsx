@@ -33,8 +33,8 @@ type GlobalContextType = {
   setDialogs: Dispatch<SetStateAction<Dialogs>>;
   setTokens: Dispatch<SetStateAction<number>>;
   deviceRegion: string;
-  activeChatVideoId: string;
-  setActiveChatVideoId: Dispatch<SetStateAction<string>>;
+  activeChatVideoId: number;
+  setActiveChatVideoId: Dispatch<SetStateAction<number>>;
 }
 
 export interface IDialogPreview {
@@ -84,7 +84,7 @@ export const GlobalProvider = (
   const [dialogPreview, setDialogPreview] = useState<IDialogPreview[]>([]);
   const [deviceRegion] = useState<string>(mainUtils.getDeviceRegion());
   const [uniqueId, setUniqueId] = useState<string>('');
-  const [activeChatVideoId, setActiveChatVideoId] = useState<string>('');
+  const [activeChatVideoId, setActiveChatVideoId] = useState<number>(0);
 
   useGooglePlayInstallReferrer(deviceRegion, uniqueId);
 

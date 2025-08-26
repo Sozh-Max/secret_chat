@@ -15,10 +15,6 @@ export const AssistantMessage = ({
 }) => {
   const content = dialog.replic.content || "";
 
-  const parts = content
-    .split(/({{2,3}(?:photo|video)_\d+}{2,3})/g)
-    .filter(Boolean);
-
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
@@ -28,14 +24,10 @@ export const AssistantMessage = ({
           <Text style={styles.time}>{dialog.create}</Text>
         </View>
         <View style={{ gap: 4, flexWrap: "wrap" }}>
-          {parts.map((part, index) => (
-            <RenderParts
-              key={index}
-              part={part}
-              id={id}
-              index={index}
-            />
-          ))}
+          <RenderParts
+            part={content}
+            id={id}
+          />
         </View>
       </View>
     </View>

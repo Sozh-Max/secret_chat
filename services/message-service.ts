@@ -101,6 +101,12 @@ class MessageService {
           const response = await data.json();
           const replic = response.choices[0].message;
 
+          const match = replic.content.match(/{{2,3}(photo|video)_(\d+)}{2,3}/);
+
+          if (match?.[0]) {
+            replic.content = match[0];
+          }
+
           const intervalId = setInterval(() => {
             if (startTime + 600 < Date.now()) {
               clearInterval(intervalId);

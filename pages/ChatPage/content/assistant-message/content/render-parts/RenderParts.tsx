@@ -6,20 +6,16 @@ import { styles } from '@/pages/ChatPage/content/assistant-message/content/rende
 
 export const RenderParts = ({
   part,
-  index,
   id,
 }: {
   id: string;
   part: string;
-  index: number;
 }) => {
-
   const match = part.match(/{{2,3}(photo|video)_(\d+)}{2,3}/);
 
   if (!match) {
     return (
       <Text
-        key={index}
         style={styles.content}
       >
         {part.trim()}

@@ -48,7 +48,7 @@ const ChatInput = ({
       return;
     }
 
-    if (!isBlocked && text.trim()) {
+    if (!isBlocked && !loading && text.trim()) {
       setText('');
       setTokens(val => val -  (dialog?.cost || 0));
 

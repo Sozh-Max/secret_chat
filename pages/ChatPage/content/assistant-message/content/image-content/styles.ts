@@ -8,18 +8,17 @@ export const styles = StyleSheet.create({
     width: "100%",
     aspectRatio: 256 / 459,
     marginVertical: 3,
+    borderRadius: 8,
   },
   modalImageWrapper: {
     width: '90%',
-    aspectRatio: 9 / 16,
-    borderRadius: 8,
+    aspectRatio: 256 / 459,
     overflow: 'hidden',
   },
   modalImage: {
     width: "100%",
-    maxWidth: "100%",
-    aspectRatio: 9 / 16,
-    borderRadius: 3,
+    aspectRatio: 256 / 459,
+    borderRadius: 10,
   },
   modalOverlay: {
     flex: 1,

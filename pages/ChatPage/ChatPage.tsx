@@ -27,7 +27,7 @@ export const ChatPage = () => {
   useFocusEffect(
     useCallback(() => {
       return () => {
-        setActiveChatVideoId('');
+        setActiveChatVideoId(0);
       };
     }, [])
   );

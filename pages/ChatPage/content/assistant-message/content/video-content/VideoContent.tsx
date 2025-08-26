@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { styles } from '@/pages/ChatPage/content/assistant-message/content/video-content/styles';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { VideoPlayer } from '@/pages/ChatPage/content/assistant-message/content/video-content/VideoPlayer';
+import { useState } from 'react';
 
 
 export const VideoContent = ({
@@ -14,13 +15,17 @@ export const VideoContent = ({
   num: string;
 }) => {
   const { activeChatVideoId, setActiveChatVideoId} = useGlobal();
+  const [tempId, setTempId] = useState<number>(Date.now() * Number(num));
 
-  const currentId = `${id}-${num}`;
-
-  const isActiveVideo = currentId === activeChatVideoId;
+  const isActiveVideo = tempId === activeChatVideoId;
 
   const videoSource = `https://app.neuronautica.com/storage/${id}/video/${num}.mp4`;
   const thumbImg = `https://app.neuronautica.com/storage/${id}/video/posters/${num}.jpg`;
+
+  const handlePress = (id: number) => {
+    setActiveChatVideoId(id);
+    setTempId(id);
+  }
 
   return (
     <View style={styles.wrapper}>
@@ -40,7 +45,7 @@ export const VideoContent = ({
           />
             <Pressable
               style={styles.button}
-              onPress={() => setActiveChatVideoId(currentId)}
+              onPress={() => handlePress(Date.now())}
             >
               <Ionicons name="play-circle" size={64} color="white" />
             </Pressable>
