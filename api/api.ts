@@ -1,3 +1,5 @@
+import { Base64 } from 'js-base64';
+
 import { IMessagesRequest } from '@/api/interfaces';
 import { PLATFORM } from '@/services/constants';
 import { IDialog } from '@/contexts/GlobalContext';
@@ -41,13 +43,23 @@ class Api {
     dialog: IDialog;
     id: string;
   }) => {
-    return fetch(`${this.link}/`, {
+
+    // console.log(JSON.stringify({
+    //   tid: id,
+    //   data: btoa(JSON.stringify(dialog)),
+    //   eventTG: 'complaints',
+    //   is_base64: 1,
+    // }));
+    return await fetch(`${this.link}/`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         tid: id,
-        data: dialog,
+        data: Base64.encode(JSON.stringify(dialog)),
         eventTG: 'complaints',
-        is_base64: 0,
+        is_base64: 1,
       }),
     })
   }

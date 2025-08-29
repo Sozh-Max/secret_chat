@@ -18,9 +18,9 @@ const ComplaintContext = createContext<ComplaintContextType | undefined>(undefin
 
 export const ComplaintProvider = (
   { children }:
-  { children: ReactNode }
+  { children: ReactNode },
 ) => {
-  const { dialogs, setDialogs,uniqueId } = useGlobal();
+  const { dialogs, setDialogs, uniqueId } = useGlobal();
 
   const [activeComplaint, setActiveComplaint] = useState<AGENT_KEYS | null>(null);
   const [showComplaintChat, setShowComplaintChat] = useState<AGENT_KEYS | null>(null);
@@ -30,12 +30,12 @@ export const ComplaintProvider = (
     setShowComplaint(true);
     setActiveComplaint(id);
     setShowComplaintChat(null);
-  }
+  };
 
   const disActiveComplaint = () => {
     setShowComplaint(false);
     setActiveComplaint(null);
-  }
+  };
 
   const complaintSucceeded = (id: AGENT_KEYS) => {
     messageService.complaintUserById({
@@ -43,7 +43,7 @@ export const ComplaintProvider = (
       setDialogs,
     });
     disActiveComplaint();
-  }
+  };
 
   const complaintFailed = (id?: AGENT_KEYS) => {
     if (id) {
@@ -53,13 +53,13 @@ export const ComplaintProvider = (
     }
 
     disActiveComplaint();
-  }
+  };
 
   const sendComplaint = async () => {
     const id = activeComplaint;
 
     if (id && dialogs[id]) {
-      messageService.sendComplaint({
+      await messageService.sendComplaint({
         dialog: dialogs[id],
         id: uniqueId,
       })
@@ -79,7 +79,7 @@ export const ComplaintProvider = (
     } else {
       complaintFailed();
     }
-  }
+  };
 
   return (
     <ComplaintContext.Provider

@@ -111,7 +111,7 @@ export const GlobalProvider = (
         setDialogPreview,
       });
     };
-    //AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.IS_INIT, '');
+    // AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.IS_INIT, '');
     getInitData();
   }, []);
 
