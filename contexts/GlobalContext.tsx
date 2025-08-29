@@ -21,7 +21,7 @@ export interface IDialog {
   name: string;
   cost: number;
   isBlocked: boolean;
-  isComplained?: boolean;
+  isComplaint?: boolean;
   hasVideo: boolean;
 }
 
@@ -45,6 +45,7 @@ export interface IDialogPreview {
   lastMessageTime: number | null;
   cost: number;
   isBlocked: boolean;
+  isComplaint?: boolean;
   hasVideo: boolean;
 }
 
@@ -69,6 +70,7 @@ const refreshChats = ({
       lastMessageTime: lastMessage?.createTime ?? null,
       cost: dialog.cost,
       isBlocked: dialog.isBlocked ?? false,
+      isComplaint: dialog.isComplaint ?? false,
       hasVideo: dialog.hasVideo,
     };
   }).sort((a, b) => b.lastMessageTime - a.lastMessageTime));

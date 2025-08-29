@@ -51,7 +51,7 @@ export const ChatWrapper = ({
   }, [
     currentDialog.length,
     dialog?.isBlocked,
-    dialog?.isComplained,
+    dialog?.isComplaint,
   ]);
 
   useEffect(() => {
@@ -95,7 +95,7 @@ export const ChatWrapper = ({
                 message={COMPLAINT_FAILED_TEXT}
               />
             )}
-            {dialog?.isComplained && (
+            {dialog?.isComplaint && (
               <SystemMessage
                 id={id}
                 message={COMPLAINT_SUCCEED_TEXT}

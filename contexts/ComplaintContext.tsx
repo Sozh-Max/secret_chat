@@ -29,7 +29,7 @@ export const ComplaintProvider = (
   const activateComplaint = (id: AGENT_KEYS) => {
     setShowComplaint(true);
     setActiveComplaint(id);
-    disActiveComplaint();
+    setShowComplaintChat(null);
   }
 
   const disActiveComplaint = () => {
