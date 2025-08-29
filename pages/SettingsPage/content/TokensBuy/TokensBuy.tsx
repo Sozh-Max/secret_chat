@@ -1,7 +1,7 @@
 import { Animated, Pressable, View, Text } from 'react-native';
 import { styles } from '@/pages/SettingsPage/content/TokensBuy/styles';
 import { useRef, useState } from 'react';
-import { CustomButton } from '@/pages/SettingsPage/content/CustomButton/CustomButton';
+import { CustomButton } from '@/components/CustomButton/CustomButton';
 
 const VALUES: number[] = [100, 500, 2500, 10000];
 

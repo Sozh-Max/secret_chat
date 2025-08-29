@@ -1,7 +1,7 @@
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
-import { View } from 'react-native';
+import {  View } from 'react-native';
 
 import Header from '@/pages/ChatPage/content/header/Header';
 import ChatInput from '@/pages/ChatPage/content/chat-input/ChatInput';
@@ -10,11 +10,12 @@ import { FormScreenWrapper } from '@/components/FormScreenWrapper/FormScreenWrap
 import { AGENT_KEYS } from '@/constants/agents-data';
 import { SafeAreaInsectComponent } from '@/components/SafeAreaInsectComponent/SafeAreaInsectComponent';
 import { useGlobal } from '@/contexts/GlobalContext';
+import { ComplaintProvider } from '@/contexts/ComplaintContext';
 
 export const ChatPage = () => {
   const { id } = useLocalSearchParams<{ id: AGENT_KEYS }>();
   const [loading, setLoading] = useState<boolean>(false);
-  const [isShowTyping, setShowTyping] = useState(false);
+  const [isShowTyping, setShowTyping] = useState<boolean>(false);
 
   const { setActiveChatVideoId} = useGlobal();
 
@@ -32,21 +33,36 @@ export const ChatPage = () => {
     }, [])
   );
 
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setActiveChatVideoId(0);
+      };
+    }, [])
+  );
+
   return (
     <SafeAreaInsectComponent>
       <FormScreenWrapper>
-        <LinearGradient
-          colors={['rgb(5, 4, 4)', 'rgb(22, 22, 22)']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          style={{ flex: 1 }}
-        >
+        <ComplaintProvider>
+          <LinearGradient
+            colors={['rgb(5, 4, 4)', 'rgb(22, 22, 22)']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={{ flex: 1 }}
+          >
             <View style={{ flex: 1 }}>
 
-              <Header id={id} />
+              <Header
+                id={id}
+              />
 
               <View style={{ flex: 1 }}>
-                <ChatWrapper id={id} isShowTyping={isShowTyping} />
+                <ChatWrapper
+                  id={id}
+                  isShowTyping={isShowTyping}
+                />
               </View>
 
               <ChatInput
@@ -56,7 +72,8 @@ export const ChatPage = () => {
                 setShowTyping={setShowTyping}
               />
             </View>
-        </LinearGradient>
+          </LinearGradient>
+        </ComplaintProvider>
       </FormScreenWrapper>
     </SafeAreaInsectComponent>
   );

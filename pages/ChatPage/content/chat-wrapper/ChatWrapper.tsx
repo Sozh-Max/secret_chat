@@ -15,7 +15,10 @@ interface IChatWrapperProps extends IdTypeProps {
   isShowTyping: boolean;
 }
 
-export const ChatWrapper = ({ id, isShowTyping }: IChatWrapperProps) => {
+export const ChatWrapper = ({
+  id,
+  isShowTyping,
+}: IChatWrapperProps) => {
   const { dialogs } = useGlobal();
   const [page, setPage] = useState(1);
 

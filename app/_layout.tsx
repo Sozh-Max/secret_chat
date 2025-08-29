@@ -17,7 +17,7 @@ import {
   NotoSans_700Bold,
   NotoSans_800ExtraBold,
 } from '@expo-google-fonts/noto-sans';
-import { View } from 'react-native';
+
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function RootLayout() {

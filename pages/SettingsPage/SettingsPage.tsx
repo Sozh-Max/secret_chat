@@ -3,7 +3,7 @@ import { View, Text, ScrollView } from 'react-native';
 
 import { SafeAreaInsectComponent } from '@/components/SafeAreaInsectComponent/SafeAreaInsectComponent';
 import { Header } from '@/pages/SettingsPage/content/Header/Header';
-import { SettingsContent } from '@/pages/SettingsPage/content/SettingsContent/SettingsContent';
+import { TemplateContent } from '@/components/TemplateContent/TemplateContent';
 import { TokensBuy } from '@/pages/SettingsPage/content/TokensBuy/TokensBuy';
 import { LogAccount } from '@/pages/SettingsPage/content/LogAccount/LogAccount';
 import { useGlobal } from '@/contexts/GlobalContext';
@@ -28,7 +28,7 @@ export const SettingsPage = () => {
         >
           <View style={styles.inner}>
 
-            <SettingsContent
+            <TemplateContent
               title='Balance'
               description="At launch, we decided to give all users virtually unlimited communication. In the future, we'll expand functionality, including paid features, but at this early stage, that's not our focus"
               contentTop={true}
@@ -38,23 +38,23 @@ export const SettingsPage = () => {
                   ⭐ {tokens}
                 </Text>
               </View>
-            </SettingsContent>
+            </TemplateContent>
 
-            {/*<SettingsContent*/}
+            {/*<TemplateContent*/}
             {/*  title='Star purchase'*/}
             {/*  description='To use chat features, view photos, or watch videos, users must have a sufficient star balance'*/}
             {/*>*/}
             {/*  <TokensBuy />*/}
-            {/*</SettingsContent>*/}
+            {/*</TemplateContent>*/}
 
-            <SettingsContent
+            <TemplateContent
               title='Account'
               description="To ensure privacy, message history is stored only on this device, we do not collect or store this type of data"
             >
               {/*<LogAccount />*/}
-            </SettingsContent>
+            </TemplateContent>
 
-            {/*<SettingsContent*/}
+            {/*<TemplateContent*/}
             {/*  title='System info'*/}
             {/*  description='Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1'*/}
             {/*/>*/}

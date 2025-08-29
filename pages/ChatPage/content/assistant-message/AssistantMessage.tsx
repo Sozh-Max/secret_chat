@@ -6,6 +6,11 @@ import { AGENT_KEYS } from '@/constants/agents-data';
 import { styles } from '@/pages/ChatPage/content/assistant-message/styles';
 import { RenderParts } from '@/pages/ChatPage/content/assistant-message/content/render-parts/RenderParts';
 
+import { MAIN_COLOR } from '@/constants/Colors';
+import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
+import { useComplaint } from '@/contexts/ComplaintContext';
+import { IconComplaintFlag } from '@/components/icons/IconComplaintFlag';
+
 export const AssistantMessage = ({
   dialog,
   id,
@@ -13,17 +18,27 @@ export const AssistantMessage = ({
   dialog: IDialogItem;
   id: AGENT_KEYS;
 }) => {
-  const content = dialog.replic.content || "";
+  const { activateComplaint } = useComplaint();
+
+  const content = dialog.replic.content || '';
 
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <IconResponse />
-          <Text style={styles.name}>{id}</Text>
-          <Text style={styles.time}>{dialog.create}</Text>
+          <View style={styles.header_content}>
+            <IconResponse/>
+            <Text style={styles.name}>{id}</Text>
+            <Text style={styles.time}>{dialog.create}</Text>
+          </View>
+          <AnimatedPressBtn
+            style={styles.button_complaint}
+            onPress={() => activateComplaint(id)}
+          >
+            <IconComplaintFlag color={MAIN_COLOR}/>
+          </AnimatedPressBtn>
         </View>
-        <View style={{ gap: 4, flexWrap: "wrap" }}>
+        <View style={{ gap: 4, flexWrap: 'wrap' }}>
           <RenderParts
             part={content}
             id={id}

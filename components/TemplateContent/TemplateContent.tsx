@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { View, Text } from 'react-native';
 
-import { styles } from '@/pages/SettingsPage/content/SettingsContent/style';
+import { styles } from '@/components/TemplateContent/style';
 
 type SettingsContentProps = {
   title: string;
@@ -10,7 +10,7 @@ type SettingsContentProps = {
   contentTop?: boolean;
 }
 
-export const SettingsContent = ({
+export const TemplateContent = ({
   title,
   description,
   contentTop = false,

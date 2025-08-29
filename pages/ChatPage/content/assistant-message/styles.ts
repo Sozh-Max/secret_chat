@@ -21,6 +21,10 @@ export const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  header_content: {
+    flexDirection: 'row',
     paddingBottom: 8,
     gap: 8,
     alignItems: 'center',
@@ -35,5 +39,8 @@ export const styles = StyleSheet.create({
     fontSize: 13,
     color: SUB_COLOR,
     fontFamily: 'NotoSans_400Regular',
+  },
+  button_complaint: {
+
   },
 });
