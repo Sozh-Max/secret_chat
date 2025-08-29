@@ -1,7 +1,10 @@
 import { ChatPage } from '@/pages/ChatPage/ChatPage';
+import { ComplaintProvider } from '@/contexts/ComplaintContext';
 
 export default function Chat() {
   return (
-    <><ChatPage /></>
+    <ComplaintProvider>
+      <ChatPage />
+    </ComplaintProvider>
   )
 }

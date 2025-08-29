@@ -28,6 +28,7 @@ const Header = ({
   const dialog = dialogs[id];
 
   const isActiveRemove = Boolean(dialog?.dialog.length) && !dialog?.isBlocked;
+  const isActiveComplaint = Boolean(dialog?.dialog.length) && !dialog?.isComplained;
 
   const handlePressBackBtn = () => {
     setTimeout(() => {
@@ -36,7 +37,9 @@ const Header = ({
   };
 
   const handleComplaint = () => {
-    activateComplaint(id);
+    if (isActiveComplaint && id) {
+      activateComplaint(id);
+    }
   }
 
   const handlePressClear = () => {
@@ -108,7 +111,7 @@ const Header = ({
         style={styles.button_mini}
         onPress={handleComplaint}
       >
-        <IconComplaint color={MAIN_COLOR}/>
+        <IconComplaint color={isActiveComplaint ? MAIN_COLOR : LOW_COLOR}/>
       </AnimatedPressBtn>
     </View>
   );

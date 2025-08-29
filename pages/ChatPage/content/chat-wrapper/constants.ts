@@ -1,0 +1,3 @@
+export const BLOCKED_TEXT = "Uh oh! Something messed up. Looks like this person has blocked you. We're saving this chat and sending it to our moderators. Just a reminder that our rules don't allow talking about violence, drugs, or suicide, and doing so could get your account totally banned.";
+export const COMPLAINT_FAILED_TEXT = "Failed to send data. Please check your network connection and try again.";
+export const COMPLAINT_SUCCEED_TEXT = "The entire content of this chat has been flagged as potentially unethical and has been sent to our development team for review. A specialist will analyze this conversation shortly, and we will take necessary measures to prevent similar situations from occurring in the future.";

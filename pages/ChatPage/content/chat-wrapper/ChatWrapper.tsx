@@ -2,7 +2,7 @@ import { FlatList } from 'react-native';
 import { ImageBackground } from 'expo-image';
 import { useMemo, useEffect, useRef, useState } from 'react';
 
-import { IMG_POSTER_MAP } from '@/constants/agents-data';
+import { AGENTS_DATA, IMG_POSTER_MAP } from '@/constants/agents-data';
 import { styles } from '@/pages/ChatPage/content/chat-wrapper/styles';
 import { SystemMessage } from '@/pages/ChatPage/content/system-message/SystemMessage';
 import { IdTypeProps } from '@/interfaces/global';
@@ -10,6 +10,12 @@ import { useGlobal } from '@/contexts/GlobalContext';
 import { CombinerMessage } from '@/pages/ChatPage/content/combiner-message/CombinerMessage';
 import { TypingComponent } from '@/pages/ChatPage/content/typing-component/TypingComponent';
 import { useKeyboardStatus } from '@/hooks/useKeyboardStatus';
+import { useComplaint } from '@/contexts/ComplaintContext';
+import {
+  BLOCKED_TEXT,
+  COMPLAINT_FAILED_TEXT,
+  COMPLAINT_SUCCEED_TEXT,
+} from '@/pages/ChatPage/content/chat-wrapper/constants';
 
 interface IChatWrapperProps extends IdTypeProps {
   isShowTyping: boolean;
@@ -20,6 +26,7 @@ export const ChatWrapper = ({
   isShowTyping,
 }: IChatWrapperProps) => {
   const { dialogs } = useGlobal();
+  const { showComplaintChat } = useComplaint();
   const [page, setPage] = useState(1);
 
   const PAGE_SIZE = 8;
@@ -41,7 +48,11 @@ export const ChatWrapper = ({
     if (listRef.current) {
       listRef.current.scrollToOffset({ offset: 0, animated: true });
     }
-  }, [currentDialog.length, dialog?.isBlocked]);
+  }, [
+    currentDialog.length,
+    dialog?.isBlocked,
+    dialog?.isComplained,
+  ]);
 
   useEffect(() => {
     if (isKeyboardVisible) {
@@ -72,11 +83,32 @@ export const ChatWrapper = ({
         ListHeaderComponent={
           <>
             {isShowTyping && <TypingComponent id={id} />}
-            {dialog?.isBlocked && <SystemMessage id={id} isBlocked />}
+            {dialog?.isBlocked && (
+              <SystemMessage
+                id={id}
+                message={BLOCKED_TEXT}
+              />
+            )}
+            {(id === showComplaintChat) && (
+              <SystemMessage
+                id={id}
+                message={COMPLAINT_FAILED_TEXT}
+              />
+            )}
+            {dialog?.isComplained && (
+              <SystemMessage
+                id={id}
+                message={COMPLAINT_SUCCEED_TEXT}
+              />
+            )}
           </>
         }
         style={styles.wrapper}
-        ListFooterComponent={<SystemMessage id={id} />}
+        ListFooterComponent={<SystemMessage
+          id={id}
+          isImage
+          message={AGENTS_DATA[id]}
+        />}
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}

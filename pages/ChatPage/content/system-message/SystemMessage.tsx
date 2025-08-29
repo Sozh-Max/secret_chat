@@ -5,19 +5,19 @@ import { useState } from 'react';
 import { IdTypeProps } from '@/interfaces/global';
 import { styles } from '@/pages/ChatPage/content/system-message/styles';
 import { IconSystem } from '@/components/icons/IconSystem';
-import { AGENTS_DATA, IMG_PREVIEW_MAP } from '@/constants/agents-data';
+import { IMG_PREVIEW_MAP } from '@/constants/agents-data';
 
-const BLOCKED_TEXT = "Uh oh! Something messed up. Looks like this person has blocked you. We're saving this chat and sending it to our moderators. Just a reminder that our rules don't allow talking about violence, drugs, or suicide, and doing so could get your account totally banned.";
 
-interface SystemMessage extends IdTypeProps {
-  isBlocked?: boolean
+interface SystemMessageType extends IdTypeProps {
+  message?: string;
+  isImage?: boolean;
 }
 
 export const SystemMessage = ({
   id,
-  isBlocked = false,
-}: SystemMessage) => {
-  const description = AGENTS_DATA[id];
+  message,
+  isImage = false,
+}: SystemMessageType) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
@@ -28,12 +28,13 @@ export const SystemMessage = ({
           <IconSystem/>
           <Text style={styles.title}>System</Text>
         </View>
+        {Boolean(message) && (
+          <Text style={styles.text}>
+            {message}
+          </Text>
+        )}
 
-        <Text style={styles.text}>
-          {isBlocked ? BLOCKED_TEXT : description}
-        </Text>
-
-        {!isBlocked && (
+        {isImage && (
           <Pressable onPress={() => setModalVisible(true)}>
             <Image
               source={IMG_PREVIEW_MAP[id]}
@@ -42,7 +43,7 @@ export const SystemMessage = ({
           </Pressable>
         )}
 
-        {!isBlocked && (
+        {isImage && (
           <Modal
             visible={modalVisible}
             transparent={true}

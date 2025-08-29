@@ -21,6 +21,7 @@ export interface IDialog {
   name: string;
   cost: number;
   isBlocked: boolean;
+  isComplained?: boolean;
   hasVideo: boolean;
 }
 

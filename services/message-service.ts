@@ -1,6 +1,6 @@
 import { AGENT_KEYS } from '@/constants/agents-data';
 import { Dispatch, SetStateAction } from 'react';
-import { Dialogs, IDialogItem } from '@/contexts/GlobalContext';
+import { Dialogs, IDialog, IDialogItem } from '@/contexts/GlobalContext';
 import { api } from '@/api/api';
 import { ROLES } from '@/api/constants';
 import { IMessage } from '@/api/interfaces';
@@ -149,6 +149,14 @@ class MessageService {
         [id]: current,
       }
     });
+  }
+
+  sendComplaint({
+    dialog,
+  }:  {
+    dialog: IDialog;
+  }) {
+    return api.sendComplaint({ dialog });
   }
 }
 
