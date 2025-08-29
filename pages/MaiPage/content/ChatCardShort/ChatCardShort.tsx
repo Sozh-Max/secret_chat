@@ -43,11 +43,11 @@ const ChatCardShort = ({
           <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
             {data.id}
           </Text>
-          {data.hasVideo && (
-            <IconPlayShort />
-          )}
           {(data.isBlocked || data.isComplaint) && (
             <IconBlock />
+          )}
+          {data.hasVideo && (
+            <IconPlayShort />
           )}
         </View>
         <Text style={[styles.description, data.message && styles.message]} numberOfLines={1} ellipsizeMode="tail">

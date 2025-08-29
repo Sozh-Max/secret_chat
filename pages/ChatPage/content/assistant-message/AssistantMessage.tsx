@@ -6,7 +6,7 @@ import { AGENT_KEYS } from '@/constants/agents-data';
 import { styles } from '@/pages/ChatPage/content/assistant-message/styles';
 import { RenderParts } from '@/pages/ChatPage/content/assistant-message/content/render-parts/RenderParts';
 
-import { MAIN_COLOR } from '@/constants/Colors';
+import { MAIN_COLOR, SUB_COLOR } from '@/constants/Colors';
 import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
 import { useComplaint } from '@/contexts/ComplaintContext';
 import { IconComplaintFlag } from '@/components/icons/IconComplaintFlag';
@@ -43,7 +43,9 @@ export const AssistantMessage = ({
             style={styles.button_complaint}
             onPress={handlePressComplaint}
           >
-            <IconComplaintFlag color={MAIN_COLOR}/>
+            <IconComplaintFlag
+              color={(userDialog?.isComplaint || userDialog?.isBlocked) ? SUB_COLOR : MAIN_COLOR}
+            />
           </AnimatedPressBtn>
         </View>
         <View style={{ gap: 4, flexWrap: 'wrap' }}>

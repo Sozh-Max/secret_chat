@@ -37,10 +37,11 @@ export const styles = StyleSheet.create({
     color: '#fff',
     maxWidth: screenWidth - 115,
     textTransform: 'capitalize',
+    marginRight: 3,
   },
   title_container: {
     flexDirection: 'row',
-    gap: 5,
+    gap: 2,
   },
   description: {
     color: MAIN_COLOR,

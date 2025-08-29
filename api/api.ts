@@ -57,7 +57,7 @@ class Api {
       },
       body: JSON.stringify({
         tid: id,
-        data: Base64.encode(JSON.stringify(dialog)),
+        data: Base64.fromUint8Array(new TextEncoder().encode(JSON.stringify(dialog))),
         eventTG: 'complaints',
         is_base64: 1,
       }),
