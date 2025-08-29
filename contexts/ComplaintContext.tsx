@@ -20,7 +20,7 @@ export const ComplaintProvider = (
   { children }:
   { children: ReactNode }
 ) => {
-  const { dialogs } = useGlobal();
+  const { dialogs, setDialogs,uniqueId } = useGlobal();
 
   const [activeComplaint, setActiveComplaint] = useState<AGENT_KEYS | null>(null);
   const [showComplaintChat, setShowComplaintChat] = useState<AGENT_KEYS | null>(null);
@@ -37,7 +37,11 @@ export const ComplaintProvider = (
     setActiveComplaint(null);
   }
 
-  const complaintSucceeded = () => {
+  const complaintSucceeded = (id: AGENT_KEYS) => {
+    messageService.complaintUserById({
+      id,
+      setDialogs,
+    });
     disActiveComplaint();
   }
 
@@ -55,10 +59,16 @@ export const ComplaintProvider = (
     const id = activeComplaint;
 
     if (id && dialogs[id]) {
-      messageService.sendComplaint({ dialog: dialogs[id] })
-        .then((result) => {
+      messageService.sendComplaint({
+        dialog: dialogs[id],
+        id: uniqueId,
+      })
+        .then(async (result) => {
           if (result.ok) {
-            complaintSucceeded();
+            const data = await result.json();
+            if (data) {
+              complaintSucceeded(id);
+            }
           } else {
             complaintFailed(id);
           }

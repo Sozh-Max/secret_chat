@@ -153,10 +153,30 @@ class MessageService {
 
   sendComplaint({
     dialog,
+    id,
   }:  {
     dialog: IDialog;
+    id: string;
   }) {
-    return api.sendComplaint({ dialog });
+    return api.sendComplaint({ dialog, id });
+  }
+
+  complaintUserById({
+    id,
+    setDialogs,
+  }: {
+    setDialogs: Dispatch<SetStateAction<Dialogs>>,
+    id: AGENT_KEYS,
+  }) {
+    setDialogs((d: Dialogs) => {
+      const current = {...d[id]};
+      current.isComplaint = true;
+
+      return {
+        ...d,
+        [id]: current,
+      }
+    });
   }
 }
 

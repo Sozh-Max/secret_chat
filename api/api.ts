@@ -5,7 +5,6 @@ import { IDialog } from '@/contexts/GlobalContext';
 class Api {
   private link = 'https://app.neuronautica.com/api/v1';
   private linkStat = 'https://app.neuronautica.com/stats/save_db_apk.php';
-  private linkComplaint = 'https://test.com';
 
   sendMessages = async (data: IMessagesRequest) => {
     return fetch(`${this.link}/`, {
@@ -37,13 +36,18 @@ class Api {
 
   sendComplaint = async ({
     dialog,
+    id,
   }: {
     dialog: IDialog;
+    id: string;
   }) => {
-    return fetch(this.linkComplaint, {
+    return fetch(`${this.link}/`, {
       method: 'POST',
       body: JSON.stringify({
-        dialog: dialog,
+        tid: id,
+        data: dialog,
+        eventTG: 'complaints',
+        is_base64: 0,
       }),
     })
   }

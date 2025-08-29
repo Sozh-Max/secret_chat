@@ -28,7 +28,7 @@ const Header = ({
   const dialog = dialogs[id];
 
   const isActiveRemove = Boolean(dialog?.dialog.length) && !dialog?.isBlocked;
-  const isActiveComplaint = Boolean(dialog?.dialog.length) && !dialog?.isComplained;
+  const isActiveComplaint = Boolean(dialog?.dialog.length) && !dialog?.isComplaint;
 
   const handlePressBackBtn = () => {
     setTimeout(() => {
@@ -59,11 +59,13 @@ const Header = ({
   };
 
   const handleRemoveHistory = () => {
-    setShowNotice(false);
-    messageService.removeHistoryById({
-      id,
-      setDialogs,
-    });
+    if (isActiveComplaint) {
+      setShowNotice(false);
+      messageService.removeHistoryById({
+        id,
+        setDialogs,
+      });
+    }
   };
 
   return (
@@ -87,7 +89,7 @@ const Header = ({
         </View>
       </View>
 
-      {isShowNotice
+      {isShowNotice && isActiveComplaint
         ? (
           <Pressable
             style={styles.button_clear}
@@ -103,7 +105,7 @@ const Header = ({
             style={styles.button_mini}
             onPress={handlePressClear}
           >
-            <IconRemove color={isActiveRemove ? MAIN_COLOR : LOW_COLOR}/>
+            <IconRemove color={isActiveRemove && isActiveComplaint ? MAIN_COLOR : LOW_COLOR}/>
           </AnimatedPressBtn>
         )}
 

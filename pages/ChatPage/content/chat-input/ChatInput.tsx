@@ -28,7 +28,7 @@ const ChatInput = ({
 
   const dialog = dialogs[id];
 
-  const isBlocked = dialog?.isBlocked || dialog?.isComplained;
+  const isBlocked = dialog?.isBlocked || dialog?.isComplaint;
 
   const handlePressEmoji = (emoji: string) => {
     if (!isBlocked) {

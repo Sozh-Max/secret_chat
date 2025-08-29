@@ -36,6 +36,7 @@ type GlobalContextType = {
   deviceRegion: string;
   activeChatVideoId: number;
   setActiveChatVideoId: Dispatch<SetStateAction<number>>;
+  uniqueId: string;
 }
 
 export interface IDialogPreview {
@@ -147,6 +148,7 @@ export const GlobalProvider = (
       deviceRegion,
       activeChatVideoId,
       setActiveChatVideoId,
+      uniqueId,
     }}>
       {children}
     </GlobalContext.Provider>
