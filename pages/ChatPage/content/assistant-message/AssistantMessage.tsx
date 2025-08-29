@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native';
 
-import { IDialogItem } from '@/contexts/GlobalContext';
+import { IDialogItem, useGlobal } from '@/contexts/GlobalContext';
 import { IconResponse } from '@/components/icons/IconResponse';
 import { AGENT_KEYS } from '@/constants/agents-data';
 import { styles } from '@/pages/ChatPage/content/assistant-message/styles';
@@ -19,8 +19,16 @@ export const AssistantMessage = ({
   id: AGENT_KEYS;
 }) => {
   const { activateComplaint } = useComplaint();
+  const { dialogs } = useGlobal();
 
   const content = dialog.replic.content || '';
+  const userDialog = dialogs[id];
+
+  const handlePressComplaint = () => {
+    if (!userDialog?.isComplaint) {
+      activateComplaint(id);
+    }
+  }
 
   return (
     <View style={styles.wrapper}>
@@ -33,7 +41,7 @@ export const AssistantMessage = ({
           </View>
           <AnimatedPressBtn
             style={styles.button_complaint}
-            onPress={() => activateComplaint(id)}
+            onPress={handlePressComplaint}
           >
             <IconComplaintFlag color={MAIN_COLOR}/>
           </AnimatedPressBtn>

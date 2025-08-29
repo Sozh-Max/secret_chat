@@ -9,6 +9,7 @@ export const styles = StyleSheet.create({
     maxWidth: '100%',
     zIndex: 3,
     width: '100%',
+    paddingRight: 10,
   },
   button: {
     width: 50,

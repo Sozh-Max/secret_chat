@@ -46,7 +46,7 @@ const ChatCardShort = ({
           {data.hasVideo && (
             <IconPlayShort />
           )}
-          {data.isBlocked && data.isComplaint && (
+          {(data.isBlocked || data.isComplaint) && (
             <IconBlock />
           )}
         </View>

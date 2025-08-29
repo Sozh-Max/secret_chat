@@ -1,6 +1,6 @@
 import { Animated, Dimensions, Modal, TouchableWithoutFeedback, View } from 'react-native';
 import { styles } from '@/components/ModalBottom/styles';
-import { ReactNode, useEffect, useRef } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 
 const { height } = Dimensions.get('window');
 
@@ -14,15 +14,20 @@ export const ModalBottom = ({
   children?: ReactNode;
 }) => {
   const slideAnim = useRef(new Animated.Value(height)).current;
+  const [innerShow, setInnerShow] = useState(isShow);
 
   useEffect(() => {
     if (isShow) {
+      setInnerShow(true);
       Animated.timing(slideAnim, {
         toValue: 0,
         duration: 300,
         useNativeDriver: true,
       }).start();
     } else {
+      setTimeout(() => {
+        setInnerShow(false);
+      }, 300)
       Animated.timing(slideAnim, {
         toValue: height,
         duration: 300,
@@ -34,7 +39,7 @@ export const ModalBottom = ({
   return (
     <Modal
       transparent
-      visible={isShow}
+      visible={innerShow}
       animationType="none"
     >
       <TouchableWithoutFeedback

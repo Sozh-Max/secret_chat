@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#1e1e1e',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#1e1e1e',
+    borderBottomColor: '#1e1e1e',
     borderTopColor: '#373737',
   },
   button_disabled: {
