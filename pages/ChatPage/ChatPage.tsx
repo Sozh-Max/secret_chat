@@ -25,8 +25,7 @@ export const ChatPage = () => {
       router.navigate('/');
     }
   }, []);
-
-
+  
   useFocusEffect(
     useCallback(() => {
       return () => {
