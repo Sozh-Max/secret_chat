@@ -45,7 +45,7 @@
       }
     },
     "android": {
-      "package": "com.sozh_max.secret_chat"
+      "package": "com.klomax.secretchat"
     }
   }
 }
