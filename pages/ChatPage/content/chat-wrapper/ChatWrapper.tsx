@@ -2,7 +2,7 @@ import { FlatList } from 'react-native';
 import { ImageBackground } from 'expo-image';
 import { useMemo, useEffect, useRef, useState } from 'react';
 
-import { AGENTS_DATA, IMG_POSTER_MAP } from '@/constants/agents-data';
+import { IMG_POSTER_MAP } from '@/constants/agents-data';
 import { styles } from '@/pages/ChatPage/content/chat-wrapper/styles';
 import { SystemMessage } from '@/pages/ChatPage/content/system-message/SystemMessage';
 import { IdTypeProps } from '@/interfaces/global';
@@ -107,7 +107,7 @@ export const ChatWrapper = ({
         ListFooterComponent={<SystemMessage
           id={id}
           isImage
-          message={AGENTS_DATA[id]}
+          message={dialog?.description}
         />}
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"

@@ -1,10 +1,12 @@
-import { AGENT_KEYS, AGENTS_DATA, INIT_AGENT_LIST } from '@/constants/agents-data';
+import { AGENT_KEYS, INIT_AGENT_LIST } from '@/constants/agents-data';
 import { AsyncStorageService } from '@/services/async-storage-service';
 import { LOCAL_STORAGE_KEYS } from '@/services/constants';
 import React, { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react';
 import { IMessage } from '@/api/interfaces';
 import { mainUtils } from '@/services/main-utils';
 import { useGooglePlayInstallReferrer } from '@/hooks/useGooglePlayInstallReferrer';
+import { InitDataService } from '@/services/init-data-service';
+import { api } from '@/api/api';
 
 export interface IDialogItem {
   replic: IMessage;
@@ -14,15 +16,13 @@ export interface IDialogItem {
 }
 
 export interface IDialog {
-  createTime: number;
   dialog: IDialogItem[];
   id: AGENT_KEYS;
-  lastReplyTime: number;
-  name: string;
   cost: number;
   isBlocked: boolean;
   isComplaint?: boolean;
   hasVideo: boolean;
+  description: string;
 }
 
 export type Dialogs = { [key in AGENT_KEYS]?: IDialog }
@@ -32,7 +32,7 @@ type GlobalContextType = {
   dialogs: Dialogs;
   dialogPreview: IDialogPreview[];
   setDialogs: Dispatch<SetStateAction<Dialogs>>;
-  setTokens: Dispatch<SetStateAction<number>>;
+  updateBalance: (amount: number) => void;
   deviceRegion: string;
   activeChatVideoId: number;
   setActiveChatVideoId: Dispatch<SetStateAction<number>>;
@@ -64,7 +64,7 @@ const refreshChats = ({
 
     return {
       id: key,
-      description: AGENTS_DATA[key],
+      description: dialog.description,
       message: (lastMessage?.replic?.content || '')
         .replace(/{{2,3}(photo)_(\d+)}{2,3}/, '📸')
         .replace(/{{2,3}(video)_(\d+)}{2,3}/, '🎥'),
@@ -93,14 +93,29 @@ export const GlobalProvider = (
   useGooglePlayInstallReferrer(deviceRegion, uniqueId);
 
   useEffect(() => {
+    if (uniqueId) {
+      new InitDataService({
+        userId: uniqueId,
+      });
+    }
+  }, [uniqueId]);
+
+  useEffect(() => {
     const getInitData = async () => {
-      const userData = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.USER_DATA);
+      // const userData = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.USER_DATA);
+      const request = await api.getBalance(uniqueId);
+
+      if (request.ok) {
+        const requestData = await request.json();
+        setTokens(Number(requestData.balance));
+      }
+
       const userDialogs = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.DIALOGS);
 
-      if (userData) {
-        const parsedData = JSON.parse(userData);
-        setTokens(parsedData.tokens || 0);
-      }
+      // if (userData) {
+      //   const parsedData = JSON.parse(userData);
+      //   setTokens(parsedData.tokens || 0);
+      // }
 
       const dialogs = JSON.parse(userDialogs || '') || {};
 
@@ -112,8 +127,14 @@ export const GlobalProvider = (
       });
     };
     // AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.IS_INIT, '');
-    getInitData();
-  }, []);
+    const intervalId = setInterval(async () => {
+      const isInit = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.IS_INIT);
+      if (isInit && uniqueId) {
+        clearInterval(intervalId);
+        getInitData();
+      }
+    }, 100);
+  }, [uniqueId]);
 
   useEffect(() => {
     if (dialogs[AGENT_KEYS.wendy] && dialogs[AGENT_KEYS.ashley]) {
@@ -126,17 +147,25 @@ export const GlobalProvider = (
     }
   }, [dialogs, setDialogPreview]);
 
-  useEffect(() => {
-    AsyncStorageService.storeDataBySubKey(
-      LOCAL_STORAGE_KEYS.USER_DATA,
-      LOCAL_STORAGE_KEYS.TOKENS,
-      tokens,
-    );
-  }, [tokens]);
+  // useEffect(() => {
+  //   AsyncStorageService.storeDataBySubKey(
+  //     LOCAL_STORAGE_KEYS.USER_DATA,
+  //     LOCAL_STORAGE_KEYS.TOKENS,
+  //     tokens,
+  //   );
+  // }, [tokens]);
 
   useEffect(() => {
     mainUtils.getUniqueId().then((id) => setUniqueId(id));
   }, []);
+
+  const updateBalance = async (amount: number) => {
+    const request = await api.addBalance(amount, uniqueId);
+    if (request.ok) {
+      const requestData = await request.json();
+      setTokens(Number(requestData.balance));
+    }
+  }
 
   return (
     <GlobalContext.Provider value={{
@@ -144,7 +173,7 @@ export const GlobalProvider = (
       dialogs,
       setDialogs,
       dialogPreview,
-      setTokens,
+      updateBalance,
       deviceRegion,
       activeChatVideoId,
       setActiveChatVideoId,

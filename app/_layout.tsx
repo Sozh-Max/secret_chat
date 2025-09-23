@@ -1,14 +1,12 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-get-random-values';
 
 import { GlobalProvider } from '@/contexts/GlobalContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { InitMockDataService } from '@/services/init-mock-data-service';
 
 import {
   useFonts,
@@ -28,10 +26,6 @@ export default function RootLayout() {
     NotoSans_700Bold,
     NotoSans_800ExtraBold,
   });
-
-  useEffect(() => {
-    new InitMockDataService();
-  }, []);
 
   if (!fontsLoaded) {
     return null;

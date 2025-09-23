@@ -2,11 +2,12 @@ import { AGENT_KEYS } from '@/constants/agents-data';
 import { ROLES } from '@/api/constants';
 
 export interface IMessage {
-  role: ROLES,
+  role: ROLES;
   content: string;
 }
 
 export interface IMessagesRequest {
-  assistantId: AGENT_KEYS,
-  messages: IMessage[],
+  userId: string;
+  assistantId: AGENT_KEYS;
+  messages: IMessage[];
 }

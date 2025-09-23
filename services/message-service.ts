@@ -58,6 +58,7 @@ const setData = ({
 class MessageService {
   async sendMessage({
     id,
+    userId,
     message,
     setDialogs,
     assistantDialog,
@@ -65,6 +66,7 @@ class MessageService {
     setShowTyping,
   }: {
     id: AGENT_KEYS;
+    userId: string;
     message: string;
     setDialogs: Dispatch<SetStateAction<Dialogs>>;
     assistantDialog: IDialogItem[];
@@ -91,6 +93,7 @@ class MessageService {
     setTimeout(() => {
       setShowTyping(true);
       api.sendMessages({
+        userId,
         assistantId: id,
         messages: [
           ...assistantDialog?.map((dialog) => dialog.replic),

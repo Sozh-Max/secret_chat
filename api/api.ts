@@ -3,13 +3,36 @@ import { Base64 } from 'js-base64';
 import { IMessagesRequest } from '@/api/interfaces';
 import { PLATFORM } from '@/services/constants';
 import { IDialog } from '@/contexts/GlobalContext';
+import { AGENT_KEYS } from '@/constants/agents-data';
 
 class Api {
-  private link = 'https://app.neuronautica.com/api/v1';
+  private link = 'https://app.neuronautica.com/api/v2';
   private linkStat = 'https://app.neuronautica.com/stats/save_db_apk.php';
 
+  getInitData = async (id: string) => {
+    return fetch(`${this.link}/app/init?id=${id}`, {
+      method: 'GET',
+    });
+  }
+
+  getBalance = async (id: string) => {
+    return fetch(`${this.link}/balance?id=${id}`, {
+      method: 'GET',
+    });
+  }
+
+  addBalance = async (amount: number, id: string) => {
+    return fetch(`${this.link}/balance/add`, {
+      method: 'POST',
+      body: JSON.stringify({
+        amount,
+        id,
+      }),
+    });
+  };
+
   sendMessages = async (data: IMessagesRequest) => {
-    return fetch(`${this.link}/`, {
+    return fetch(`${this.link}/user/chat`, {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -43,26 +66,49 @@ class Api {
     dialog: IDialog;
     id: string;
   }) => {
-
-    // console.log(JSON.stringify({
-    //   tid: id,
-    //   data: btoa(JSON.stringify(dialog)),
-    //   eventTG: 'complaints',
-    //   is_base64: 1,
-    // }));
-    return await fetch(`${this.link}/`, {
+    return await fetch(`${this.link}/user/complaints`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
       body: JSON.stringify({
-        tid: id,
+        id: id,
         data: Base64.fromUint8Array(new TextEncoder().encode(JSON.stringify(dialog))),
-        eventTG: 'complaints',
         is_base64: 1,
       }),
     })
   }
+
+  selectAssistantStatistics = async ({
+    userId,
+    assistantId,
+  }: {
+    userId: string;
+    assistantId: AGENT_KEYS;
+  }) => {
+    return await fetch(`${this.link}/stats/assists/selected`, {
+      method: 'POST',
+      body: JSON.stringify({
+        id: userId,
+        assistantId,
+      }),
+    })
+  }
+
+  launchingStatistics = async ({
+    userId,
+    data,
+  }: {
+    userId: string;
+    data?: string;
+  }) => {
+    return await fetch(`${this.link}/stats/launching`, {
+      method: 'POST',
+      body: JSON.stringify({
+        id: userId,
+        data,
+      }),
+    })
+  }
+
+
 }
 
 export const api = new Api();

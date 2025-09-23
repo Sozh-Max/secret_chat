@@ -24,7 +24,7 @@ const ChatInput = ({
 }: ChatInputProps) => {
   const [text, setText] = useState<string>('');
   const [isVisiblePicker, setIsVisiblePicker] = useState<boolean>(false);
-  const { dialogs, setDialogs, tokens, setTokens } = useGlobal();
+  const { dialogs, setDialogs, tokens, updateBalance, uniqueId } = useGlobal();
 
   const dialog = dialogs[id];
 
@@ -50,10 +50,11 @@ const ChatInput = ({
 
     if (!isBlocked && !loading && text.trim()) {
       setText('');
-      setTokens(val => val -  (dialog?.cost || 0));
+      updateBalance(-(dialog?.cost || 0));
 
       await messageService.sendMessage({
         id,
+        userId: uniqueId,
         message: text.trim(),
         setDialogs,
         assistantDialog: dialog?.dialog || [],
