@@ -11,6 +11,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import {
   useFonts,
   NotoSans_400Regular,
+  NotoSans_500Medium,
   NotoSans_600SemiBold,
   NotoSans_700Bold,
   NotoSans_800ExtraBold,
@@ -22,6 +23,7 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [fontsLoaded] = useFonts({
     NotoSans_400Regular,
+    NotoSans_500Medium,
     NotoSans_600SemiBold,
     NotoSans_700Bold,
     NotoSans_800ExtraBold,
@@ -65,6 +67,7 @@ export default function RootLayout() {
               },
             }}
           >
+            <Stack.Screen name="login"/>
             <Stack.Screen name="index"/>
             <Stack.Screen name="chat"/>
             <Stack.Screen name="settings"/>

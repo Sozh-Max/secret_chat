@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 import { CHAT_COLOR, MAIN_COLOR } from '@/constants/Colors';
-import { NotoSans_400Regular } from '@expo-google-fonts/noto-sans';
 
 export const styles = StyleSheet.create({
   wrapper: {

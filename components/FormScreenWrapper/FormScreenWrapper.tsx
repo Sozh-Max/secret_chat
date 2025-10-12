@@ -12,7 +12,7 @@ export const FormScreenWrapper = (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
-      keyboardVerticalOffset={isKeyboardVisible ? 0 : -50} // если хедер фиксированный, отступ = его высоте
+      keyboardVerticalOffset={isKeyboardVisible ? 0 : -50}
     >
       <ScrollView
         keyboardShouldPersistTaps="handled"

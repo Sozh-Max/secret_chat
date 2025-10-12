@@ -1,11 +1,12 @@
 import { Animated, Pressable, PressableProps, StyleProp, ViewStyle } from 'react-native';
-import { ReactNode, useRef } from 'react';
+import { ReactNode, RefObject, useRef } from 'react';
 
 type AnimatedPressBtnProps = {
   style?: StyleProp<ViewStyle>;
   children: ReactNode;
   onPress?: PressableProps['onPress'];
   scaleEnd?: number;
+  customRef?: RefObject<any> | null;
 };
 
 export const AnimatedPressBtn = ({
@@ -13,6 +14,7 @@ export const AnimatedPressBtn = ({
   children,
   onPress = () => {},
   scaleEnd = 0.85,
+  customRef,
 }: AnimatedPressBtnProps) => {
 
   const scale = useRef(new Animated.Value(1)).current;
@@ -36,7 +38,12 @@ export const AnimatedPressBtn = ({
   }
 
   return (
-    <Pressable onPressIn={handlePressIn} onPressOut={handlePressOut} onPress={onPress}>
+    <Pressable
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      onPress={onPress}
+      ref={customRef}
+    >
       <Animated.View style={[style, { transform: [{ scale }] }]}>
         {children}
       </Animated.View>
