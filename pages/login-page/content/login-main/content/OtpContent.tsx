@@ -1,19 +1,33 @@
 import { Text, TextInput, View } from 'react-native';
 import { styles } from '@/pages/login-page/content/login-main/styles';
-import { RefObject, useEffect, useRef, useState } from 'react';
+import { Dispatch, RefObject, SetStateAction, useEffect, useRef, useState } from 'react';
 import { CustomButton } from '@/components/CustomButton/CustomButton';
 import { checkIsDigit } from '@/utils/global';
 import { maskEmail } from '@/pages/login-page/content/login-main/utils';
+import { api } from '@/api/api';
+import { IconBackBtn } from '@/components/icons/IconBackBtn';
+import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
+import { STEPS } from '@/pages/login-page/content/login-main/constants';
+import { useUser } from '@/contexts/UserContext';
 
 type OtpContentPayload = {
   activeEmail: string;
+  loading: boolean;
+  setLoading: Dispatch<SetStateAction<boolean>>;
+  setCurrentStep: Dispatch<SetStateAction<STEPS>>;
+  setEmail: Dispatch<SetStateAction<string>>;
 };
 
 type MiniStoreType = Record<number, TextInput | null>;
 
 export const OtpContent = ({
   activeEmail,
+  loading,
+  setLoading,
+  setCurrentStep,
+  setEmail,
 }: OtpContentPayload) => {
+  const { setAuthorizedData } = useUser();
   const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
 
   const miniStore = useRef<MiniStoreType>({
@@ -52,7 +66,7 @@ export const OtpContent = ({
     setOtp([...copyOtp]);
 
     if (miniStore.current[index + 1]) {
-      miniStore.current[index + 1]?.focus()
+      miniStore.current[index + 1]?.focus();
     } else {
       buttonRef.current?.focus();
     }
@@ -91,8 +105,41 @@ export const OtpContent = ({
     }, 0);
   };
 
+  const checkAuthorized = async () => {
+    try {
+      if (otp.every((s) => Boolean(s) && Number.isInteger(+s)) && activeEmail) {
+        setLoading(true);
+        const data = await api.checkAuthorizeByEmail(activeEmail, otp.join(''));
+        if (data?.data) {
+          setAuthorizedData({
+            isAuthorized: true,
+            userId: data?.data.id,
+            email: data?.data.email,
+          })
+        }
+        setLoading(false);
+      }
+    } catch (_) {
+      setLoading(false);
+    }
+  }
+
+  const handlePressBackBtn = () => {
+    setCurrentStep(STEPS.START);
+    setEmail('');
+  }
+
   return (
     <>
+      <AnimatedPressBtn
+        style={styles.buttonBack}
+        wrapperStyle={styles.buttonBackWrapper}
+        onPress={handlePressBackBtn}
+      >
+        <IconBackBtn
+          color={"#ffffff"}
+        />
+      </AnimatedPressBtn>
       <View style={styles.row}>
         <Text style={styles.text_enter}>Enter the code sent to</Text>
         <Text style={styles.text_email_code}>{maskEmail(activeEmail)}</Text>
@@ -164,6 +211,8 @@ export const OtpContent = ({
         <CustomButton
           text="Sign In"
           customRef={buttonRef}
+          disabled={loading}
+          handlePress={checkAuthorized}
         />
       </View>
     </>

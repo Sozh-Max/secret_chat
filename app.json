@@ -33,6 +33,13 @@
           "supportsBackgroundPlayback": true,
           "supportsPictureInPicture": true
         }
+      ],
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "androidClientId": "676751766781-lafb95424jnnvugikfmio4ef7h2hokih.apps.googleusercontent.com",
+          "iosUrlScheme": "com.googleusercontent.apps.676751766781-lafb95424jnnvugikfmio4ef7h2hokih"
+        }
       ]
     ],
     "experiments": {

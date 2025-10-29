@@ -3,6 +3,7 @@ import { ReactNode, RefObject, useRef } from 'react';
 
 type AnimatedPressBtnProps = {
   style?: StyleProp<ViewStyle>;
+  wrapperStyle?: StyleProp<ViewStyle>;
   children: ReactNode;
   onPress?: PressableProps['onPress'];
   scaleEnd?: number;
@@ -11,6 +12,7 @@ type AnimatedPressBtnProps = {
 
 export const AnimatedPressBtn = ({
   style,
+  wrapperStyle,
   children,
   onPress = () => {},
   scaleEnd = 0.85,
@@ -43,6 +45,7 @@ export const AnimatedPressBtn = ({
       onPressOut={handlePressOut}
       onPress={onPress}
       ref={customRef}
+      style={[wrapperStyle]}
     >
       <Animated.View style={[style, { transform: [{ scale }] }]}>
         {children}

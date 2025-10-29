@@ -7,6 +7,7 @@ import { mainUtils } from '@/services/main-utils';
 import { useGooglePlayInstallReferrer } from '@/hooks/useGooglePlayInstallReferrer';
 import { InitDataService } from '@/services/init-data-service';
 import { api } from '@/api/api';
+import { useUser } from '@/contexts/UserContext';
 
 export interface IDialogItem {
   replic: IMessage;
@@ -36,7 +37,6 @@ type GlobalContextType = {
   deviceRegion: string;
   activeChatVideoId: number;
   setActiveChatVideoId: Dispatch<SetStateAction<number>>;
-  uniqueId: string;
 }
 
 export interface IDialogPreview {
@@ -87,23 +87,24 @@ export const GlobalProvider = (
   const [dialogs, setDialogs] = useState<Dialogs>({});
   const [dialogPreview, setDialogPreview] = useState<IDialogPreview[]>([]);
   const [deviceRegion] = useState<string>(mainUtils.getDeviceRegion());
-  const [uniqueId, setUniqueId] = useState<string>('');
   const [activeChatVideoId, setActiveChatVideoId] = useState<number>(0);
 
-  useGooglePlayInstallReferrer(deviceRegion, uniqueId);
+  const { userId } = useUser();
+
+  useGooglePlayInstallReferrer(deviceRegion, userId);
 
   useEffect(() => {
-    if (uniqueId) {
+    if (userId) {
       new InitDataService({
-        userId: uniqueId,
+        userId,
       });
     }
-  }, [uniqueId]);
+  }, [userId]);
 
   useEffect(() => {
     const getInitData = async () => {
       // const userData = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.USER_DATA);
-      const request = await api.getBalance(uniqueId);
+      const request = await api.getBalance(userId);
 
       if (request.ok) {
         const requestData = await request.json();
@@ -129,12 +130,12 @@ export const GlobalProvider = (
     // AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.IS_INIT, '');
     const intervalId = setInterval(async () => {
       const isInit = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.IS_INIT);
-      if (isInit && uniqueId) {
+      if (isInit && userId) {
         clearInterval(intervalId);
         getInitData();
       }
     }, 100);
-  }, [uniqueId]);
+  }, [userId]);
 
   useEffect(() => {
     if (dialogs[AGENT_KEYS.wendy] && dialogs[AGENT_KEYS.ashley]) {
@@ -155,12 +156,8 @@ export const GlobalProvider = (
   //   );
   // }, [tokens]);
 
-  useEffect(() => {
-    mainUtils.getUniqueId().then((id) => setUniqueId(id));
-  }, []);
-
   const updateBalance = async (amount: number) => {
-    const request = await api.addBalance(amount, uniqueId);
+    const request = await api.addBalance(amount, userId);
     if (request.ok) {
       const requestData = await request.json();
       setTokens(Number(requestData.balance));
@@ -177,7 +174,6 @@ export const GlobalProvider = (
       deviceRegion,
       activeChatVideoId,
       setActiveChatVideoId,
-      uniqueId,
     }}>
       {children}
     </GlobalContext.Provider>

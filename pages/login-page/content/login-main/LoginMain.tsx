@@ -8,6 +8,9 @@ import { styles } from '@/pages/login-page/content/login-main/styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { OtpContent } from '@/pages/login-page/content/login-main/content/OtpContent';
 import { STEPS } from '@/pages/login-page/content/login-main/constants';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import { api } from '@/api/api';
+import { useUser } from '@/contexts/UserContext';
 
 
 
@@ -17,8 +20,39 @@ export const LoginMain = () => {
   const [emailError, setEmailError] = useState(false);
   const emailRef = useRef<TextInput>(null);
   const [currentStep, setCurrentStep] = useState<STEPS>(STEPS.START);
+  const [loadingSendEmail, setLoadingSendEmail] = useState(false);
+  const { setAuthorizedData } = useUser();
 
+  const signIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const user = await GoogleSignin.signIn();
 
+      if (!user) return;
+
+      if (user?.data?.idToken) {
+        const data = await api.auth(user.data.idToken as string);
+
+        if (data?.data) {
+          setAuthorizedData({
+            isAuthorized: true,
+            userId: data?.data.id,
+            email: data?.data.email,
+          })
+        }
+      }
+    } catch (error: any) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log('Пользователь отменил вход');
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        console.log('Авторизация уже выполняется');
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.log('Сервисы Google Play недоступны');
+      } else {
+        console.error(error);
+      }
+    }
+  };
 
   const validateEmail = (value: string) => {
     const trimmed = (value || '').trim();
@@ -40,7 +74,13 @@ export const LoginMain = () => {
       return;
     }
 
-    setCurrentStep(STEPS.OTP);
+    setLoadingSendEmail(true);
+
+    api.sendAuthorizeByEmail(email.trim()).then(() => {
+      setCurrentStep(STEPS.OTP);
+    }).finally(() => {
+      setLoadingSendEmail(false);
+    });
   };
 
   return (
@@ -85,6 +125,7 @@ export const LoginMain = () => {
                 <CustomButton
                   text="Continue"
                   handlePress={onContinuePress}
+                  disabled={loadingSendEmail}
                 />
               </View>
             </>
@@ -93,6 +134,10 @@ export const LoginMain = () => {
           {currentStep === STEPS.OTP && (
             <OtpContent
               activeEmail={activeEmail}
+              loading={loadingSendEmail}
+              setLoading={setLoadingSendEmail}
+              setCurrentStep={setCurrentStep}
+              setEmail={setEmail}
             />
           )}
           <View style={styles.row}>
@@ -103,6 +148,7 @@ export const LoginMain = () => {
           <CustomButton
             text="Continue with Google"
             Icon={<IconGoogle/>}
+            handlePress={signIn}
           />
         </View>
       </LinearGradient>

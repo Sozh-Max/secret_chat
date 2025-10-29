@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { AsyncStorageService } from '@/services/async-storage-service';
 import { LOCAL_STORAGE_KEYS, PLATFORM } from '@/services/constants';
+import { UserData } from '@/contexts/UserContext';
 
 class MainUtils {
   getDeviceRegion = (): string => {
@@ -13,17 +14,25 @@ class MainUtils {
     return deviceLocale?.split('_')[0]?.toLowerCase() || '';
   }
 
-  getUniqueId = async (): Promise<string> => {
-    const uid = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.UID);
+  // getUniqueId = async (): Promise<string> => {
+  //   const uid = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.UID);
+  //
+  //   if (!uid) {
+  //     const id = uuidv4();
+  //
+  //     await AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.UID, id);
+  //     return id;
+  //   }
+  //
+  //   return uid;
+  // }
 
-    if (!uid) {
-      const id = uuidv4();
-
-      await AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.UID, id);
-      return id;
+  getUserData = async (): Promise<UserData> => {
+    const userData = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.USER_DATA);
+    if (!userData) {
+      return null;
     }
-
-    return uid;
+     return JSON.parse(userData) || null;
   }
 }
 

@@ -8,6 +8,7 @@ import { TokensBuy } from '@/pages/SettingsPage/content/TokensBuy/TokensBuy';
 import { LogAccount } from '@/pages/SettingsPage/content/LogAccount/LogAccount';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { styles } from '@/pages/SettingsPage/styles';
+import { AccountData } from '@/pages/SettingsPage/content/account-data/AccountData';
 
 export const SettingsPage = () => {
   const { tokens } = useGlobal();
@@ -52,6 +53,7 @@ export const SettingsPage = () => {
               description="To ensure privacy, message history is stored only on this device, we do not collect or store this type of data"
             >
               {/*<LogAccount />*/}
+              <AccountData />
             </TemplateContent>
 
             {/*<TemplateContent*/}

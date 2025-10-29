@@ -5,6 +5,7 @@ import { ModalBottom } from '@/components/ModalBottom/ModalBottom';
 import { ModalBottomContent } from '@/pages/ChatPage/content/modal-bottom-content/ModalBottomContent';
 import { messageService } from '@/services/message-service';
 import { useGlobal } from '@/contexts/GlobalContext';
+import { useUser } from '@/contexts/UserContext';
 
 type ComplaintContextType = {
   activeComplaint: AGENT_KEYS | null;
@@ -20,7 +21,8 @@ export const ComplaintProvider = (
   { children }:
   { children: ReactNode },
 ) => {
-  const { dialogs, setDialogs, uniqueId } = useGlobal();
+  const { dialogs, setDialogs } = useGlobal();
+  const { userId } = useUser();
 
   const [activeComplaint, setActiveComplaint] = useState<AGENT_KEYS | null>(null);
   const [showComplaintChat, setShowComplaintChat] = useState<AGENT_KEYS | null>(null);
@@ -61,7 +63,7 @@ export const ComplaintProvider = (
     if (id && dialogs[id]) {
       await messageService.sendComplaint({
         dialog: dialogs[id],
-        id: uniqueId,
+        id: userId,
       })
         .then(async (result) => {
           if (result.ok) {

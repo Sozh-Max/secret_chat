@@ -40,6 +40,8 @@ const initGooglePlayInstallReferrer = async (geo: string, id: string) => {
 
 export const useGooglePlayInstallReferrer = (deviceRegion: string, id: string) => {
   useEffect(() => {
-    initGooglePlayInstallReferrer(deviceRegion, id);
+    if (id) {
+      initGooglePlayInstallReferrer(deviceRegion, id);
+    }
   }, [id])
 }

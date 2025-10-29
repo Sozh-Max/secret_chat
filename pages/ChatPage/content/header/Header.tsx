@@ -21,7 +21,7 @@ const Header = ({
   id,
 }: IdTypeProps) => {
   const [isShowNotice, setShowNotice] = useState(false);
-  const timeoutIdRef = useRef<number | null>(null);
+  const timeoutIdRef = useRef<ReturnType<typeof setTimeout>  | null>(null);
   const { setDialogs, dialogs } = useGlobal();
   const { activateComplaint } = useComplaint();
 

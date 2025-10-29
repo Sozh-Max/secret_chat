@@ -11,3 +11,14 @@ export interface IMessagesRequest {
   assistantId: AGENT_KEYS;
   messages: IMessage[];
 }
+
+export interface IResponse<T> {
+  msg: string;
+  error: number;
+  data: T;
+}
+
+export interface IResponseUserData  {
+  id: string;
+  email: string;
+}

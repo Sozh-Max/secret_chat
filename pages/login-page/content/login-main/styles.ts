@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
     padding: 24,
     justifyContent: 'flex-end',
     gap: 16,
+    position: 'relative',
   },
   row: {
 
@@ -91,5 +92,17 @@ export const styles = StyleSheet.create({
     fontFamily: 'NotoSans_400Regular',
     fontSize: 14,
     color: '#757575',
+  },
+
+  buttonBackWrapper: {
+    position: 'absolute',
+    left: 20,
+    top: 20,
+  },
+  buttonBack: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

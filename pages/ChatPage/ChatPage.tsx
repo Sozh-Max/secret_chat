@@ -12,10 +12,11 @@ import { SafeAreaInsectComponent } from '@/components/SafeAreaInsectComponent/Sa
 import { useGlobal } from '@/contexts/GlobalContext';
 import { useComplaint } from '@/contexts/ComplaintContext';
 import { api } from '@/api/api';
+import { useUser } from '@/contexts/UserContext';
 
 export const ChatPage = () => {
   const { id } = useLocalSearchParams<{ id: AGENT_KEYS }>();
-  const { uniqueId } = useGlobal()
+  const { userId } = useUser()
   const [loading, setLoading] = useState<boolean>(false);
   const [isShowTyping, setShowTyping] = useState<boolean>(false);
 
@@ -29,10 +30,10 @@ export const ChatPage = () => {
   }, []);
 
   useEffect(() => {
-    if (id && uniqueId) {
+    if (id && userId) {
       api.selectAssistantStatistics({
         assistantId: id,
-        userId: uniqueId,
+        userId,
       })
     }
 

@@ -9,6 +9,7 @@ import { IdTypeProps } from '@/interfaces/global';
 import { messageService } from '@/services/message-service';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { styles } from '@/pages/ChatPage/content/chat-input/styles';
+import { useUser } from '@/contexts/UserContext';
 
 interface ChatInputProps extends IdTypeProps {
   setLoading: (loading: boolean) => void;
@@ -24,7 +25,8 @@ const ChatInput = ({
 }: ChatInputProps) => {
   const [text, setText] = useState<string>('');
   const [isVisiblePicker, setIsVisiblePicker] = useState<boolean>(false);
-  const { dialogs, setDialogs, tokens, updateBalance, uniqueId } = useGlobal();
+  const { dialogs, setDialogs, tokens, updateBalance } = useGlobal();
+  const { userId } = useUser();
 
   const dialog = dialogs[id];
 
@@ -54,7 +56,7 @@ const ChatInput = ({
 
       await messageService.sendMessage({
         id,
-        userId: uniqueId,
+        userId,
         message: text.trim(),
         setDialogs,
         assistantDialog: dialog?.dialog || [],
