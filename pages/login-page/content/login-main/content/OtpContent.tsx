@@ -13,7 +13,7 @@ type MiniStoreType = Record<number, TextInput | null>;
 export const OtpContent = () => {
   const { setAuthorizedData } = useUser();
   const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
-  const otpRef = useRef<string[]>(otp); // реф для актуального otp
+  const otpRef = useRef<string[]>(otp);
   const {
     activeEmail,
     loadingSendEmail,
@@ -45,7 +45,6 @@ export const OtpContent = () => {
     miniStore.current[5] = otp5Ref.current;
   }, []);
 
-  // синхронизируем реф с состоянием
   useEffect(() => {
     otpRef.current = otp;
   }, [otp]);
@@ -54,15 +53,13 @@ export const OtpContent = () => {
     setOtp((prev) => {
       const copy = [...prev];
       copy[index] = value;
-      otpRef.current = copy; // также держим реф в актуале
+      otpRef.current = copy;
       return copy;
     });
   };
 
   const handleBackspace = (index: number) => {
-    // если текущий инпут пустой — переходим на предыдущий и очищаем его
     if (index > 0) {
-      // очистим предыдущий символ
       setValues('', index - 1);
       miniStore.current[index - 1]?.focus();
     }
@@ -71,39 +68,54 @@ export const OtpContent = () => {
   const handleKeyPress = (e: NativeSyntheticEvent<TextInputKeyPressEventData>, index: number) => {
     const { key } = e.nativeEvent;
     if (key === 'Backspace') {
-      // Если в текущем индексе уже пусто — переместим фокус назад и очистим предыдущий.
-      // Если есть символ (удаляется), onChangeText обычно сработает и очистит его.
       if (!otpRef.current[index]) {
         handleBackspace(index);
       } else {
-        // если в текущем поле есть символ, просто очистим его (без смещения)
         setValues('', index);
       }
     }
   };
 
   const setOtpValue = (value: string, index: number): void => {
-    // берем только первый символ (если пользователь вставил)
-    const val = value[0] ?? '';
-    // если ввели пустую строку (удаление) — уже покрывается onKeyPress на большинстве клавиатур,
-    // но оставим резервную логику: если значение пустое и предыдущий уже пустой — переместим фокус назад
-    if (value === '') {
+    const digits = value.replace(/\D/g, '').split('');
+
+    if (digits.length === 0) {
       setValues('', index);
-      // если текущее было пусто раньше, перемещаемся назад (резервный путь)
+
       if (!otpRef.current[index] && index > 0) {
         miniStore.current[index - 1]?.focus();
       }
       return;
     }
 
-    const isDigit = checkIsDigit(val);
-    if (!isDigit) return;
+    if (digits.length === 1) {
+      const val = digits[0];
+      if (!checkIsDigit(val)) return;
+      setValues(val, index);
 
-    setValues(val, index);
+      if (miniStore.current[index + 1]) {
+        miniStore.current[index + 1]?.focus();
+      } else {
+        buttonRef.current?.focus();
+      }
+      return;
+    }
 
-    // фокус на следующий, если есть
-    if (miniStore.current[index + 1]) {
-      miniStore.current[index + 1]?.focus();
+    setOtp((prev) => {
+      const copy = [...prev];
+      let i = index;
+      for (let j = 0; j < digits.length && i < 6; j++, i++) {
+        const ch = digits[j];
+        if (!checkIsDigit(ch)) continue;
+        copy[i] = ch;
+      }
+      otpRef.current = copy;
+      return copy;
+    });
+
+    const nextIndex = Math.min(6, index + digits.length);
+    if (nextIndex <= 5) {
+      miniStore.current[nextIndex]?.focus();
     } else {
       buttonRef.current?.focus();
     }
@@ -175,7 +187,7 @@ export const OtpContent = () => {
 
   return (
     <>
-      <View style={styles.row}>
+      <View>
         <Text style={styles.text_enter}>Enter the code sent to</Text>
         <Text style={styles.text_email_code}>{maskEmail(activeEmail)}</Text>
       </View>
@@ -199,7 +211,7 @@ export const OtpContent = () => {
           <TextInput {...inputCommonProps(5)} ref={otp5Ref} />
         </View>
       </View>
-      <View style={styles.row}>
+      <View>
         <CustomButton
           text="Sign In"
           customRef={buttonRef}
