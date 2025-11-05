@@ -1,8 +1,7 @@
 import { View, Text, TextInput } from 'react-native';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { ImageBackground } from 'expo-image';
 
-import { IconGoogle } from '@/components/icons/IconGoogle';
 import { CustomButton } from '@/components/CustomButton/CustomButton';
 import { styles } from '@/pages/login-page/content/login-main/styles';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -11,17 +10,23 @@ import { STEPS } from '@/pages/login-page/content/login-main/constants';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { api } from '@/api/api';
 import { useUser } from '@/contexts/UserContext';
-
-
+import { useLoginPage } from '@/contexts/LoginPageContext';
 
 export const LoginMain = () => {
-  const [email, setEmail] = useState('');
-  const [activeEmail, setActiveEmail] = useState('');
-  const [emailError, setEmailError] = useState(false);
   const emailRef = useRef<TextInput>(null);
-  const [currentStep, setCurrentStep] = useState<STEPS>(STEPS.START);
-  const [loadingSendEmail, setLoadingSendEmail] = useState(false);
   const { setAuthorizedData } = useUser();
+
+  const {
+    currentStep,
+    email,
+    emailError,
+    loadingSendEmail,
+    setCurrentStep,
+    setEmail,
+    setActiveEmail,
+    setEmailError,
+    setLoadingSendEmail,
+  } = useLoginPage();
 
   const signIn = async () => {
     try {
@@ -100,12 +105,12 @@ export const LoginMain = () => {
         >
           {currentStep === STEPS.START && (
             <>
-              <View style={styles.row}>
+              <View>
                 <Text style={styles.text}>
                   Enter your email to log in
                 </Text>
               </View>
-              <View style={styles.row}>
+              <View>
                 <TextInput
                   ref={emailRef}
                   style={styles.emailInput}
@@ -121,7 +126,7 @@ export const LoginMain = () => {
                   <Text style={{ color: 'red', marginTop: 8 }}>Please enter a valid email address.</Text>
                 ) : null}
               </View>
-              <View style={styles.row}>
+              <View>
                 <CustomButton
                   text="Continue"
                   handlePress={onContinuePress}
@@ -132,22 +137,17 @@ export const LoginMain = () => {
           )}
 
           {currentStep === STEPS.OTP && (
-            <OtpContent
-              activeEmail={activeEmail}
-              loading={loadingSendEmail}
-              setLoading={setLoadingSendEmail}
-              setCurrentStep={setCurrentStep}
-              setEmail={setEmail}
-            />
+            <OtpContent />
           )}
           <View style={styles.row}>
+            <View style={styles.line} />
             <Text style={styles.text}>
               or
             </Text>
+            <View style={styles.line} />
           </View>
           <CustomButton
             text="Continue with Google"
-            Icon={<IconGoogle/>}
             handlePress={signIn}
           />
         </View>

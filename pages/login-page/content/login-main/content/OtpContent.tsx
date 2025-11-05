@@ -1,34 +1,24 @@
-import { Text, TextInput, View } from 'react-native';
+import { Text, TextInput, View, NativeSyntheticEvent, TextInputKeyPressEventData } from 'react-native';
 import { styles } from '@/pages/login-page/content/login-main/styles';
-import { Dispatch, RefObject, SetStateAction, useEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import { CustomButton } from '@/components/CustomButton/CustomButton';
 import { checkIsDigit } from '@/utils/global';
 import { maskEmail } from '@/pages/login-page/content/login-main/utils';
 import { api } from '@/api/api';
-import { IconBackBtn } from '@/components/icons/IconBackBtn';
-import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
-import { STEPS } from '@/pages/login-page/content/login-main/constants';
 import { useUser } from '@/contexts/UserContext';
-
-type OtpContentPayload = {
-  activeEmail: string;
-  loading: boolean;
-  setLoading: Dispatch<SetStateAction<boolean>>;
-  setCurrentStep: Dispatch<SetStateAction<STEPS>>;
-  setEmail: Dispatch<SetStateAction<string>>;
-};
+import { useLoginPage } from '@/contexts/LoginPageContext';
 
 type MiniStoreType = Record<number, TextInput | null>;
 
-export const OtpContent = ({
-  activeEmail,
-  loading,
-  setLoading,
-  setCurrentStep,
-  setEmail,
-}: OtpContentPayload) => {
+export const OtpContent = () => {
   const { setAuthorizedData } = useUser();
   const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
+  const otpRef = useRef<string[]>(otp); // реф для актуального otp
+  const {
+    activeEmail,
+    loadingSendEmail,
+    setLoadingSendEmail,
+  } = useLoginPage();
 
   const miniStore = useRef<MiniStoreType>({
     0: null,
@@ -55,22 +45,69 @@ export const OtpContent = ({
     miniStore.current[5] = otp5Ref.current;
   }, []);
 
+  // синхронизируем реф с состоянием
+  useEffect(() => {
+    otpRef.current = otp;
+  }, [otp]);
+
+  const setValues = (value: string, index: number) => {
+    setOtp((prev) => {
+      const copy = [...prev];
+      copy[index] = value;
+      otpRef.current = copy; // также держим реф в актуале
+      return copy;
+    });
+  };
+
+  const handleBackspace = (index: number) => {
+    // если текущий инпут пустой — переходим на предыдущий и очищаем его
+    if (index > 0) {
+      // очистим предыдущий символ
+      setValues('', index - 1);
+      miniStore.current[index - 1]?.focus();
+    }
+  };
+
+  const handleKeyPress = (e: NativeSyntheticEvent<TextInputKeyPressEventData>, index: number) => {
+    const { key } = e.nativeEvent;
+    if (key === 'Backspace') {
+      // Если в текущем индексе уже пусто — переместим фокус назад и очистим предыдущий.
+      // Если есть символ (удаляется), onChangeText обычно сработает и очистит его.
+      if (!otpRef.current[index]) {
+        handleBackspace(index);
+      } else {
+        // если в текущем поле есть символ, просто очистим его (без смещения)
+        setValues('', index);
+      }
+    }
+  };
+
   const setOtpValue = (value: string, index: number): void => {
-    const val = value[0];
+    // берем только первый символ (если пользователь вставил)
+    const val = value[0] ?? '';
+    // если ввели пустую строку (удаление) — уже покрывается onKeyPress на большинстве клавиатур,
+    // но оставим резервную логику: если значение пустое и предыдущий уже пустой — переместим фокус назад
+    if (value === '') {
+      setValues('', index);
+      // если текущее было пусто раньше, перемещаемся назад (резервный путь)
+      if (!otpRef.current[index] && index > 0) {
+        miniStore.current[index - 1]?.focus();
+      }
+      return;
+    }
+
     const isDigit = checkIsDigit(val);
     if (!isDigit) return;
 
-    const copyOtp = [...otp];
-    copyOtp[index] = val;
+    setValues(val, index);
 
-    setOtp([...copyOtp]);
-
+    // фокус на следующий, если есть
     if (miniStore.current[index + 1]) {
       miniStore.current[index + 1]?.focus();
     } else {
       buttonRef.current?.focus();
     }
-  }
+  };
 
   const handleFocus = (ref: RefObject<TextInput | any>) => {
     const cur = ref.current as any;
@@ -108,113 +145,68 @@ export const OtpContent = ({
   const checkAuthorized = async () => {
     try {
       if (otp.every((s) => Boolean(s) && Number.isInteger(+s)) && activeEmail) {
-        setLoading(true);
+        setLoadingSendEmail(true);
         const data = await api.checkAuthorizeByEmail(activeEmail, otp.join(''));
         if (data?.data) {
           setAuthorizedData({
             isAuthorized: true,
             userId: data?.data.id,
             email: data?.data.email,
-          })
+          });
         }
-        setLoading(false);
+        setLoadingSendEmail(false);
       }
     } catch (_) {
-      setLoading(false);
+      setLoadingSendEmail(false);
     }
-  }
+  };
 
-  const handlePressBackBtn = () => {
-    setCurrentStep(STEPS.START);
-    setEmail('');
-  }
+  const inputCommonProps = (index: number) => ({
+    style: styles.input_otp,
+    keyboardType: 'numeric' as const,
+    onChangeText: (e: string) => setOtpValue(e, index),
+    onKeyPress: (e: NativeSyntheticEvent<TextInputKeyPressEventData>) =>
+      handleKeyPress(e, index),
+    onFocus: () => handleFocus(
+      [otp0Ref, otp1Ref, otp2Ref, otp3Ref, otp4Ref, otp5Ref][index] as RefObject<TextInput>
+    ),
+    value: otp[index],
+  });
 
   return (
     <>
-      <AnimatedPressBtn
-        style={styles.buttonBack}
-        wrapperStyle={styles.buttonBackWrapper}
-        onPress={handlePressBackBtn}
-      >
-        <IconBackBtn
-          color={"#ffffff"}
-        />
-      </AnimatedPressBtn>
       <View style={styles.row}>
         <Text style={styles.text_enter}>Enter the code sent to</Text>
         <Text style={styles.text_email_code}>{maskEmail(activeEmail)}</Text>
       </View>
       <View style={styles.row_otp}>
         <View style={styles.col_otp}>
-          <TextInput
-            style={styles.input_otp}
-            keyboardType="numeric"
-            onChangeText={(e) => setOtpValue(e, 0)}
-            ref={otp0Ref}
-            onFocus={() => handleFocus(otp0Ref as RefObject<TextInput>)}
-            value={otp[0]}
-          />
+          <TextInput {...inputCommonProps(0)} ref={otp0Ref} />
         </View>
         <View style={styles.col_otp}>
-          <TextInput
-            style={styles.input_otp}
-            keyboardType="numeric"
-            onChangeText={(e) => setOtpValue(e, 1)}
-            ref={otp1Ref}
-            onFocus={() => handleFocus(otp1Ref as RefObject<TextInput>)}
-            value={otp[1]}
-          />
+          <TextInput {...inputCommonProps(1)} ref={otp1Ref} />
         </View>
         <View style={styles.col_otp}>
-          <TextInput
-            style={styles.input_otp}
-            keyboardType="numeric"
-            onChangeText={(e) => setOtpValue(e, 2)}
-            ref={otp2Ref}
-            onFocus={() => handleFocus(otp2Ref as RefObject<TextInput>)}
-            value={otp[2]}
-          />
-        </View>
-        <Text style={styles.text_otp}>-</Text>
-        <View style={styles.col_otp}>
-          <TextInput
-            style={styles.input_otp}
-            keyboardType="numeric"
-            onChangeText={(e) => setOtpValue(e, 3)}
-            ref={otp3Ref}
-            onFocus={() => handleFocus(otp3Ref as RefObject<TextInput>)}
-            value={otp[3]}
-          />
+          <TextInput {...inputCommonProps(2)} ref={otp2Ref} />
         </View>
         <View style={styles.col_otp}>
-          <TextInput
-            style={styles.input_otp}
-            keyboardType="numeric"
-            onChangeText={(e) => setOtpValue(e, 4)}
-            ref={otp4Ref}
-            onFocus={() => handleFocus(otp4Ref as RefObject<TextInput>)}
-            value={otp[4]}
-          />
+          <TextInput {...inputCommonProps(3)} ref={otp3Ref} />
         </View>
         <View style={styles.col_otp}>
-          <TextInput
-            style={styles.input_otp}
-            keyboardType="numeric"
-            onChangeText={(e) => setOtpValue(e, 5)}
-            ref={otp5Ref}
-            onFocus={() => handleFocus(otp5Ref as RefObject<TextInput>)}
-            value={otp[5]}
-          />
+          <TextInput {...inputCommonProps(4)} ref={otp4Ref} />
+        </View>
+        <View style={styles.col_otp}>
+          <TextInput {...inputCommonProps(5)} ref={otp5Ref} />
         </View>
       </View>
       <View style={styles.row}>
         <CustomButton
           text="Sign In"
           customRef={buttonRef}
-          disabled={loading}
+          disabled={loadingSendEmail}
           handlePress={checkAuthorized}
         />
       </View>
     </>
-  )
-}
+  );
+};
