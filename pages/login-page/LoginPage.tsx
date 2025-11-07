@@ -1,4 +1,4 @@
-import { SafeAreaView } from "react-native";
+import { View } from 'react-native';
 import { useEffect } from 'react';
 import { useRouter } from 'expo-router';
 
@@ -7,6 +7,7 @@ import Footer from '@/pages/MaiPage/content/Footer/Footer';
 import { LoginMain } from '@/pages/login-page/content/login-main/LoginMain';
 import { useUser } from '@/contexts/UserContext';
 import { LoginPageProvider } from '@/contexts/LoginPageContext';
+import { SafeAreaInsectComponent } from '@/components/SafeAreaInsectComponent/SafeAreaInsectComponent';
 
 export const LoginPage = () => {
   const { isAuthorized } = useUser()
@@ -18,12 +19,14 @@ export const LoginPage = () => {
   }, [isAuthorized]);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaInsectComponent>
       <LoginPageProvider>
-        <Header />
-        <LoginMain />
-        <Footer />
+        <View style={{ flex: 1 }}>
+          <Header />
+          <LoginMain />
+          <Footer />
+        </View>
       </LoginPageProvider>
-    </SafeAreaView>
+    </SafeAreaInsectComponent>
   )
 }
