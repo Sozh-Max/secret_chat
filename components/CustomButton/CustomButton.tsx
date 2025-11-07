@@ -19,7 +19,11 @@ export const CustomButton = ({
   customRef = null,
 }: CustomButtonProps) => (
   <AnimatedPressBtn
-    style={[styles.button, disabled && styles.button_disabled]}
+    style={({ pressed }) => [
+      styles.button,
+      disabled && styles.button_disabled,
+      pressed && styles.button_pressed,
+    ]}
     onPress={handlePress}
     scaleEnd={0.98}
     customRef={customRef}
