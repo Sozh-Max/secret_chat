@@ -45,6 +45,12 @@ export const styles = StyleSheet.create({
     fontFamily: 'NotoSans_400Regular',
     fontSize: 16,
   },
+  inputError: {
+    borderBottomColor: '#ff0000',
+    borderTopColor: '#ff0000',
+    borderLeftColor: '#ff0000',
+    borderRightColor: '#ff0000',
+  },
   row_otp: {
     display: 'flex',
     justifyContent: 'space-between',

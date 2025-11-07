@@ -15,7 +15,7 @@ export const AccountData = () => {
       </View>
       <View style={styles.row}>
         <CustomButton
-          text="Sign Out"
+          text="Sign out"
           handlePress={logout}
         />
       </View>

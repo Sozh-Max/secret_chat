@@ -20,6 +20,9 @@ export const styles = StyleSheet.create({
   button_disabled: {
     backgroundColor: '#181818',
   },
+  button_pressed: {
+    borderTopColor: '#1e1e1e',
+  },
   text: {
     fontSize: 14,
     color: '#fff',

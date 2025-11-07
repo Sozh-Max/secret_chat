@@ -1,6 +1,5 @@
 import { Image } from 'expo-image';
 import { View } from 'react-native';
-import { ThemedView } from '@/components/ThemedView';
 import { STEPS } from '@/pages/login-page/content/login-main/constants';
 import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
 import { styles } from '@/pages/login-page/content/login-main/styles';
@@ -10,14 +9,13 @@ import { useLoginPage } from '@/contexts/LoginPageContext';
 export const Header = () => {
   const { currentStep, setCurrentStep, setEmail } = useLoginPage();
 
-
   const handlePressBackBtn = () => {
     setCurrentStep(STEPS.START);
     setEmail('');
   }
-  console.log(currentStep === STEPS.OTP);
+
   return (
-    <ThemedView
+    <View
       style={{
         height: 60,
         justifyContent: 'space-between',
@@ -58,6 +56,6 @@ export const Header = () => {
         />
       )}
       </View>
-    </ThemedView>
+    </View>
   );
 };

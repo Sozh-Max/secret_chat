@@ -113,7 +113,7 @@ export const LoginMain = () => {
               <View>
                 <TextInput
                   ref={emailRef}
-                  style={styles.emailInput}
+                  style={[styles.emailInput, emailError && styles.inputError]}
                   placeholder="Email"
                   keyboardType="email-address"
                   autoCapitalize="none"
@@ -122,9 +122,6 @@ export const LoginMain = () => {
                   onChangeText={setEmail}
                   placeholderTextColor="#737373"
                 />
-                {emailError ? (
-                  <Text style={{ color: 'red', marginTop: 8 }}>Please enter a valid email address.</Text>
-                ) : null}
               </View>
               <View>
                 <CustomButton

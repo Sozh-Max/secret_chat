@@ -3,7 +3,6 @@ import { styles } from '@/pages/login-page/content/login-main/styles';
 import { RefObject, useEffect, useRef, useState } from 'react';
 import { CustomButton } from '@/components/CustomButton/CustomButton';
 import { checkIsDigit } from '@/utils/global';
-import { maskEmail } from '@/pages/login-page/content/login-main/utils';
 import { api } from '@/api/api';
 import { useUser } from '@/contexts/UserContext';
 import { useLoginPage } from '@/contexts/LoginPageContext';
@@ -12,8 +11,11 @@ type MiniStoreType = Record<number, TextInput | null>;
 
 export const OtpContent = () => {
   const { setAuthorizedData } = useUser();
+
   const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
+  const [isError, setIsError] = useState<boolean>(false);
   const otpRef = useRef<string[]>(otp);
+
   const {
     activeEmail,
     loadingSendEmail,
@@ -56,6 +58,7 @@ export const OtpContent = () => {
       otpRef.current = copy;
       return copy;
     });
+    setIsError(false);
   };
 
   const handleBackspace = (index: number) => {
@@ -169,12 +172,13 @@ export const OtpContent = () => {
         setLoadingSendEmail(false);
       }
     } catch (_) {
+      setIsError(true);
       setLoadingSendEmail(false);
     }
   };
 
   const inputCommonProps = (index: number) => ({
-    style: styles.input_otp,
+    style: [styles.input_otp, isError && styles.inputError],
     keyboardType: 'numeric' as const,
     onChangeText: (e: string) => setOtpValue(e, index),
     onKeyPress: (e: NativeSyntheticEvent<TextInputKeyPressEventData>) =>
@@ -189,7 +193,7 @@ export const OtpContent = () => {
     <>
       <View>
         <Text style={styles.text_enter}>Enter the code sent to</Text>
-        <Text style={styles.text_email_code}>{maskEmail(activeEmail)}</Text>
+        <Text style={styles.text_email_code}>{activeEmail}</Text>
       </View>
       <View style={styles.row_otp}>
         <View style={styles.col_otp}>
