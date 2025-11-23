@@ -13,6 +13,7 @@ interface IUserContext extends IUserData {
   isCheckAuthorized: boolean;
   setAuthorizedData: (data: IUserData) => void;
   logout: () => void;
+  bootId: string;
 }
 
 export type UserData = IUserContext | null;
@@ -24,10 +25,10 @@ export const UserProvider = (
   { children: ReactNode }
 ) => {
   const [userId, setUserId] = useState<string>('');
+  const [bootId, setBootId] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
   const [isCheckAuthorized, setIsCheckAuthorized] = useState<boolean>(false);
-
 
   useEffect(() => {
     mainUtils.getUserData().then((data: UserData) => {
@@ -39,6 +40,15 @@ export const UserProvider = (
     }).finally(() => {
       setIsCheckAuthorized(true);
     });
+  }, []);
+
+  useEffect(() => {
+    const getBootId: () => Promise<void> = async () => {
+      const id = await mainUtils.getBootId();
+      setBootId(id);
+    };
+
+    getBootId();
   }, []);
 
   const setAuthorizedData = async (data: IUserData) => {
@@ -72,6 +82,7 @@ export const UserProvider = (
       logout,
       isCheckAuthorized,
       setAuthorizedData,
+      bootId,
     }}>
       {children}
     </UserContext.Provider>

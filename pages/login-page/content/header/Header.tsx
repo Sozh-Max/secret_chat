@@ -26,7 +26,7 @@ export const Header = () => {
         left: 0,
         width: '100%',
         backgroundColor: 'none',
-        zIndex: 1,
+        zIndex: 5,
       }}
     >
       <View

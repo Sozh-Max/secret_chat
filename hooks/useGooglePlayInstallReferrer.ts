@@ -6,15 +6,18 @@ import { LOCAL_STORAGE_KEYS } from '@/services/constants';
 import { api } from '@/api/api';
 import { Platform } from 'react-native';
 
-const initGooglePlayInstallReferrer = async (geo: string, id: string) => {
-  // const lastReferrer = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.GOOGLE_REFERRER);
-
-  if (Platform.OS === 'android' && id) {
-    const referrer = await Application.getInstallReferrerAsync();
-
+const setReferrerToServer = async (bootId: string, referrer: string) => {
+  if (bootId && referrer) {
     await api.launchingStatistics({
-      userId: id,
+      bootId,
       data: referrer,
+    }).then(async (data) => {
+      if (data.ok) {
+        await AsyncStorageService.storeData(
+          LOCAL_STORAGE_KEYS.IS_SENT_REFERRER,
+          'true',
+        );
+      }
     });
 
     await AsyncStorageService.storeData(
@@ -22,26 +25,35 @@ const initGooglePlayInstallReferrer = async (geo: string, id: string) => {
       JSON.stringify(referrer),
     );
   }
-
-  // if (!lastReferrer && id && Platform.OS === 'android') {
-  //
-  //
-  //   if (referrer) {
-  //
-  //     await api.sendGooglePlayInstallReferrer({
-  //       ref: referrer,
-  //       geo,
-  //       id,
-  //     });
-  //
-  //   }
-  // }
 }
 
-export const useGooglePlayInstallReferrer = (deviceRegion: string, id: string) => {
+
+const initGooglePlayInstallReferrer = async (geo: string, bootId: string) => {
+  const referrer = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.GOOGLE_REFERRER);
+  if (referrer) {
+    await setReferrerToServer(bootId, referrer);
+  } else if (Platform.OS === 'android' && bootId) {
+    const referrer = await Application.getInstallReferrerAsync();
+
+    await setReferrerToServer(bootId, referrer);
+  }
+}
+
+export const useGooglePlayInstallReferrer = (deviceRegion: string, bootId: string) => {
   useEffect(() => {
-    if (id) {
-      initGooglePlayInstallReferrer(deviceRegion, id);
+
+    if (bootId) {
+      setGoogleReferrer(deviceRegion, bootId);
     }
-  }, [id])
+  }, [bootId])
+}
+
+const setGoogleReferrer = async (deviceRegion: string, bootId: string) => {
+  const isSentReferrer = await AsyncStorageService.getData(
+    LOCAL_STORAGE_KEYS.IS_SENT_REFERRER,
+  );
+
+  if (!isSentReferrer) {
+    await initGooglePlayInstallReferrer(deviceRegion, bootId);
+  }
 }

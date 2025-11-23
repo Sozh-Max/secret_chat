@@ -1,10 +1,9 @@
 export const enum LOCAL_STORAGE_KEYS {
-	IS_INIT = 'isInit',
 	USER_DATA = 'userData',
-	DIALOGS = 'dialogs',
 	TOKENS = 'tokens',
 	GOOGLE_REFERRER = 'googleReferrer',
-	UID = 'uid',
+	BOOT_ID = 'bootId',
+	IS_SENT_REFERRER = 'isSentReferrer',
 }
 
 export const enum PLATFORM {

@@ -11,10 +11,11 @@ import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-si
 import { api } from '@/api/api';
 import { useUser } from '@/contexts/UserContext';
 import { useLoginPage } from '@/contexts/LoginPageContext';
+import { VideoBackground } from '@/components/video-background/VideoBackground';
 
 export const LoginMain = () => {
   const emailRef = useRef<TextInput>(null);
-  const { setAuthorizedData } = useUser();
+  const { bootId, setAuthorizedData } = useUser();
 
   const {
     currentStep,
@@ -36,13 +37,14 @@ export const LoginMain = () => {
       if (!user) return;
 
       if (user?.data?.idToken) {
-        const data = await api.auth(user.data.idToken as string);
+        const data = await api.auth(user.data.idToken as string, bootId);
 
-        if (data?.data) {
+        if (data) {
+
           setAuthorizedData({
             isAuthorized: true,
-            userId: data?.data.id,
-            email: data?.data.email,
+            userId: data.id,
+            email: data.email,
           })
         }
       }
@@ -54,7 +56,7 @@ export const LoginMain = () => {
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         console.log('Сервисы Google Play недоступны');
       } else {
-        console.error(error);
+        console.error(`error: ${error}`);
       }
     }
   };
@@ -89,16 +91,18 @@ export const LoginMain = () => {
   };
 
   return (
-    <ImageBackground
-      source={require('../../../../assets/images/login-bg.jpg')}
-      style={{ flex: 1 }}
-      resizeMode="cover"
-    >
+    // <ImageBackground
+    //   source={require('../../../../assets/images/login-bg.jpg')}
+    //   style={{ flex: 1 }}
+    //   resizeMode="cover"
+    // >
+    <View style={{ flex: 1, position: 'relative' }}>
+      <VideoBackground />
       <LinearGradient
-        colors={['rgba(0,0,0,1)', 'rgba(0,0,0,0.85)', 'transparent']}
+        colors={['rgba(0,0,0,0.9)', 'rgba(0,0,0,0.4)', 'transparent']}
         start={{ x: 0, y: 1 }}
         end={{ x: 0, y: 0 }}
-        style={{ flex: 1 }}
+        style={{ flex: 1, position: 'absolute', zIndex: 2, top: 0, right: 0, left: 0, bottom: 0 }}
       >
         <View
           style={styles.wrapper}
@@ -149,6 +153,8 @@ export const LoginMain = () => {
           />
         </View>
       </LinearGradient>
-    </ImageBackground>
+    </View>
+
+    // </ImageBackground>
   );
 };

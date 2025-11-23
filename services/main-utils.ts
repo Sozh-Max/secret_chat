@@ -14,18 +14,18 @@ class MainUtils {
     return deviceLocale?.split('_')[0]?.toLowerCase() || '';
   }
 
-  // getUniqueId = async (): Promise<string> => {
-  //   const uid = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.UID);
-  //
-  //   if (!uid) {
-  //     const id = uuidv4();
-  //
-  //     await AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.UID, id);
-  //     return id;
-  //   }
-  //
-  //   return uid;
-  // }
+  getBootId = async (): Promise<string> => {
+    const uid = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.BOOT_ID);
+
+    if (!uid) {
+      const id = uuidv4();
+
+      await AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.BOOT_ID, id);
+      return id;
+    }
+
+    return uid;
+  }
 
   getUserData = async (): Promise<UserData> => {
     const userData = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.USER_DATA);

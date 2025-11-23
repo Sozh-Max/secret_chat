@@ -10,7 +10,7 @@ import { useLoginPage } from '@/contexts/LoginPageContext';
 type MiniStoreType = Record<number, TextInput | null>;
 
 export const OtpContent = () => {
-  const { setAuthorizedData } = useUser();
+  const { bootId, setAuthorizedData } = useUser();
 
   const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
   const [isError, setIsError] = useState<boolean>(false);
@@ -161,17 +161,24 @@ export const OtpContent = () => {
     try {
       if (otp.every((s) => Boolean(s) && Number.isInteger(+s)) && activeEmail) {
         setLoadingSendEmail(true);
-        const data = await api.checkAuthorizeByEmail(activeEmail, otp.join(''));
-        if (data?.data) {
+
+        const data = await api.checkAuthorizeByEmail(
+          activeEmail,
+          otp.join(''),
+          bootId,
+        );
+
+        if (data) {
           setAuthorizedData({
             isAuthorized: true,
-            userId: data?.data.id,
-            email: data?.data.email,
+            userId: data.id,
+            email: data.email,
           });
         }
         setLoadingSendEmail(false);
       }
-    } catch (_) {
+    } catch (e) {
+      console.log(`authorized by OTP error: ${e}`);
       setIsError(true);
       setLoadingSendEmail(false);
     }

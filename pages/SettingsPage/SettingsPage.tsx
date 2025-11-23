@@ -4,8 +4,6 @@ import { View, Text, ScrollView } from 'react-native';
 import { SafeAreaInsectComponent } from '@/components/SafeAreaInsectComponent/SafeAreaInsectComponent';
 import { Header } from '@/pages/SettingsPage/content/Header/Header';
 import { TemplateContent } from '@/components/TemplateContent/TemplateContent';
-import { TokensBuy } from '@/pages/SettingsPage/content/TokensBuy/TokensBuy';
-import { LogAccount } from '@/pages/SettingsPage/content/LogAccount/LogAccount';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { styles } from '@/pages/SettingsPage/styles';
 import { AccountData } from '@/pages/SettingsPage/content/account-data/AccountData';

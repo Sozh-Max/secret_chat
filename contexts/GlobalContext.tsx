@@ -5,7 +5,6 @@ import React, { createContext, Dispatch, ReactNode, SetStateAction, useContext, 
 import { IMessage } from '@/api/interfaces';
 import { mainUtils } from '@/services/main-utils';
 import { useGooglePlayInstallReferrer } from '@/hooks/useGooglePlayInstallReferrer';
-import { InitDataService } from '@/services/init-data-service';
 import { api } from '@/api/api';
 import { useUser } from '@/contexts/UserContext';
 
@@ -24,6 +23,7 @@ export interface IDialog {
   isComplaint?: boolean;
   hasVideo: boolean;
   description: string;
+  lastMsgId: number;
 }
 
 export type Dialogs = { [key in AGENT_KEYS]?: IDialog }
@@ -37,13 +37,15 @@ type GlobalContextType = {
   deviceRegion: string;
   activeChatVideoId: number;
   setActiveChatVideoId: Dispatch<SetStateAction<number>>;
+  lastMsgGlobalId: number;
+  setLastMsgGlobalId: Dispatch<SetStateAction<number>>;
 }
 
 export interface IDialogPreview {
   id: AGENT_KEYS;
   description: string;
   message: string;
-  lastMessageTime: number | null;
+  lastMessageTime: number;
   cost: number;
   isBlocked: boolean;
   isComplaint?: boolean;
@@ -88,59 +90,79 @@ export const GlobalProvider = (
   const [dialogPreview, setDialogPreview] = useState<IDialogPreview[]>([]);
   const [deviceRegion] = useState<string>(mainUtils.getDeviceRegion());
   const [activeChatVideoId, setActiveChatVideoId] = useState<number>(0);
+  const [lastMsgGlobalId, setLastMsgGlobalId] = useState<number>(0);
 
-  const { userId } = useUser();
+  const { userId, bootId, isCheckAuthorized } = useUser();
 
-  useGooglePlayInstallReferrer(deviceRegion, userId);
-
-  useEffect(() => {
-    if (userId) {
-      new InitDataService({
-        userId,
-      });
-    }
-  }, [userId]);
+  useGooglePlayInstallReferrer(deviceRegion, bootId);
 
   useEffect(() => {
     const getInitData = async () => {
-      // const userData = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.USER_DATA);
-      const request = await api.getBalance(userId);
+      try {
+        const dialogsData: Partial<Record<AGENT_KEYS, IDialog>> = {};
 
-      if (request.ok) {
-        const requestData = await request.json();
-        setTokens(Number(requestData.balance));
+        const requestInitData = await api.getInitData(userId);
+
+        for (const key in requestInitData?.assistantsData) {
+          const obj = requestInitData.assistantsData[key];
+
+          dialogsData[key as AGENT_KEYS] = {
+            dialog: [],
+            id: key as AGENT_KEYS,
+            cost: obj.cost ?? 10,
+            isBlocked: false,
+            isComplaint: false,
+            hasVideo: Boolean(obj.vid_count),
+            description: obj.description ?? '',
+            lastMsgId: 0,
+          }
+        }
+
+        const requestDialogsData = await api.getDialogs(userId);
+
+        if (requestDialogsData?.dialogs?.length) {
+          for (let dialog of requestDialogsData.dialogs) {
+            const item: IDialog | undefined = dialogsData[dialog.id as AGENT_KEYS];
+            if (item) {
+              item.dialog = dialog.dialog as IDialogItem[];
+              item.isBlocked = dialog.isBlocked || false;
+              item.isComplaint = dialog.isComplaint || false;
+              item.lastMsgId = dialog.lastMsgId || 0;
+            }
+          }
+        }
+        if (requestDialogsData?.lastMsgGlobalId) {
+          setLastMsgGlobalId(requestDialogsData.lastMsgGlobalId);
+        }
+
+
+        const requestBalanceData = await api.getBalance(userId);
+
+        setTokens(Number(requestBalanceData?.balance || 0));
+
+        console.log('dialogsData', dialogsData);
+
+        setDialogs(dialogsData)
+
+        refreshChats({
+          dialogs: dialogsData,
+          setDialogPreview,
+        });
+      } catch (e) {
+        console.log(e);
       }
-
-      const userDialogs = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.DIALOGS);
-
-      // if (userData) {
-      //   const parsedData = JSON.parse(userData);
-      //   setTokens(parsedData.tokens || 0);
-      // }
-
-      const dialogs = JSON.parse(userDialogs || '') || {};
-
-      setDialogs(dialogs);
-
-      refreshChats({
-        dialogs,
-        setDialogPreview,
-      });
     };
-    // AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.IS_INIT, '');
+
     const intervalId = setInterval(async () => {
-      const isInit = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.IS_INIT);
-      if (isInit && userId) {
+      if (isCheckAuthorized && userId) {
         clearInterval(intervalId);
         getInitData();
       }
     }, 100);
-  }, [userId]);
+  }, [userId, isCheckAuthorized]);
 
   useEffect(() => {
     if (dialogs[AGENT_KEYS.wendy] && dialogs[AGENT_KEYS.ashley]) {
-      AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.DIALOGS, JSON.stringify(dialogs));
-
       refreshChats({
         dialogs,
         setDialogPreview,
@@ -148,22 +170,58 @@ export const GlobalProvider = (
     }
   }, [dialogs, setDialogPreview]);
 
-  // useEffect(() => {
-  //   AsyncStorageService.storeDataBySubKey(
-  //     LOCAL_STORAGE_KEYS.USER_DATA,
-  //     LOCAL_STORAGE_KEYS.TOKENS,
-  //     tokens,
-  //   );
-  // }, [tokens]);
+  useEffect(() => {
+    const id = setInterval(async () => {
+      if (userId) {
+        const dialogsData = [];
+        for (const key in dialogs) {
+          // @ts-ignore
+          const dialog: IDialog = dialogs[key];
+          dialogsData.push({
+            assistantId: dialog.id,
+            lastMsgId: dialog.lastMsgId,
+          });
+        }
+        const data = await api.syncDialogs({
+          userId,
+          lastMsgGlobalId,
+          data: dialogsData,
+        });
+        console.log(data);
+
+        setDialogs(((dialogs) => {
+          // @ts-ignore
+          data.dialogs?.forEach((d) => {
+            // @ts-ignore
+            const dialog = dialogs[d.id];
+            if (dialog) {
+              dialog.dialog = d.dialog;
+              dialog.isBlocked = d.isBlocked;
+              dialog.isComplaint = d.isComplaint;
+              dialog.lastMsgId = d.lastMsgId;
+            }
+          });
+
+          return {
+            ...dialogs,
+          }
+        }));
+        setLastMsgGlobalId(data.lastMsgGlobalId);
+      }
+    }, 5000);
+
+
+
+    return () => {
+      clearInterval(id);
+    }
+  }, [userId, lastMsgGlobalId, dialogs, setDialogs])
 
   const updateBalance = async (amount: number) => {
-    const request = await api.addBalance(amount, userId);
-    if (request.ok) {
-      const requestData = await request.json();
-      setTokens(Number(requestData.balance));
-    }
+    const requestData = await api.addBalance(amount, userId);
+    setTokens(Number(requestData.balance));
   }
-
+  console.log(lastMsgGlobalId, dialogs);
   return (
     <GlobalContext.Provider value={{
       tokens,
@@ -174,6 +232,8 @@ export const GlobalProvider = (
       deviceRegion,
       activeChatVideoId,
       setActiveChatVideoId,
+      lastMsgGlobalId,
+      setLastMsgGlobalId,
     }}>
       {children}
     </GlobalContext.Provider>

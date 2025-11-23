@@ -25,7 +25,7 @@ const ChatInput = ({
 }: ChatInputProps) => {
   const [text, setText] = useState<string>('');
   const [isVisiblePicker, setIsVisiblePicker] = useState<boolean>(false);
-  const { dialogs, setDialogs, tokens, updateBalance } = useGlobal();
+  const { dialogs, setDialogs, tokens, updateBalance, setLastMsgGlobalId } = useGlobal();
   const { userId } = useUser();
 
   const dialog = dialogs[id];
@@ -62,6 +62,7 @@ const ChatInput = ({
         assistantDialog: dialog?.dialog || [],
         setLoading,
         setShowTyping,
+        setLastMsgGlobalId,
       });
     }
   };

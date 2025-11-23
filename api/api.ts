@@ -5,24 +5,30 @@ import { PLATFORM } from '@/services/constants';
 import { IDialog } from '@/contexts/GlobalContext';
 import { AGENT_KEYS } from '@/constants/agents-data';
 
+const responseHandler = async (res: any) => {
+  if (!res.ok) {
+    return Error(`Network error: ${res.status} ${res.statusText}`);
+  }
+
+  const data =  await res.json();
+
+  return data.data;
+}
+
 class Api {
   private link = 'https://app.neuronautica.com/api/v2';
   private linkStat = 'https://app.neuronautica.com/stats/save_db_apk.php';
 
-
-  async auth(token: string): Promise<IResponse<IResponseUserData>> {
-    const res = await fetch(`${this.link}/app/auth`, {
+  async auth(token: string, bootId: string): Promise<IResponseUserData> {
+    return fetch(`${this.link}/app/auth`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id_token: token, mode: 'google' }),
-    });
-
-    if (!res.ok) {
-      throw new Error(`Network error: ${res.status} ${res.statusText}`);
-    }
-
-    const data = (await res.json()) as IResponse<IResponseUserData>;
-    return data;
+      body: JSON.stringify({
+        id_token: token,
+        mode: 'google',
+        bootId,
+      }),
+    }).then(responseHandler);
   }
 
 
@@ -37,30 +43,37 @@ class Api {
 
   async checkAuthorizeByEmail(
     email: string,
-    code: string | number
-  ): Promise<IResponse<IResponseUserData>> {
-    const res = await fetch(`${this.link}/app/code/check?email=${email}&code=${code}`, {
+    code: string | number,
+    bootId: string,
+  ): Promise<IResponseUserData> {
+    return fetch(`${this.link}/app/code/check?email=${email}&code=${code}&bootId=${bootId}`, {
       method: 'GET',
-    });
-
-    if (!res.ok) {
-      throw new Error(`Network error: ${res.status} ${res.statusText}`);
-    }
-
-    const data = (await res.json()) as IResponse<IResponseUserData>;
-    return data;
+    }).then(responseHandler)
   }
 
   getInitData = async (id: string) => {
     return fetch(`${this.link}/app/init?id=${id}`, {
       method: 'GET',
-    });
+    }).then(responseHandler);
   };
 
   getBalance = async (id: string) => {
     return fetch(`${this.link}/balance?id=${id}`, {
       method: 'GET',
-    });
+    }).then(responseHandler);
+  };
+
+  getDialogs = async (id: string) => {
+    return fetch(`${this.link}/user/dialogs?id=${id}`, {
+      method: 'GET',
+    }).then(responseHandler);
+  }
+
+  syncDialogs = async (data: any) => {
+    return fetch(`${this.link}/user/dialogs/synch`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }).then(responseHandler);
   };
 
   addBalance = async (amount: number, id: string) => {
@@ -70,7 +83,7 @@ class Api {
         amount,
         id,
       }),
-    });
+    }).then(responseHandler);
   };
 
   sendMessages = async (data: IMessagesRequest) => {
@@ -135,16 +148,16 @@ class Api {
   };
 
   launchingStatistics = async ({
-    userId,
+    bootId,
     data,
   }: {
-    userId: string;
+    bootId: string;
     data?: string;
   }) => {
     return await fetch(`${this.link}/stats/launching`, {
       method: 'POST',
       body: JSON.stringify({
-        id: userId,
+        bootId: bootId,
         data,
       }),
     });

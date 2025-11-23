@@ -24,22 +24,25 @@ const setData = ({
   setDialogs,
   timestamp,
   isBlocked,
+  lastMsgId,
 }: {
-  replic: IMessage;
+  replic: IMessage | null;
   id: AGENT_KEYS;
   setDialogs: Dispatch<SetStateAction<Dialogs>>;
   timestamp: number;
   isBlocked: boolean;
+  lastMsgId: number;
 }): void => {
   setDialogs((d: Dialogs) => {
     const current = {...d[id]};
+    current.lastMsgId = lastMsgId;
     if (isBlocked) {
       current.isBlocked = isBlocked;
     }
 
     current.dialog = [...(current.dialog || [])];
 
-    if (!isBlocked) {
+    if (!isBlocked && replic) {
       current.dialog.push({
         replic,
         isFWord: 0,
@@ -64,6 +67,7 @@ class MessageService {
     assistantDialog,
     setLoading,
     setShowTyping,
+    setLastMsgGlobalId,
   }: {
     id: AGENT_KEYS;
     userId: string;
@@ -72,6 +76,7 @@ class MessageService {
     assistantDialog: IDialogItem[];
     setLoading: (state: boolean) => void;
     setShowTyping: (state: boolean) => void;
+    setLastMsgGlobalId: Dispatch<SetStateAction<number | null>>;
   }): Promise<void> {
     const replic: IMessage = {
       content: message,
@@ -84,13 +89,14 @@ class MessageService {
       setDialogs,
       timestamp: Date.now(),
       isBlocked: false,
+      lastMsgId: 0,
     });
 
     const timeout = getRandomInt(500, 1500);
 
     const startTime = Date.now();
 
-    setTimeout(() => {
+    setTimeout(async () => {
       setShowTyping(true);
       api.sendMessages({
         userId,
@@ -101,10 +107,14 @@ class MessageService {
         ]
       }).then(async (data) => {
         if (data.ok) {
+          // @ts-ignore
           const response = await data.json();
-          const replic = response.choices[0].message;
+          const responseData = response.data;
+          console.log(111111111111111111111111111111111111);
+          console.log(responseData);
+          const replic = responseData.choices[0].message;
 
-          const match = replic.content.match(/{{2,3}(photo|video)_(\d+)}{2,3}/);
+          const match = replic?.content?.match(/{{2,3}(photo|video)_(\d+)}{2,3}/);
 
           if (match?.[0]) {
             replic.content = match[0];
@@ -115,13 +125,15 @@ class MessageService {
               clearInterval(intervalId);
               setShowTyping(false);
 
-              if (response) {
+              if (responseData) {
+                setLastMsgGlobalId(responseData.lastMsgGlobalId)
                 setData({
-                  replic,
+                  replic: replic ?? null,
                   id,
                   setDialogs,
-                  timestamp: response.created * 1000,
-                  isBlocked: replic.content.includes('*blacklist*'),
+                  timestamp: responseData.created * 1000,
+                  isBlocked: responseData.isBlocked,
+                  lastMsgId: responseData.lastMsgId,
                 });
               }
             }

@@ -1,11 +1,9 @@
-
 import { View, Pressable, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from '@/pages/ChatPage/content/assistant-message/content/video-content/styles';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { VideoPlayer } from '@/pages/ChatPage/content/assistant-message/content/video-content/VideoPlayer';
 import { useState } from 'react';
-
 
 export const VideoContent = ({
   id,
