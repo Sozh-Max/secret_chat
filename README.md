@@ -1,50 +1,44 @@
-# Welcome to your Expo app 👋
+# secret_chat — Android README
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Overview
 
-## Get started
+**secret_chat** — это мобильное приложение на базе **Expo (SDK 53)** с использованием **expo-router**, Google Sign-In и других нативных модулей.  
+Этот README предназначен для разработки и сборки проекта **под Android**.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## Requirements
 
-2. Start the app
+Перед началом убедитесь, что установлены:
 
-   ```bash
-   npx expo start
-   ```
+- **Node.js** (рекомендуется LTS)
+- **npm** или **yarn**
+- **Java JDK** (подходит для Gradle, напр. Temurin 17)
+- **Android Studio** (включая Android SDK и AVD)
+- Переменные окружения:
+   - `ANDROID_HOME` или `ANDROID_SDK_ROOT`
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+Для разработки с Dev Client:
 
 ```bash
-npm run reset-project
+npm install expo-dev-client
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Установка зависимостей
+```bash
+npm install
+```
 
-## Learn more
+Для разработки под андроид
+```bash
+npm run android
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+Команда	Описание
+npm run start	  Запуск Metro и Dev Client
+npm run android	  Сборка и запуск Android-приложения
+npm run ios	      Сборка и запуск iOS-приложения
+npm run web	      Запуск web-версии
+npm run lint	  Проверка ESLint
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
 
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
