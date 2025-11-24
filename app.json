@@ -6,10 +6,15 @@
     "orientation": "portrait",
     "icon": "./assets/images/splash-icon.png",
     "scheme": "secretchat",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
+    },
+    "androidNavigationBar": {
+      "visible": "sticky-immersive",
+      "barStyle": "dark-content",
+      "backgroundColor": "#000000"
     },
     "web": {
       "bundler": "metro",

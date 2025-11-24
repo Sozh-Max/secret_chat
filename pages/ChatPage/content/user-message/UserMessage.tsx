@@ -2,6 +2,7 @@ import { View, Text } from 'react-native';
 import { IDialogItem } from '@/contexts/GlobalContext';
 import { styles } from '@/pages/ChatPage/content/user-message/styles';
 import { IconResponse } from '@/components/icons/IconResponse';
+import { getHoursAndMinutesFromMs } from '@/services/message-service';
 
 export const UserMessage = ({
   dialog
@@ -12,8 +13,10 @@ export const UserMessage = ({
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.name}>You</Text>
-        <Text style={styles.time}>{dialog.create}</Text>
-        <IconResponse />
+        <Text style={styles.time}>{getHoursAndMinutesFromMs(dialog.createTime)}</Text>
+        <View style={styles.iconWrap}>
+          <IconResponse />
+        </View>
       </View>
       <Text style={styles.content}>{dialog.replic.content}</Text>
     </View>

@@ -90,6 +90,14 @@ export const LoginMain = () => {
     });
   };
 
+  const setEmailHandler = (value: string) => {
+    if (emailError) {
+      setEmailError(false);
+    }
+
+    setEmail(value);
+  }
+
   return (
     // <ImageBackground
     //   source={require('../../../../assets/images/login-bg.jpg')}
@@ -118,12 +126,12 @@ export const LoginMain = () => {
                 <TextInput
                   ref={emailRef}
                   style={[styles.emailInput, emailError && styles.inputError]}
-                  placeholder="Email"
+                  placeholder="email@example.com"
                   keyboardType="email-address"
                   autoCapitalize="none"
                   autoCorrect={false}
                   value={email}
-                  onChangeText={setEmail}
+                  onChangeText={setEmailHandler}
                   placeholderTextColor="#737373"
                 />
               </View>

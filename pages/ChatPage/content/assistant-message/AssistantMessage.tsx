@@ -10,6 +10,7 @@ import { MAIN_COLOR, SUB_COLOR } from '@/constants/Colors';
 import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
 import { useComplaint } from '@/contexts/ComplaintContext';
 import { IconComplaintFlag } from '@/components/icons/IconComplaintFlag';
+import { getHoursAndMinutesFromMs } from '@/services/message-service';
 
 export const AssistantMessage = ({
   dialog,
@@ -37,7 +38,7 @@ export const AssistantMessage = ({
           <View style={styles.header_content}>
             <IconResponse/>
             <Text style={styles.name}>{id}</Text>
-            <Text style={styles.time}>{dialog.create}</Text>
+            <Text style={styles.time}>{getHoursAndMinutesFromMs(dialog.createTime)}</Text>
           </View>
           <AnimatedPressBtn
             style={styles.button_complaint}

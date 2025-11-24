@@ -110,7 +110,7 @@ export default function RootLayout() {
               style={{ flex: 1 }}
             >
               <RootNavigator />
-              <StatusBar style="auto" />
+              <StatusBar style="light" backgroundColor="#000000" />
             </LinearGradient>
           </SafeAreaProvider>
         </GlobalProvider>

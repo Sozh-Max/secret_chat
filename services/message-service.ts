@@ -9,9 +9,8 @@ function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-const getHoursAndMinutesFromMs = (timestamp: number) => {
-  const date = new Date(timestamp);
-
+export const getHoursAndMinutesFromMs = (timestamp: number) => {
+  const date = new Date(timestamp * 1000);
   const hours = date.getHours();
   const minutes = String(date.getMinutes()).padStart(2, '0');
 
@@ -46,8 +45,7 @@ const setData = ({
       current.dialog.push({
         replic,
         isFWord: 0,
-        create: getHoursAndMinutesFromMs(timestamp ?? Date.now()),
-        createTime: timestamp ?? Date.now(),
+        createTime: timestamp ?? (Date.now() / 1000),
       })
     }
 
@@ -87,7 +85,7 @@ class MessageService {
       replic,
       id,
       setDialogs,
-      timestamp: Date.now(),
+      timestamp: Date.now() / 1000,
       isBlocked: false,
       lastMsgId: 0,
     });
@@ -110,8 +108,7 @@ class MessageService {
           // @ts-ignore
           const response = await data.json();
           const responseData = response.data;
-          console.log(111111111111111111111111111111111111);
-          console.log(responseData);
+
           const replic = responseData.choices[0].message;
 
           const match = replic?.content?.match(/{{2,3}(photo|video)_(\d+)}{2,3}/);
@@ -131,7 +128,7 @@ class MessageService {
                   replic: replic ?? null,
                   id,
                   setDialogs,
-                  timestamp: responseData.created * 1000,
+                  timestamp: responseData.created,
                   isBlocked: responseData.isBlocked,
                   lastMsgId: responseData.lastMsgId,
                 });

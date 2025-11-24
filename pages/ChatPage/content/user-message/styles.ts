@@ -42,4 +42,7 @@ export const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'right',
   },
+  iconWrap: {
+    marginLeft: 8,
+  },
 });

@@ -41,6 +41,6 @@ export const styles = StyleSheet.create({
     fontFamily: 'NotoSans_400Regular',
   },
   button_complaint: {
-
+    marginLeft: 15,
   },
 });

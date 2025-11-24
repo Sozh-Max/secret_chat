@@ -1,17 +1,15 @@
 import { AGENT_KEYS, INIT_AGENT_LIST } from '@/constants/agents-data';
-import { AsyncStorageService } from '@/services/async-storage-service';
-import { LOCAL_STORAGE_KEYS } from '@/services/constants';
 import React, { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react';
 import { IMessage } from '@/api/interfaces';
 import { mainUtils } from '@/services/main-utils';
 import { useGooglePlayInstallReferrer } from '@/hooks/useGooglePlayInstallReferrer';
 import { api } from '@/api/api';
 import { useUser } from '@/contexts/UserContext';
+import * as NavigationBar from 'expo-navigation-bar';
 
 export interface IDialogItem {
   replic: IMessage;
   isFWord: number;
-  create: string;
   createTime: number;
 }
 
@@ -135,12 +133,9 @@ export const GlobalProvider = (
           setLastMsgGlobalId(requestDialogsData.lastMsgGlobalId);
         }
 
-
         const requestBalanceData = await api.getBalance(userId);
 
         setTokens(Number(requestBalanceData?.balance || 0));
-
-        console.log('dialogsData', dialogsData);
 
         setDialogs(dialogsData)
 
@@ -162,6 +157,11 @@ export const GlobalProvider = (
   }, [userId, isCheckAuthorized]);
 
   useEffect(() => {
+    NavigationBar.setBackgroundColorAsync('#000000');
+    NavigationBar.setButtonStyleAsync('light');
+  }, []);
+
+  useEffect(() => {
     if (dialogs[AGENT_KEYS.wendy] && dialogs[AGENT_KEYS.ashley]) {
       refreshChats({
         dialogs,
@@ -172,42 +172,50 @@ export const GlobalProvider = (
 
   useEffect(() => {
     const id = setInterval(async () => {
-      if (userId) {
-        const dialogsData = [];
-        for (const key in dialogs) {
-          // @ts-ignore
-          const dialog: IDialog = dialogs[key];
-          dialogsData.push({
-            assistantId: dialog.id,
-            lastMsgId: dialog.lastMsgId,
-          });
-        }
-        const data = await api.syncDialogs({
-          userId,
-          lastMsgGlobalId,
-          data: dialogsData,
-        });
-        console.log(data);
-
-        setDialogs(((dialogs) => {
-          // @ts-ignore
-          data.dialogs?.forEach((d) => {
+      try {
+        if (userId) {
+          const dialogsData = [];
+          for (const key in dialogs) {
             // @ts-ignore
-            const dialog = dialogs[d.id];
-            if (dialog) {
-              dialog.dialog = d.dialog;
-              dialog.isBlocked = d.isBlocked;
-              dialog.isComplaint = d.isComplaint;
-              dialog.lastMsgId = d.lastMsgId;
-            }
+            const dialog: IDialog = dialogs[key];
+            dialogsData.push({
+              assistantId: dialog.id,
+              lastMsgId: dialog.lastMsgId,
+            });
+          }
+          const data = await api.syncDialogs({
+            userId,
+            lastMsgGlobalId,
+            data: dialogsData,
           });
 
-          return {
-            ...dialogs,
+          if (data?.balance) {
+            setTokens(data.balance);
           }
-        }));
-        setLastMsgGlobalId(data.lastMsgGlobalId);
+
+          setDialogs(((dialogs) => {
+            // @ts-ignore
+            data.dialogs?.forEach((d) => {
+              // @ts-ignore
+              const dialog = dialogs[d.id];
+              if (dialog) {
+                dialog.dialog = d.dialog;
+                dialog.isBlocked = d.isBlocked;
+                dialog.isComplaint = d.isComplaint;
+                dialog.lastMsgId = d.lastMsgId;
+              }
+            });
+
+            return {
+              ...dialogs,
+            }
+          }));
+          setLastMsgGlobalId(data.lastMsgGlobalId);
+        }
+      } catch (e) {
+        console.log(e);
       }
+
     }, 5000);
 
 
@@ -221,7 +229,7 @@ export const GlobalProvider = (
     const requestData = await api.addBalance(amount, userId);
     setTokens(Number(requestData.balance));
   }
-  console.log(lastMsgGlobalId, dialogs);
+
   return (
     <GlobalContext.Provider value={{
       tokens,

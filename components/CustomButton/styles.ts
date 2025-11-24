@@ -15,6 +15,8 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderBottomColor: '#1e1e1e',
+    borderLeftColor: '#1e1e1e',
+    borderRightColor: '#1e1e1e',
     borderTopColor: '#373737',
   },
   button_disabled: {
