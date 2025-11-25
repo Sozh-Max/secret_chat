@@ -43,7 +43,7 @@ export const styles = StyleSheet.create({
     borderRightColor: '#1e1e1e',
     color: 'white',
     fontFamily: 'NotoSans_400Regular',
-    fontSize: 16,
+    fontSize: 14,
   },
   inputError: {
     borderBottomColor: '#ff0000',
@@ -89,14 +89,14 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'NotoSans_400Regular',
     fontSize: 14,
-    color: 'white',
-    marginBottom: 5,
+    color: '#ffffff',
+    marginBottom: 2,
   },
   text_email_code: {
     textAlign: 'center',
     fontFamily: 'NotoSans_400Regular',
     fontSize: 14,
-    color: '#757575',
+    color: '#ffffff',
   },
   buttonBack: {
     width: 40,

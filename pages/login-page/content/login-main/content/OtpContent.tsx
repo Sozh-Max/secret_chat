@@ -70,6 +70,7 @@ export const OtpContent = () => {
 
   const handleKeyPress = (e: NativeSyntheticEvent<TextInputKeyPressEventData>, index: number) => {
     const { key } = e.nativeEvent;
+    setIsError(false);
     if (key === 'Backspace') {
       if (!otpRef.current[index]) {
         handleBackspace(index);
@@ -168,14 +169,18 @@ export const OtpContent = () => {
           bootId,
         );
 
-        if (data) {
+        if (data?.id && data?.email) {
           setAuthorizedData({
             isAuthorized: true,
             userId: data.id,
             email: data.email,
           });
+        } else {
+          setIsError(true);
         }
         setLoadingSendEmail(false);
+      } else {
+        setIsError(true);
       }
     } catch (e) {
       console.log(`authorized by OTP error: ${e}`);
@@ -194,6 +199,7 @@ export const OtpContent = () => {
       [otp0Ref, otp1Ref, otp2Ref, otp3Ref, otp4Ref, otp5Ref][index] as RefObject<TextInput>
     ),
     value: otp[index],
+    cursorColor: '#efefef',
   });
 
   return (
@@ -224,7 +230,7 @@ export const OtpContent = () => {
       </View>
       <View>
         <CustomButton
-          text="Sign In"
+          text="Verify"
           customRef={buttonRef}
           disabled={loadingSendEmail}
           handlePress={checkAuthorized}

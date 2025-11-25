@@ -1,5 +1,5 @@
 import { View, Text, TextInput } from 'react-native';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { ImageBackground } from 'expo-image';
 
 import { CustomButton } from '@/components/CustomButton/CustomButton';
@@ -16,6 +16,7 @@ import { VideoBackground } from '@/components/video-background/VideoBackground';
 export const LoginMain = () => {
   const emailRef = useRef<TextInput>(null);
   const { bootId, setAuthorizedData } = useUser();
+  const [isEmailFocused, setIsEmailFocused] = useState(false);
 
   const {
     currentStep,
@@ -40,7 +41,6 @@ export const LoginMain = () => {
         const data = await api.auth(user.data.idToken as string, bootId);
 
         if (data) {
-
           setAuthorizedData({
             isAuthorized: true,
             userId: data.id,
@@ -94,45 +94,49 @@ export const LoginMain = () => {
     if (emailError) {
       setEmailError(false);
     }
-
     setEmail(value);
-  }
+  };
+
+  const handleEmailFocus = () => {
+    setIsEmailFocused(true);
+  };
+
+  const handleEmailBlur = () => {
+    setIsEmailFocused(false);
+  };
 
   return (
-    // <ImageBackground
-    //   source={require('../../../../assets/images/login-bg.jpg')}
-    //   style={{ flex: 1 }}
-    //   resizeMode="cover"
-    // >
     <View style={{ flex: 1, position: 'relative' }}>
       <VideoBackground />
       <LinearGradient
-        colors={['rgba(0,0,0,0.9)', 'rgba(0,0,0,0.4)', 'transparent']}
+        colors={['rgba(0,0,0,1)', 'rgba(0,0,0,0.5)', 'transparent']}
         start={{ x: 0, y: 1 }}
         end={{ x: 0, y: 0 }}
         style={{ flex: 1, position: 'absolute', zIndex: 2, top: 0, right: 0, left: 0, bottom: 0 }}
       >
-        <View
-          style={styles.wrapper}
-        >
+        <View style={styles.wrapper}>
           {currentStep === STEPS.START && (
             <>
               <View>
                 <Text style={styles.text}>
-                  Enter your email to log in
+                  Enter your email to sign in
                 </Text>
               </View>
               <View>
                 <TextInput
                   ref={emailRef}
                   style={[styles.emailInput, emailError && styles.inputError]}
-                  placeholder="email@example.com"
+                  placeholder={isEmailFocused ? "" : "email@example.com"}
                   keyboardType="email-address"
                   autoCapitalize="none"
                   autoCorrect={false}
                   value={email}
                   onChangeText={setEmailHandler}
+                  onFocus={handleEmailFocus}
+                  onBlur={handleEmailBlur}
                   placeholderTextColor="#737373"
+                  cursorColor='#efefef'
+                  textAlign={'center'}
                 />
               </View>
               <View>
@@ -162,7 +166,5 @@ export const LoginMain = () => {
         </View>
       </LinearGradient>
     </View>
-
-    // </ImageBackground>
   );
 };

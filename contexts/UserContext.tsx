@@ -2,6 +2,7 @@ import React, { createContext, ReactNode, useContext, useEffect, useState } from
 import { mainUtils } from '@/services/main-utils';
 import { AsyncStorageService } from '@/services/async-storage-service';
 import { LOCAL_STORAGE_KEYS } from '@/services/constants';
+import { router } from 'expo-router';
 
 interface IUserData {
   email: string;
@@ -72,6 +73,12 @@ export const UserProvider = (
     await AsyncStorageService.removeData(
       LOCAL_STORAGE_KEYS.USER_DATA,
     );
+    router.navigate({
+      pathname: '/login',
+      params: {
+        // дополнительные параметры если нужны
+      }
+    });
   }
 
   return (
