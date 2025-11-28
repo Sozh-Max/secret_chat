@@ -2,7 +2,6 @@ import { Image } from 'expo-image';
 import { StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { IconMenu } from '@/components/icons/IconMenu';
 import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
@@ -18,7 +17,7 @@ export const Header = () => {
   }
 
   return (
-    <ThemedView
+    <View
       style={{
         height: 80,
         backgroundColor: 'rgba(0, 0, 0, 0.95)',
@@ -57,7 +56,7 @@ export const Header = () => {
           <IconMenu />
         </AnimatedPressBtn>
       </View>
-    </ThemedView>
+    </View>
   );
 };
 

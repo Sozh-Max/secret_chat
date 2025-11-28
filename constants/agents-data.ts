@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from 'react-native';
+
 export const enum AGENT_KEYS {
   wendy = 'wendy',
   ashley = 'ashley',
@@ -53,7 +55,7 @@ export const IMG_POSTER_MAP: Record<AGENT_KEYS, string> = {
   [AGENT_KEYS.lola]: require(`@/assets/images/lola/poster.webp`),
 };
 
-export const IMG_PREVIEW_MAP: Record<AGENT_KEYS, string> = {
+export const IMG_PREVIEW_MAP: Record<AGENT_KEYS, ImageSourcePropType> = {
   [AGENT_KEYS.wendy]: require(`@/assets/images/wendy/preview.jpg`),
   [AGENT_KEYS.ashley]: require(`@/assets/images/ashley/preview.jpg`),
   [AGENT_KEYS.jane]: require(`@/assets/images/jane/preview.jpg`),

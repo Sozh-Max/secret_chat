@@ -1,4 +1,4 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DarkTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
@@ -6,7 +6,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-get-random-values';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { GlobalProvider } from '@/contexts/GlobalContext';
-import { useColorScheme } from '@/hooks/useColorScheme';
 import Constants from 'expo-constants';
 import {
   useFonts,
@@ -80,12 +79,22 @@ function RootNavigator() {
       <Stack.Screen name="chat" />
       <Stack.Screen name="settings" />
       <Stack.Screen name="+not-found" />
+
+      <Stack.Screen
+        name="image-modal"
+        options={{
+          presentation: 'transparentModal',
+          gestureEnabled: true,
+          headerShown: false,
+          animation: 'fade',
+          contentStyle: { backgroundColor: 'transparent' },
+        }}
+      />
     </Stack>
   );
 }
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
   const [fontsLoaded] = useFonts({
     NotoSans_400Regular,
     NotoSans_500Medium,
@@ -99,7 +108,7 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={DarkTheme}>
       <UserProvider>
         <GlobalProvider>
           <SafeAreaProvider>
@@ -110,7 +119,7 @@ export default function RootLayout() {
               style={{ flex: 1 }}
             >
               <RootNavigator />
-              <StatusBar style="light" backgroundColor="#000000" />
+              <StatusBar translucent style="light" backgroundColor="#000000" />
             </LinearGradient>
           </SafeAreaProvider>
         </GlobalProvider>

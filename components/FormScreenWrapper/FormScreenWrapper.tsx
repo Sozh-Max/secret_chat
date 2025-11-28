@@ -14,14 +14,14 @@ export const FormScreenWrapper = (
       style={{ flex: 1 }}
       keyboardVerticalOffset={isKeyboardVisible ? 0 : -50}
     >
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ flexGrow: 1 }}
-      >
+      {/*<ScrollView*/}
+      {/*  keyboardShouldPersistTaps="handled"*/}
+      {/*  contentContainerStyle={{ flexGrow: 1 }}*/}
+      {/*>*/}
         <View style={{ flex: 1 }}>
           {children}
         </View>
-      </ScrollView>
+      {/*</ScrollView>*/}
     </KeyboardAvoidingView>
   );
 }
