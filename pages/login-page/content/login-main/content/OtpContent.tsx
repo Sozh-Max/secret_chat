@@ -117,12 +117,14 @@ export const OtpContent = () => {
       return copy;
     });
 
-    const nextIndex = Math.min(6, index + digits.length);
-    if (nextIndex <= 5) {
-      miniStore.current[nextIndex]?.focus();
-    } else {
-      buttonRef.current?.focus();
-    }
+    const lastFilledIndex = Math.min(5, index + digits.length - 1);
+    setTimeout(() => {
+      if (miniStore.current[lastFilledIndex]) {
+        miniStore.current[lastFilledIndex]?.focus();
+      } else {
+        buttonRef.current?.focus();
+      }
+    }, 0);
   };
 
   const handleFocus = (ref: RefObject<TextInput | any>) => {

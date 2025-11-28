@@ -74,7 +74,7 @@ class MessageService {
     assistantDialog: IDialogItem[];
     setLoading: (state: boolean) => void;
     setShowTyping: (state: boolean) => void;
-    setLastMsgGlobalId: Dispatch<SetStateAction<number | null>>;
+    setLastMsgGlobalId: Dispatch<SetStateAction<number>>;
   }): Promise<void> {
     const replic: IMessage = {
       content: message,
@@ -148,14 +148,17 @@ class MessageService {
 
   removeHistoryById({
     id,
-    setDialogs
+    setDialogs,
+    lastMsgId,
   }:  {
     id: AGENT_KEYS;
     setDialogs: Dispatch<SetStateAction<Dialogs>>;
+    lastMsgId: number;
   }): void {
     setDialogs((d: Dialogs) => {
       const current = {...d[id]};
       current.dialog = [];
+      current.lastMsgId = lastMsgId;
       return {
         ...d,
         [id]: current,

@@ -76,7 +76,7 @@ const ChatInput = ({
 
   return (
     <View style={styles.container}>
-      <AnimatedPressBtn style={styles.button} onPress={handleToggleEmojiPicker}>
+      <AnimatedPressBtn style={[styles.button, styles.button_start]} onPress={handleToggleEmojiPicker}>
         <IconSmile color={isBlocked ? LOW_COLOR : SUB_COLOR} />
       </AnimatedPressBtn>
 
@@ -94,7 +94,7 @@ const ChatInput = ({
         editable={!isBlocked}
       />
 
-      <Pressable style={styles.button} onPress={sendMessage}>
+      <Pressable style={[styles.button, styles.button_finish]} onPress={sendMessage}>
         <IconSend
           color={(isBlocked || loading) ? LOW_COLOR : MAIN_COLOR}
         />

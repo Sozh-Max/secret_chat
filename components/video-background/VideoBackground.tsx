@@ -20,7 +20,7 @@ export const VideoBackground = () => {
 
   useEffect(() => {
     const handler = (nextAppState: AppStateStatus) => {
-      const prev = appStateRef.current;
+
       appStateRef.current = nextAppState;
 
       if (nextAppState === 'active') {
@@ -65,6 +65,8 @@ export const VideoBackground = () => {
         bottom: 0,
         width: '100%',
         height: '100%',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
         zIndex: 1,
       }}
       nativeControls={false}

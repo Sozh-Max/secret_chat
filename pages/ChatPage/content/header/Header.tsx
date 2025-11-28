@@ -16,14 +16,17 @@ import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn
 import { LOW_COLOR, MAIN_COLOR } from '@/constants/Colors';
 import { IconComplaint } from '@/components/icons/IconComplaint';
 import { useComplaint } from '@/contexts/ComplaintContext';
+import { api } from '@/api/api';
+import { useUser } from '@/contexts/UserContext';
 
 const Header = ({
   id,
 }: IdTypeProps) => {
   const [isShowNotice, setShowNotice] = useState(false);
   const timeoutIdRef = useRef<ReturnType<typeof setTimeout>  | null>(null);
-  const { setDialogs, dialogs } = useGlobal();
+  const { setDialogs, dialogs, setLastMsgGlobalId } = useGlobal();
   const { activateComplaint } = useComplaint();
+  const { userId } = useUser()
 
   const dialog = dialogs[id];
 
@@ -58,13 +61,25 @@ const Header = ({
     }
   };
 
-  const handleRemoveHistory = () => {
-    if (isActiveComplaint) {
-      setShowNotice(false);
-      messageService.removeHistoryById({
-        id,
-        setDialogs,
-      });
+  const handleRemoveHistory = async () => {
+    try {
+      if (isActiveComplaint) {
+        setShowNotice(false);
+        const data = await api.removeDialog({
+          userId,
+          assistantId: id,
+        });
+        if (data?.lastMsgGlobalId) {
+          setLastMsgGlobalId(data.lastMsgGlobalId);
+          messageService.removeHistoryById({
+            id,
+            setDialogs,
+            lastMsgId: data?.lastMsgId || 0,
+          });
+        }
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 

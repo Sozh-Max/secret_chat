@@ -1,7 +1,6 @@
 import { Base64 } from 'js-base64';
 
-import { IMessagesRequest, IResponse, IResponseUserData } from '@/api/interfaces';
-import { PLATFORM } from '@/services/constants';
+import { IMessagesRequest, IResponseUserData } from '@/api/interfaces';
 import { IDialog } from '@/contexts/GlobalContext';
 import { AGENT_KEYS } from '@/constants/agents-data';
 
@@ -17,7 +16,6 @@ const responseHandler = async (res: any) => {
 
 class Api {
   private link = 'https://app.neuronautica.com/api/v2';
-  private linkStat = 'https://app.neuronautica.com/stats/save_db_apk.php';
 
   async auth(token: string, bootId: string): Promise<IResponseUserData> {
     return fetch(`${this.link}/app/auth`, {
@@ -93,27 +91,6 @@ class Api {
     });
   };
 
-  sendGooglePlayInstallReferrer = async ({
-    ref,
-    geo,
-    id,
-  }: {
-    ref: string;
-    geo: string;
-    id: string;
-  }) => {
-    return fetch(`${this.linkStat}/`, {
-      method: 'POST',
-      body: JSON.stringify({
-        action: 'startParamsApp_raw',
-        startParamsApp: ref,
-        tid: id,
-        geo: geo || '',
-        platform: PLATFORM.ANDROID,
-      }),
-    });
-  };
-
   sendComplaint = async ({
     dialog,
     id,
@@ -145,6 +122,22 @@ class Api {
         assistantId,
       }),
     });
+  };
+
+  removeDialog = async ({
+    userId,
+    assistantId,
+  }: {
+    userId: string;
+    assistantId: AGENT_KEYS;
+  }) => {
+    return fetch(`${this.link}/user/dialogs/delete`, {
+      method: 'DELETE',
+      body: JSON.stringify({
+        id: userId,
+        assistantId,
+      }),
+    }).then(responseHandler);
   };
 
   launchingStatistics = async ({

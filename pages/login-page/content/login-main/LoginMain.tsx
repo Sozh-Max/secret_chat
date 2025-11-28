@@ -1,6 +1,5 @@
 import { View, Text, TextInput } from 'react-native';
 import { useRef, useState } from 'react';
-import { ImageBackground } from 'expo-image';
 
 import { CustomButton } from '@/components/CustomButton/CustomButton';
 import { styles } from '@/pages/login-page/content/login-main/styles';
@@ -106,7 +105,10 @@ export const LoginMain = () => {
   };
 
   return (
-    <View style={{ flex: 1, position: 'relative' }}>
+    <View style={{
+      flex: 1,
+      position: 'relative',
+    }}>
       <VideoBackground />
       <LinearGradient
         colors={['rgba(0,0,0,1)', 'rgba(0,0,0,0.5)', 'transparent']}

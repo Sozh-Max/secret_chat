@@ -17,11 +17,22 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  button_start: {
+    paddingLeft: 4,
+  },
+  button_finish: {
+    paddingRight: 4,
+  },
   input: {
+    flex: 1,
+    textAlignVertical: 'center',
+    minWidth: 0,
     height: 50,
     color: '#fff',
     fontSize: 14,
     flexGrow: 1,
+    paddingBottom: 5,
+    paddingTop: 8,
     fontFamily: 'NotoSans_400Regular',
     ...(Platform.OS === 'web' ? ({ outlineStyle: 'none' } as any) : {}),
   },

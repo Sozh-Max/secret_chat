@@ -21,7 +21,11 @@ export const LoginPage = () => {
   return (
     <SafeAreaInsectComponent>
       <LoginPageProvider>
-        <View style={{ flex: 1 }}>
+        <View
+          style={{
+            flex: 1,
+          }}
+        >
           <Header />
           <LoginMain />
           <Footer />
