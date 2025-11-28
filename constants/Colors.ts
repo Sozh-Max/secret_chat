@@ -8,9 +8,11 @@ const tintColorDark = '#fff';
 
 // export const subColor = '#6b4431';
 export const SUB_COLOR = '#494949';
-export const MAIN_COLOR = '#6f6e6e';
-export const LOW_COLOR = '#323232';
+export const MAIN_ICON_COLOR = '#6f6e6e';
+export const DISMISS_ICON_COLOR = '#323232';
 export const CHAT_COLOR = '#111111db';
+export const SUB_MAIN_ICON_COLOR = '#c0c0c0';
+export const CURSOR_COLOR = '#efefef';
 
 export const Colors = {
   light: {
@@ -20,7 +22,7 @@ export const Colors = {
     icon: '#687076',
     tabIconDefault: '#687076',
     tabIconSelected: tintColorLight,
-    subColor: SUB_COLOR,
+    subColor: DISMISS_ICON_COLOR,
   },
   dark: {
     text: '#ECEDEE',
@@ -29,6 +31,6 @@ export const Colors = {
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
     tabIconSelected: tintColorDark,
-    subColor: SUB_COLOR,
+    subColor: DISMISS_ICON_COLOR,
   },
 };

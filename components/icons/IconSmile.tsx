@@ -1,9 +1,9 @@
-import { SUB_COLOR } from '@/constants/Colors';
+import { MAIN_ICON_COLOR } from '@/constants/Colors';
 import Svg, { Path } from 'react-native-svg';
 import { IconProps } from '@/components/icons/interfaces';
 
 const IconSmile = ({
-  color = SUB_COLOR,
+  color = MAIN_ICON_COLOR,
 }: IconProps) => (
   <Svg
     width="24"

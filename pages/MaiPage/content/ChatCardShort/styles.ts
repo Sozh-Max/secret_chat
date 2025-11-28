@@ -1,5 +1,5 @@
 import { Dimensions, StyleSheet } from 'react-native';
-import { MAIN_COLOR } from '@/constants/Colors';
+import { MAIN_ICON_COLOR } from '@/constants/Colors';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     paddingTop: 6,
     paddingRight: 6,
     paddingBottom: 6,
-    paddingLeft: 19,
+    paddingLeft: 14,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(73, 73, 73, 0.1);',
     flexDirection: 'row',
@@ -44,7 +44,7 @@ export const styles = StyleSheet.create({
     gap: 2,
   },
   description: {
-    color: MAIN_COLOR,
+    color: MAIN_ICON_COLOR,
     maxWidth: screenWidth - 115,
     width: '100%',
     fontSize: 14,
@@ -65,7 +65,7 @@ export const styles = StyleSheet.create({
     fontSize: 11,
     lineHeight: 17,
     fontFamily: 'NotoSans_600SemiBold',
-    color: '#fff',
+    color: MAIN_ICON_COLOR,
   },
   label: {
     position: 'absolute',

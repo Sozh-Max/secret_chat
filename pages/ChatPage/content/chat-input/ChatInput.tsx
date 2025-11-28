@@ -2,7 +2,7 @@ import { Pressable, TextInput, View, Text } from 'react-native';
 import IconSend from '@/components/icons/IconSend';
 import IconSmile from '@/components/icons/IconSmile';
 import { useEffect, useState } from 'react';
-import { LOW_COLOR, MAIN_COLOR, SUB_COLOR } from '@/constants/Colors';
+import { CURSOR_COLOR, DISMISS_ICON_COLOR, MAIN_ICON_COLOR, SUB_MAIN_ICON_COLOR } from '@/constants/Colors';
 import { EMOJI_LIST } from '@/pages/ChatPage/content/chat-input/constants';
 import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
 import { IdTypeProps } from '@/interfaces/global';
@@ -27,6 +27,7 @@ const ChatInput = ({
   const [isVisiblePicker, setIsVisiblePicker] = useState<boolean>(false);
   const { dialogs, setDialogs, tokens, updateBalance, setLastMsgGlobalId } = useGlobal();
   const { userId } = useUser();
+  const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
 
   const dialog = dialogs[id];
 
@@ -36,17 +37,17 @@ const ChatInput = ({
     if (!isBlocked) {
       setText(text => text + emoji);
     }
-  }
+  };
 
   const handleToggleEmojiPicker = () => {
     if (!isBlocked) {
       setIsVisiblePicker(val => !val);
     }
-  }
+  };
 
   const sendMessage = async () => {
     if (tokens - (dialog?.cost || 0) < 0) {
-      alert("You haven't tokens!");
+      alert('You haven\'t tokens!');
       return;
     }
 
@@ -72,31 +73,34 @@ const ChatInput = ({
       setIsVisiblePicker(false);
       setText('');
     }
-  }, [isBlocked, loading, setIsVisiblePicker])
+  }, [isBlocked, loading, setIsVisiblePicker]);
 
   return (
     <View style={styles.container}>
       <AnimatedPressBtn style={[styles.button, styles.button_start]} onPress={handleToggleEmojiPicker}>
-        <IconSmile color={isBlocked ? LOW_COLOR : SUB_COLOR} />
+        <IconSmile color={isBlocked ? DISMISS_ICON_COLOR : MAIN_ICON_COLOR}/>
       </AnimatedPressBtn>
 
       <TextInput
         style={styles.input}
         placeholder="Type your message here..."
-        placeholderTextColor={isBlocked ? LOW_COLOR : MAIN_COLOR}
-        selectionColor={MAIN_COLOR}
+        placeholderTextColor={isBlocked ? DISMISS_ICON_COLOR : MAIN_ICON_COLOR}
+        selectionColor={MAIN_ICON_COLOR}
         underlineColorAndroid="transparent"
         value={text}
         onChangeText={setText}
         onSubmitEditing={sendMessage}
         returnKeyType="send"
         blurOnSubmit={false}
+        cursorColor={CURSOR_COLOR}
         editable={!isBlocked}
+        onBlur={() => setIsInputFocused(false)}
+        onFocus={() => setIsInputFocused(true)}
       />
 
       <Pressable style={[styles.button, styles.button_finish]} onPress={sendMessage}>
         <IconSend
-          color={(isBlocked || loading) ? LOW_COLOR : MAIN_COLOR}
+          color={(isBlocked || loading) ? DISMISS_ICON_COLOR : isInputFocused ? SUB_MAIN_ICON_COLOR : MAIN_ICON_COLOR}
         />
       </Pressable>
 
@@ -110,7 +114,7 @@ const ChatInput = ({
         </View>
       )}
     </View>
-  )
-}
+  );
+};
 
 export default ChatInput;

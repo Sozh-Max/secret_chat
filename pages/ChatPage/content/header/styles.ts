@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { MAIN_ICON_COLOR } from '@/constants/Colors';
 
 export const styles = StyleSheet.create({
   wrapper: {
@@ -9,7 +10,7 @@ export const styles = StyleSheet.create({
     maxWidth: '100%',
     zIndex: 3,
     width: '100%',
-    paddingRight: 15,
+    paddingRight: 7,
   },
   button: {
     width: 50,
@@ -72,7 +73,7 @@ export const styles = StyleSheet.create({
     fontSize: 11,
     lineHeight: 17,
     fontFamily: 'NotoSans_600SemiBold',
-    color: '#fff',
+    color: MAIN_ICON_COLOR,
     position: 'relative',
   },
 });

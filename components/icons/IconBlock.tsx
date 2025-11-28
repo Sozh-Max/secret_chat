@@ -1,9 +1,9 @@
 import Svg, { Path } from 'react-native-svg';
-import { SUB_COLOR } from '@/constants/Colors';
+import { MAIN_ICON_COLOR } from '@/constants/Colors';
 import { IconProps } from '@/components/icons/interfaces';
 
 export const IconBlock = ({
-  color = SUB_COLOR,
+  color = MAIN_ICON_COLOR,
 }: IconProps) => (
   <Svg
     height={18}

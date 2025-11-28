@@ -1,9 +1,9 @@
 import Svg, { Path } from 'react-native-svg';
-import { SUB_COLOR } from '@/constants/Colors';
+import { MAIN_ICON_COLOR } from '@/constants/Colors';
 import { IconProps } from '@/components/icons/interfaces';
 
 export const IconPlayShort = ({
-  color = SUB_COLOR,
+  color = MAIN_ICON_COLOR,
 }: IconProps) => (
   <Svg width="18" height="18" viewBox="0 -960 960 960">
     <Path

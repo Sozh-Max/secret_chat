@@ -1,10 +1,10 @@
 import Svg, { Path } from 'react-native-svg';
 
-import { MAIN_COLOR } from '@/constants/Colors';
+import { MAIN_ICON_COLOR } from '@/constants/Colors';
 import { IconProps } from '@/components/icons/interfaces';
 
 const IconSend = ({
-  color = MAIN_COLOR,
+  color = MAIN_ICON_COLOR,
 }: IconProps) => (
   <Svg width="24" height="24" viewBox="0 -960 960 960">
     <Path

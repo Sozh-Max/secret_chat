@@ -13,7 +13,7 @@ import { styles } from '@/pages/ChatPage/content/header/styles';
 import { messageService } from '@/services/message-service';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
-import { LOW_COLOR, MAIN_COLOR } from '@/constants/Colors';
+import { DISMISS_ICON_COLOR, MAIN_ICON_COLOR, SUB_MAIN_ICON_COLOR } from '@/constants/Colors';
 import { IconComplaint } from '@/components/icons/IconComplaint';
 import { useComplaint } from '@/contexts/ComplaintContext';
 import { api } from '@/api/api';
@@ -89,7 +89,7 @@ const Header = ({
         style={styles.button}
         onPress={handlePressBackBtn}
       >
-        <IconBackBtn/>
+        <IconBackBtn color={SUB_MAIN_ICON_COLOR} />
       </AnimatedPressBtn>
 
       <Image
@@ -120,7 +120,7 @@ const Header = ({
             style={styles.button_mini}
             onPress={handlePressClear}
           >
-            <IconRemove color={isActiveRemove && isActiveComplaint ? MAIN_COLOR : LOW_COLOR}/>
+            <IconRemove color={isActiveRemove && isActiveComplaint ? MAIN_ICON_COLOR : DISMISS_ICON_COLOR}/>
           </AnimatedPressBtn>
         )}
 
@@ -128,7 +128,7 @@ const Header = ({
         style={styles.button_mini}
         onPress={handleComplaint}
       >
-        <IconComplaint color={isActiveComplaint ? MAIN_COLOR : LOW_COLOR}/>
+        <IconComplaint color={isActiveComplaint ? MAIN_ICON_COLOR : DISMISS_ICON_COLOR}/>
       </AnimatedPressBtn>
     </View>
   );

@@ -1,8 +1,8 @@
-import { MAIN_COLOR } from '@/constants/Colors';
+import { MAIN_ICON_COLOR, SUB_MAIN_ICON_COLOR } from '@/constants/Colors';
 import Svg, { Path } from 'react-native-svg';
 
 export const IconBackBtn = ({
-  color = MAIN_COLOR,
+  color = SUB_MAIN_ICON_COLOR,
 }: {
   color?: string;
 }) => (

@@ -5,6 +5,7 @@ import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn
 import { styles } from '@/pages/login-page/content/login-main/styles';
 import { IconBackBtn } from '@/components/icons/IconBackBtn';
 import { useLoginPage } from '@/contexts/LoginPageContext';
+import { SUB_MAIN_ICON_COLOR } from '@/constants/Colors';
 
 export const Header = () => {
   const { currentStep, setCurrentStep, setEmail } = useLoginPage();
@@ -42,7 +43,7 @@ export const Header = () => {
           onPress={handlePressBackBtn}
         >
           <IconBackBtn
-            color={"#ffffff"}
+            color={SUB_MAIN_ICON_COLOR}
           />
         </AnimatedPressBtn>
       ): (

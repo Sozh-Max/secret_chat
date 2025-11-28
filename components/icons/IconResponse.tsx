@@ -1,9 +1,9 @@
 import { IconProps } from '@/components/icons/interfaces';
-import { MAIN_COLOR } from '@/constants/Colors';
+import { MAIN_ICON_COLOR } from '@/constants/Colors';
 import Svg, { Path } from 'react-native-svg';
 
 export const IconResponse = ({
-  color = MAIN_COLOR,
+  color = MAIN_ICON_COLOR,
 }: IconProps) => (
   <Svg
     height="24px"

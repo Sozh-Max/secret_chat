@@ -1,8 +1,8 @@
 import { IconProps } from '@/components/icons/interfaces';
-import { MAIN_COLOR } from '@/constants/Colors';
+import { MAIN_ICON_COLOR } from '@/constants/Colors';
 import Svg, { Path } from 'react-native-svg';
 
-export const IconSystem = ({ color = MAIN_COLOR }: IconProps) => (
+export const IconSystem = ({ color = MAIN_ICON_COLOR }: IconProps) => (
   <Svg
     height="24px"
     viewBox="0 -960 960 960"

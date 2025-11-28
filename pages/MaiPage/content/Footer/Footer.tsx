@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { View, Text, StyleSheet, Pressable, Linking } from 'react-native';
-import { SUB_COLOR } from '@/constants/Colors';
+import { DISMISS_ICON_COLOR } from '@/constants/Colors';
 
 
 const Footer = () => {
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   link: {
-    color: SUB_COLOR,
+    color: DISMISS_ICON_COLOR,
     textTransform: 'uppercase',
     paddingLeft: 6,
     paddingRight: 6,
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     fontFamily: 'NotoSans_600SemiBold',
   },
   separator: {
-    color: SUB_COLOR,
+    color: DISMISS_ICON_COLOR,
     fontSize: 9,
     fontFamily: 'NotoSans_600SemiBold',
   },

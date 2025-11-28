@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { CHAT_COLOR, SUB_COLOR } from '@/constants/Colors';
+import { CHAT_COLOR, MAIN_ICON_COLOR } from '@/constants/Colors';
 
 export const styles = StyleSheet.create({
   wrapper: {
@@ -37,7 +37,7 @@ export const styles = StyleSheet.create({
   },
   time: {
     fontSize: 13,
-    color: SUB_COLOR,
+    color: MAIN_ICON_COLOR,
     fontFamily: 'NotoSans_400Regular',
   },
   button_complaint: {

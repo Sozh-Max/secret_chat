@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { MAIN_COLOR } from '@/constants/Colors';
+import { MAIN_ICON_COLOR } from '@/constants/Colors';
 
 export const styles = StyleSheet.create({
   container: {
@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
     borderRightColor: '#1e1e1e',
   },
   emailText: {
-    color: MAIN_COLOR,
+    color: MAIN_ICON_COLOR,
     width: '100%',
     fontSize: 14,
     fontFamily: 'NotoSans_400Regular',

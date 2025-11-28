@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { MAIN_COLOR, SUB_COLOR } from '@/constants/Colors';
+import { DISMISS_ICON_COLOR, MAIN_ICON_COLOR } from '@/constants/Colors';
 
 export const styles = StyleSheet.create({
   wrapper: {
@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
   typing: {
     fontSize: 13,
     lineHeight: 24,
-    color: SUB_COLOR,
+    color: DISMISS_ICON_COLOR,
     fontFamily: 'NotoSans_400Regular',
   },
   ico: {
@@ -29,9 +29,9 @@ export const styles = StyleSheet.create({
     borderRightWidth: 3,
     borderBottomWidth: 3,
     borderLeftWidth: 3,
-    borderTopColor: MAIN_COLOR,
-    borderRightColor: SUB_COLOR,
-    borderBottomColor: SUB_COLOR,
-    borderLeftColor: SUB_COLOR,
+    borderTopColor: MAIN_ICON_COLOR,
+    borderRightColor: DISMISS_ICON_COLOR,
+    borderBottomColor: DISMISS_ICON_COLOR,
+    borderLeftColor: DISMISS_ICON_COLOR,
   }
 });

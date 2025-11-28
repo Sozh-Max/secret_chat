@@ -6,6 +6,7 @@ import { checkIsDigit } from '@/utils/global';
 import { api } from '@/api/api';
 import { useUser } from '@/contexts/UserContext';
 import { useLoginPage } from '@/contexts/LoginPageContext';
+import { CURSOR_COLOR, MAIN_ICON_COLOR } from '@/constants/Colors';
 
 type MiniStoreType = Record<number, TextInput | null>;
 
@@ -201,7 +202,8 @@ export const OtpContent = () => {
       [otp0Ref, otp1Ref, otp2Ref, otp3Ref, otp4Ref, otp5Ref][index] as RefObject<TextInput>
     ),
     value: otp[index],
-    cursorColor: '#efefef',
+    cursorColor: CURSOR_COLOR,
+    placeholderTextColor: MAIN_ICON_COLOR,
   });
 
   return (
