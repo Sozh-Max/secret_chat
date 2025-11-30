@@ -2,14 +2,14 @@ import { View } from 'react-native';
 
 import { TemplateContent } from '@/components/TemplateContent/TemplateContent';
 import { CustomButton } from '@/components/CustomButton/CustomButton';
-import { styles } from '@/pages/ChatPage/content/modal-bottom-content/styles';
+import { styles } from '@/pages/ChatPage/content/modal-complaint-content/styles';
 
-export const ModalBottomContent = ({
-  handleCancel,
+export const ModalComplaintContent = ({
+  handleClose,
   handleApply,
 }: {
+  handleClose: () => void;
   handleApply: () => void;
-  handleCancel: () => void;
 }) => (
   <View>
     <TemplateContent
@@ -25,7 +25,7 @@ export const ModalBottomContent = ({
       <View style={styles.btn_container}>
         <CustomButton
           text="Cancel"
-          handlePress={handleCancel}
+          handlePress={handleClose}
         />
       </View>
     </TemplateContent>

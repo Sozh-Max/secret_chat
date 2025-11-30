@@ -2,7 +2,7 @@ import { Pressable, TextInput, View, Text } from 'react-native';
 import IconSend from '@/components/icons/IconSend';
 import IconSmile from '@/components/icons/IconSmile';
 import { useEffect, useState } from 'react';
-import { CURSOR_COLOR, DISMISS_ICON_COLOR, MAIN_ICON_COLOR, SUB_MAIN_ICON_COLOR } from '@/constants/Colors';
+import { MAIN_ICON_COLOR, DISMISS_ICON_COLOR, SUB_MAIN_ICON_COLOR } from '@/constants/Colors';
 import { EMOJI_LIST } from '@/pages/ChatPage/content/chat-input/constants';
 import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
 import { IdTypeProps } from '@/interfaces/global';
@@ -92,7 +92,7 @@ const ChatInput = ({
         onSubmitEditing={sendMessage}
         returnKeyType="send"
         blurOnSubmit={false}
-        cursorColor={CURSOR_COLOR}
+        cursorColor={MAIN_ICON_COLOR}
         editable={!isBlocked}
         onBlur={() => setIsInputFocused(false)}
         onFocus={() => setIsInputFocused(true)}

@@ -1,8 +1,7 @@
-import { AGENT_KEYS } from '@/constants/agents-data';
+import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { router } from 'expo-router';
 
-import React, { createContext, ReactNode, useContext, useState } from 'react';
-import { ModalBottom } from '@/components/ModalBottom/ModalBottom';
-import { ModalBottomContent } from '@/pages/ChatPage/content/modal-bottom-content/ModalBottomContent';
+import { AGENT_KEYS } from '@/constants/agents-data';
 import { messageService } from '@/services/message-service';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { useUser } from '@/contexts/UserContext';
@@ -13,6 +12,7 @@ type ComplaintContextType = {
   activateComplaint: (id: AGENT_KEYS) => void;
   setShowComplaintChat: (id: AGENT_KEYS | null) => void;
   disActiveComplaint: () => void;
+  sendComplaint: () => void;
 }
 
 const ComplaintContext = createContext<ComplaintContextType | undefined>(undefined);
@@ -39,23 +39,13 @@ export const ComplaintProvider = (
     setActiveComplaint(null);
   };
 
-  const complaintSucceeded = (id: AGENT_KEYS) => {
-    messageService.complaintUserById({
-      id,
-      setDialogs,
-    });
-    disActiveComplaint();
-  };
-
-  const complaintFailed = (id?: AGENT_KEYS) => {
-    if (id) {
-      setShowComplaintChat(id);
-    } else {
-      setShowComplaintChat(null);
+  useEffect(() => {
+    if (isShowComplaint) {
+      router.push({
+        pathname: '/modal-bottom',
+      })
     }
-
-    disActiveComplaint();
-  };
+  }, [isShowComplaint]);
 
   const sendComplaint = async () => {
     const id = activeComplaint;
@@ -83,6 +73,23 @@ export const ComplaintProvider = (
     }
   };
 
+  const complaintFailed = (id?: AGENT_KEYS) => {
+    if (id) {
+      setShowComplaintChat(id);
+    } else {
+      setShowComplaintChat(null);
+    }
+    disActiveComplaint();
+  };
+
+  const complaintSucceeded = (id: AGENT_KEYS) => {
+    messageService.complaintUserById({
+      id,
+      setDialogs,
+    });
+    disActiveComplaint();
+  };
+
   return (
     <ComplaintContext.Provider
       value={{
@@ -91,18 +98,10 @@ export const ComplaintProvider = (
         disActiveComplaint,
         showComplaintChat,
         setShowComplaintChat,
+        sendComplaint,
       }}
     >
       {children}
-      <ModalBottom
-        isShow={isShowComplaint}
-        setHide={disActiveComplaint}
-      >
-        <ModalBottomContent
-          handleApply={sendComplaint}
-          handleCancel={disActiveComplaint}
-        />
-      </ModalBottom>
     </ComplaintContext.Provider>
   );
 };

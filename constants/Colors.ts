@@ -12,7 +12,6 @@ export const MAIN_ICON_COLOR = '#6f6e6e';
 export const DISMISS_ICON_COLOR = '#323232';
 export const CHAT_COLOR = '#111111db';
 export const SUB_MAIN_ICON_COLOR = '#c0c0c0';
-export const CURSOR_COLOR = '#efefef';
 
 export const Colors = {
   light: {

@@ -19,6 +19,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { UserProvider, useUser } from '@/contexts/UserContext';
 import { useEffect } from 'react';
 import { View, ActivityIndicator } from 'react-native';
+import { ComplaintProvider } from '@/contexts/ComplaintContext';
 
 const GOOGLE_WEB_AUTH_CLIENT_ID = Constants.expoConfig?.extra?.GOOGLE_WEB_AUTH_CLIENT_ID;
 
@@ -90,6 +91,17 @@ function RootNavigator() {
           contentStyle: { backgroundColor: 'transparent' },
         }}
       />
+
+      <Stack.Screen
+        name="modal-bottom"
+        options={{
+          presentation: 'transparentModal',
+          gestureEnabled: true,
+          headerShown: false,
+          animation: 'fade',
+          contentStyle: { backgroundColor: 'transparent' },
+        }}
+      />
     </Stack>
   );
 }
@@ -112,15 +124,17 @@ export default function RootLayout() {
       <UserProvider>
         <GlobalProvider>
           <SafeAreaProvider>
-            <LinearGradient
-              colors={['rgb(5, 4, 4)', 'rgb(22, 22, 22)']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 1 }}
-              style={{ flex: 1 }}
-            >
-              <RootNavigator />
-              <StatusBar translucent style="light" backgroundColor="#000000" />
-            </LinearGradient>
+            <ComplaintProvider>
+              <LinearGradient
+                colors={['rgb(5, 4, 4)', 'rgb(22, 22, 22)']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 0, y: 1 }}
+                style={{ flex: 1 }}
+              >
+                <RootNavigator />
+                <StatusBar translucent style="light" backgroundColor="#000000" />
+              </LinearGradient>
+            </ComplaintProvider>
           </SafeAreaProvider>
         </GlobalProvider>
       </UserProvider>

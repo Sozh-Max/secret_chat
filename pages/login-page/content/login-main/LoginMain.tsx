@@ -11,7 +11,7 @@ import { api } from '@/api/api';
 import { useUser } from '@/contexts/UserContext';
 import { useLoginPage } from '@/contexts/LoginPageContext';
 import { VideoBackground } from '@/components/video-background/VideoBackground';
-import { CURSOR_COLOR, MAIN_ICON_COLOR } from '@/constants/Colors';
+import { MAIN_ICON_COLOR } from '@/constants/Colors';
 
 export const LoginMain = () => {
   const emailRef = useRef<TextInput>(null);
@@ -138,7 +138,7 @@ export const LoginMain = () => {
                   onFocus={handleEmailFocus}
                   onBlur={handleEmailBlur}
                   placeholderTextColor={MAIN_ICON_COLOR}
-                  cursorColor={CURSOR_COLOR}
+                  cursorColor={MAIN_ICON_COLOR}
                   textAlign={'center'}
                 />
               </View>
