@@ -45,6 +45,13 @@
           "androidClientId": "676751766781-lafb95424jnnvugikfmio4ef7h2hokih.apps.googleusercontent.com",
           "iosUrlScheme": "com.googleusercontent.apps.676751766781-lafb95424jnnvugikfmio4ef7h2hokih"
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/notification-icon.png",
+          "color": "#FF0000"
+        }
       ]
     ],
     "experiments": {
@@ -57,7 +64,8 @@
       }
     },
     "android": {
-      "package": "com.klomax.secretchat"
+      "package": "com.klomax.secretchat",
+      "permissions": ["NOTIFICATIONS", "SCHEDULE_EXACT_ALARM"]
     }
   }
 }

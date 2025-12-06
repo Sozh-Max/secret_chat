@@ -20,6 +20,21 @@ export const styles = StyleSheet.create({
     gap: 13,
     position: 'relative',
   },
+  circle: {
+    width: 12,
+    height: 12,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    backgroundColor: '#21cee6',
+    position: 'absolute',
+    right: 5,
+    bottom: 2,
+  },
+  item_notify: {
+    backgroundColor: 'rgba(255,255,255,0.1)',
+  },
   img: {
     borderRadius: 30,
     alignSelf: 'center',

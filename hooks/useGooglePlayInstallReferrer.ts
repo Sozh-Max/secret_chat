@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import * as Application from 'expo-application';
 
 import { AsyncStorageService } from '@/services/async-storage-service';
-import { LOCAL_STORAGE_KEYS } from '@/services/constants';
+import { LOCAL_STORAGE_KEYS, PLATFORM } from '@/services/constants';
 import { api } from '@/api/api';
 import { Platform } from 'react-native';
 
@@ -32,7 +32,7 @@ const initGooglePlayInstallReferrer = async (geo: string, bootId: string) => {
   const referrer = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.GOOGLE_REFERRER);
   if (referrer) {
     await setReferrerToServer(bootId, referrer);
-  } else if (Platform.OS === 'android' && bootId) {
+  } else if (Platform.OS === PLATFORM.ANDROID && bootId) {
     const referrer = await Application.getInstallReferrerAsync();
 
     await setReferrerToServer(bootId, referrer);

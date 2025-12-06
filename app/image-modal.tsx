@@ -4,13 +4,14 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import * as NavigationBar from 'expo-navigation-bar';
 import { AGENT_KEYS, IMG_PREVIEW_MAP } from '@/constants/agents-data';
+import { PLATFORM } from '@/services/constants';
 
 export default function ImageModal() {
   const router = useRouter();
   const { url, sourceId } = useLocalSearchParams<{ url: string, sourceId: AGENT_KEYS }>();
 
   useEffect(() => {
-    if (Platform.OS === 'android') {
+    if (Platform.OS === PLATFORM.ANDROID) {
       NavigationBar.setBackgroundColorAsync('#000000');
       NavigationBar.setButtonStyleAsync('light');
     }

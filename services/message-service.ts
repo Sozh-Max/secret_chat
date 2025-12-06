@@ -44,7 +44,6 @@ const setData = ({
     if (!isBlocked && replic) {
       current.dialog.push({
         replic,
-        isFWord: 0,
         createTime: timestamp ?? (Date.now() / 1000),
       })
     }

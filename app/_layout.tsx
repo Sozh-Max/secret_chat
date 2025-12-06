@@ -53,6 +53,8 @@ function RootNavigator() {
     );
   }
 
+
+
   return (
     <Stack
       screenOptions={{

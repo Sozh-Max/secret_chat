@@ -1,15 +1,28 @@
 import { AGENT_KEYS, INIT_AGENT_LIST } from '@/constants/agents-data';
-import React, { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { IMessage } from '@/api/interfaces';
 import { mainUtils } from '@/services/main-utils';
 import { useGooglePlayInstallReferrer } from '@/hooks/useGooglePlayInstallReferrer';
 import { api } from '@/api/api';
 import { useUser } from '@/contexts/UserContext';
 import * as NavigationBar from 'expo-navigation-bar';
+import { useInactivityNotification } from '@/hooks/useInactivityNotification';
+import { getNotificationsByUserId, setNotificationsByUserId } from '@/utils/global';
+import { ROLES } from '@/api/constants';
+import { Platform, Vibration } from 'react-native';
+import { PLATFORM } from '@/services/constants';
 
 export interface IDialogItem {
   replic: IMessage;
-  isFWord: number;
   createTime: number;
 }
 
@@ -22,6 +35,7 @@ export interface IDialog {
   hasVideo: boolean;
   description: string;
   lastMsgId: number;
+  isNotificationMessage?: boolean;
 }
 
 export type Dialogs = { [key in AGENT_KEYS]?: IDialog }
@@ -48,6 +62,7 @@ export interface IDialogPreview {
   isBlocked: boolean;
   isComplaint?: boolean;
   hasVideo: boolean;
+  isNotificationMessage?: boolean;
 }
 
 const refreshChats = ({
@@ -73,6 +88,7 @@ const refreshChats = ({
       isBlocked: dialog.isBlocked ?? false,
       isComplaint: dialog.isComplaint ?? false,
       hasVideo: dialog.hasVideo,
+      isNotificationMessage: dialog.isNotificationMessage || false,
     };
   }).sort((a, b) => b.lastMessageTime - a.lastMessageTime));
 }
@@ -93,6 +109,10 @@ export const GlobalProvider = (
   const { userId, bootId, isCheckAuthorized } = useUser();
 
   useGooglePlayInstallReferrer(deviceRegion, bootId);
+
+  useInactivityNotification({
+    setDialogs,
+  });
 
   useEffect(() => {
     const getInitData = async () => {
@@ -161,6 +181,33 @@ export const GlobalProvider = (
     NavigationBar.setButtonStyleAsync('light');
   }, []);
 
+  const clearDialogs = useCallback(() => {
+    setDialogs((dialogs: Dialogs) => {
+      const newDialogs: Dialogs = {};
+
+      for (const key in dialogs) {
+        const value = dialogs[key as AGENT_KEYS];
+        if (value) {
+          newDialogs[key as AGENT_KEYS] = {
+            ...value,
+            dialog: [],
+            isBlocked: false,
+            isComplaint: false,
+            lastMsgId: 0,
+          }
+        }
+      }
+
+      return newDialogs;
+    });
+  }, [setDialogs]);
+
+  useEffect(() => {
+    if (!userId) {
+      clearDialogs();
+    }
+  }, [userId]);
+
   useEffect(() => {
     if (dialogs[AGENT_KEYS.wendy] && dialogs[AGENT_KEYS.ashley]) {
       refreshChats({
@@ -223,7 +270,49 @@ export const GlobalProvider = (
     return () => {
       clearInterval(id);
     }
-  }, [userId, lastMsgGlobalId, dialogs, setDialogs])
+  }, [userId, lastMsgGlobalId, dialogs, setDialogs]);
+
+  useEffect(() => {
+    const checkFirstMessage = async () => {
+      const notifications = await getNotificationsByUserId(userId);
+
+      const currentNotice =  notifications.find((note) => note.active && !note.done);
+
+      if (currentNotice) {
+        setTimeout(async () => {
+          await setNotificationsByUserId(userId, notifications.map((data) => ({
+            ...data,
+            done: data.id === currentNotice?.id ? true: data.done,
+          })));
+
+          setDialogs((dialogs) => {
+            const currentDialog = dialogs[currentNotice.agent];
+            if (currentDialog) {
+              currentDialog.isNotificationMessage = true;
+              currentDialog.dialog.push({
+                createTime: Date.now() / 1000,
+                replic: {
+                  role: ROLES.ASSISTANT,
+                  content: currentNotice.body,
+                }
+              });
+
+              return {
+                ...dialogs,
+              }
+            }
+
+            return dialogs;
+          });
+          Vibration.vibrate([500, 200, 500, 200, 500]);
+        }, currentNotice.seconds * 1000);
+      }
+    }
+
+    if (userId && dialogs?.elise && Platform.OS === PLATFORM.ANDROID) {
+      checkFirstMessage();
+    }
+  }, [userId, dialogs?.elise, setDialogs]);
 
   const updateBalance = async (amount: number) => {
     const requestData = await api.addBalance(amount, userId);

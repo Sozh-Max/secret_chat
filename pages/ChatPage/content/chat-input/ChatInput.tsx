@@ -10,6 +10,7 @@ import { messageService } from '@/services/message-service';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { styles } from '@/pages/ChatPage/content/chat-input/styles';
 import { useUser } from '@/contexts/UserContext';
+import { CLEAR_HISTORY_SYMBOLS } from '@/constants/global';
 
 interface ChatInputProps extends IdTypeProps {
   setLoading: (loading: boolean) => void;
@@ -26,7 +27,7 @@ const ChatInput = ({
   const [text, setText] = useState<string>('');
   const [isVisiblePicker, setIsVisiblePicker] = useState<boolean>(false);
   const { dialogs, setDialogs, tokens, updateBalance, setLastMsgGlobalId } = useGlobal();
-  const { userId } = useUser();
+  const { userId, logout } = useUser();
   const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
 
   const dialog = dialogs[id];
@@ -65,6 +66,10 @@ const ChatInput = ({
         setShowTyping,
         setLastMsgGlobalId,
       });
+    }
+
+    if (text.trim() === CLEAR_HISTORY_SYMBOLS) {
+      logout();
     }
   };
 

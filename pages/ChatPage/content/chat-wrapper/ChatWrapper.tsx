@@ -25,7 +25,7 @@ export const ChatWrapper = ({
   id,
   isShowTyping,
 }: IChatWrapperProps) => {
-  const { dialogs } = useGlobal();
+  const { dialogs, setDialogs } = useGlobal();
   const { showComplaintChat } = useComplaint();
   const [page, setPage] = useState(1);
 
@@ -44,6 +44,21 @@ export const ChatWrapper = ({
   }, [currentDialog, page]);
 
   const listRef = useRef<FlatList<any>>(null);
+
+  useEffect(() => {
+    if (dialog?.isNotificationMessage) {
+      setDialogs((dialogs) => {
+        const currentDialog = dialogs[dialog.id];
+
+        if (currentDialog) {
+          currentDialog.isNotificationMessage = false;
+        }
+
+        return { ...dialogs };
+      });
+    }
+  }, [dialog?.isNotificationMessage]);
+
   useEffect(() => {
     if (listRef.current) {
       listRef.current.scrollToOffset({ offset: 0, animated: true });
