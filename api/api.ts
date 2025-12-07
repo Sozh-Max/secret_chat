@@ -4,18 +4,49 @@ import { IMessagesRequest, IResponseUserData } from '@/api/interfaces';
 import { IDialog } from '@/contexts/GlobalContext';
 import { AGENT_KEYS } from '@/constants/agents-data';
 
-const responseHandler = async (res: any) => {
-  if (!res.ok) {
-    return Error(`Network error: ${res.status} ${res.statusText}`);
-  }
-
-  const data =  await res.json();
-
-  return data.data;
+enum ErrorCodes {
+  USER_WAS_REMOVE = 666,
 }
 
-class Api {
+const responseHandler = async (res: any) => {
+  if (!res.ok) {
+    let payload: any = null;
+
+    try {
+      payload = await res.json();
+    } catch (e) {}
+
+    const err: any = new Error(payload?.message || `HTTP ${res.status}`);
+    if (payload) {
+      err.payload = payload;
+      Object.assign(err, payload);
+    }
+
+    err.status = res.status;
+
+    throw err;
+  }
+
+  const data = await res.json().catch(() => null);
+  return data?.data;
+}
+
+type LogoutFn = () => void;
+
+export class Api {
   private link = 'https://app.neuronautica.com/api/v2';
+  private readonly logout: LogoutFn;
+
+  constructor(onUnauthorized: LogoutFn) {
+    this.logout = onUnauthorized;
+  }
+
+  private errorHandler = (err: any) => {
+    if (err?.error === ErrorCodes.USER_WAS_REMOVE) {
+      this.logout();
+    }
+    throw err;
+  }
 
   async auth(token: string, bootId: string): Promise<IResponseUserData> {
     return fetch(`${this.link}/app/auth`, {
@@ -26,7 +57,7 @@ class Api {
         mode: 'google',
         bootId,
       }),
-    }).then(responseHandler);
+    }).then(responseHandler).catch(this.errorHandler);
   }
 
 
@@ -46,32 +77,32 @@ class Api {
   ): Promise<IResponseUserData> {
     return fetch(`${this.link}/app/code/check?email=${email}&code=${code}&bootId=${bootId}`, {
       method: 'GET',
-    }).then(responseHandler)
+    }).then(responseHandler).catch(this.errorHandler);
   }
 
   getInitData = async (id: string) => {
     return fetch(`${this.link}/app/init?id=${id}`, {
       method: 'GET',
-    }).then(responseHandler);
+    }).then(responseHandler).catch(this.errorHandler);
   };
 
   getBalance = async (id: string) => {
     return fetch(`${this.link}/balance?id=${id}`, {
       method: 'GET',
-    }).then(responseHandler);
+    }).then(responseHandler).catch(this.errorHandler);
   };
 
   getDialogs = async (id: string) => {
     return fetch(`${this.link}/user/dialogs?id=${id}`, {
       method: 'GET',
-    }).then(responseHandler);
+    }).then(responseHandler).catch(this.errorHandler);
   }
 
   syncDialogs = async (data: any) => {
     return fetch(`${this.link}/user/dialogs/synch`, {
       method: 'POST',
       body: JSON.stringify(data),
-    }).then(responseHandler);
+    }).then(responseHandler).catch(this.errorHandler);
   };
 
   addBalance = async (amount: number, id: string) => {
@@ -81,7 +112,7 @@ class Api {
         amount,
         id,
       }),
-    }).then(responseHandler);
+    }).then(responseHandler).catch(this.errorHandler);
   };
 
   sendMessages = async (data: IMessagesRequest) => {
@@ -137,7 +168,7 @@ class Api {
         id: userId,
         assistantId,
       }),
-    }).then(responseHandler);
+    }).then(responseHandler).catch(this.errorHandler);
   };
 
   launchingStatistics = async ({
@@ -155,8 +186,4 @@ class Api {
       }),
     });
   };
-
-
 }
-
-export const api = new Api();

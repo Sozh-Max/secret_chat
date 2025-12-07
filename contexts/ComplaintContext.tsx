@@ -2,9 +2,9 @@ import React, { createContext, ReactNode, useContext, useEffect, useState } from
 import { router } from 'expo-router';
 
 import { AGENT_KEYS } from '@/constants/agents-data';
-import { messageService } from '@/services/message-service';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { useUser } from '@/contexts/UserContext';
+import { useApi } from '@/contexts/ApiContext';
 
 type ComplaintContextType = {
   activeComplaint: AGENT_KEYS | null;
@@ -23,6 +23,7 @@ export const ComplaintProvider = (
 ) => {
   const { dialogs, setDialogs } = useGlobal();
   const { userId } = useUser();
+  const { messageService } = useApi();
 
   const [activeComplaint, setActiveComplaint] = useState<AGENT_KEYS | null>(null);
   const [showComplaintChat, setShowComplaintChat] = useState<AGENT_KEYS | null>(null);

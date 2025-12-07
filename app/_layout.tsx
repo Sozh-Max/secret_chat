@@ -20,6 +20,7 @@ import { UserProvider, useUser } from '@/contexts/UserContext';
 import { useEffect } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { ComplaintProvider } from '@/contexts/ComplaintContext';
+import { ApiProvider } from '@/contexts/ApiContext';
 
 const GOOGLE_WEB_AUTH_CLIENT_ID = Constants.expoConfig?.extra?.GOOGLE_WEB_AUTH_CLIENT_ID;
 
@@ -48,11 +49,10 @@ function RootNavigator() {
 
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'black' }}>
-        <ActivityIndicator size="large" color="white" />
+        <ActivityIndicator size="large" color="white"/>
       </View>
     );
   }
-
 
 
   return (
@@ -77,11 +77,11 @@ function RootNavigator() {
         },
       }}
     >
-      <Stack.Screen name="login" />
-      <Stack.Screen name="index" />
-      <Stack.Screen name="chat" />
-      <Stack.Screen name="settings" />
-      <Stack.Screen name="+not-found" />
+      <Stack.Screen name="login"/>
+      <Stack.Screen name="index"/>
+      <Stack.Screen name="chat"/>
+      <Stack.Screen name="settings"/>
+      <Stack.Screen name="+not-found"/>
 
       <Stack.Screen
         name="image-modal"
@@ -124,21 +124,23 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={DarkTheme}>
       <UserProvider>
-        <GlobalProvider>
-          <SafeAreaProvider>
-            <ComplaintProvider>
-              <LinearGradient
-                colors={['rgb(5, 4, 4)', 'rgb(22, 22, 22)']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 0, y: 1 }}
-                style={{ flex: 1 }}
-              >
-                <RootNavigator />
-                <StatusBar translucent style="light" backgroundColor="#000000" />
-              </LinearGradient>
-            </ComplaintProvider>
-          </SafeAreaProvider>
-        </GlobalProvider>
+        <ApiProvider>
+          <GlobalProvider>
+            <SafeAreaProvider>
+              <ComplaintProvider>
+                <LinearGradient
+                  colors={['rgb(5, 4, 4)', 'rgb(22, 22, 22)']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 0, y: 1 }}
+                  style={{ flex: 1 }}
+                >
+                  <RootNavigator/>
+                  <StatusBar translucent style="light" backgroundColor="#000000"/>
+                </LinearGradient>
+              </ComplaintProvider>
+            </SafeAreaProvider>
+          </GlobalProvider>
+        </ApiProvider>
       </UserProvider>
     </ThemeProvider>
   );

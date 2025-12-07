@@ -6,11 +6,11 @@ import { MAIN_ICON_COLOR, DISMISS_ICON_COLOR, SUB_MAIN_ICON_COLOR } from '@/cons
 import { EMOJI_LIST } from '@/pages/ChatPage/content/chat-input/constants';
 import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
 import { IdTypeProps } from '@/interfaces/global';
-import { messageService } from '@/services/message-service';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { styles } from '@/pages/ChatPage/content/chat-input/styles';
 import { useUser } from '@/contexts/UserContext';
 import { CLEAR_HISTORY_SYMBOLS } from '@/constants/global';
+import { useApi } from '@/contexts/ApiContext';
 
 interface ChatInputProps extends IdTypeProps {
   setLoading: (loading: boolean) => void;
@@ -29,7 +29,7 @@ const ChatInput = ({
   const { dialogs, setDialogs, tokens, updateBalance, setLastMsgGlobalId } = useGlobal();
   const { userId, logout } = useUser();
   const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
-
+  const { messageService } = useApi();
   const dialog = dialogs[id];
 
   const isBlocked = dialog?.isBlocked || dialog?.isComplaint;

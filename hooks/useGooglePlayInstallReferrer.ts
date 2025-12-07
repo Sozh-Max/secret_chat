@@ -3,10 +3,10 @@ import * as Application from 'expo-application';
 
 import { AsyncStorageService } from '@/services/async-storage-service';
 import { LOCAL_STORAGE_KEYS, PLATFORM } from '@/services/constants';
-import { api } from '@/api/api';
 import { Platform } from 'react-native';
+import { Api } from '@/api/api';
 
-const setReferrerToServer = async (bootId: string, referrer: string) => {
+const setReferrerToServer = async (api: Api, bootId: string, referrer: string) => {
   if (bootId && referrer) {
     await api.launchingStatistics({
       bootId,
@@ -28,32 +28,32 @@ const setReferrerToServer = async (bootId: string, referrer: string) => {
 }
 
 
-const initGooglePlayInstallReferrer = async (geo: string, bootId: string) => {
+const initGooglePlayInstallReferrer = async (api: Api, bootId: string) => {
   const referrer = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.GOOGLE_REFERRER);
   if (referrer) {
-    await setReferrerToServer(bootId, referrer);
+    await setReferrerToServer(api, bootId, referrer);
   } else if (Platform.OS === PLATFORM.ANDROID && bootId) {
     const referrer = await Application.getInstallReferrerAsync();
 
-    await setReferrerToServer(bootId, referrer);
+    await setReferrerToServer(api, bootId, referrer);
   }
 }
 
-export const useGooglePlayInstallReferrer = (deviceRegion: string, bootId: string) => {
+export const useGooglePlayInstallReferrer = (api: Api, bootId: string) => {
   useEffect(() => {
 
-    if (bootId) {
-      setGoogleReferrer(deviceRegion, bootId);
+    if (bootId && api) {
+      setGoogleReferrer(api, bootId);
     }
-  }, [bootId])
+  }, [bootId, api])
 }
 
-const setGoogleReferrer = async (deviceRegion: string, bootId: string) => {
+const setGoogleReferrer = async (api: Api, bootId: string) => {
   const isSentReferrer = await AsyncStorageService.getData(
     LOCAL_STORAGE_KEYS.IS_SENT_REFERRER,
   );
 
   if (!isSentReferrer) {
-    await initGooglePlayInstallReferrer(deviceRegion, bootId);
+    await initGooglePlayInstallReferrer(api, bootId);
   }
 }

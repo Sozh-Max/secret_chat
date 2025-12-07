@@ -12,7 +12,6 @@ import React, {
 import { IMessage } from '@/api/interfaces';
 import { mainUtils } from '@/services/main-utils';
 import { useGooglePlayInstallReferrer } from '@/hooks/useGooglePlayInstallReferrer';
-import { api } from '@/api/api';
 import { useUser } from '@/contexts/UserContext';
 import * as NavigationBar from 'expo-navigation-bar';
 import { useInactivityNotification } from '@/hooks/useInactivityNotification';
@@ -20,6 +19,7 @@ import { getNotificationsByUserId, setNotificationsByUserId } from '@/utils/glob
 import { ROLES } from '@/api/constants';
 import { Platform, Vibration } from 'react-native';
 import { PLATFORM } from '@/services/constants';
+import { useApi } from '@/contexts/ApiContext';
 
 export interface IDialogItem {
   replic: IMessage;
@@ -107,8 +107,9 @@ export const GlobalProvider = (
   const [lastMsgGlobalId, setLastMsgGlobalId] = useState<number>(0);
 
   const { userId, bootId, isCheckAuthorized } = useUser();
+  const { api } = useApi();
 
-  useGooglePlayInstallReferrer(deviceRegion, bootId);
+  useGooglePlayInstallReferrer(api, bootId);
 
   useInactivityNotification({
     setDialogs,

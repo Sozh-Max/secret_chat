@@ -7,11 +7,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { OtpContent } from '@/pages/login-page/content/login-main/content/OtpContent';
 import { STEPS } from '@/pages/login-page/content/login-main/constants';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
-import { api } from '@/api/api';
 import { useUser } from '@/contexts/UserContext';
 import { useLoginPage } from '@/contexts/LoginPageContext';
 import { VideoBackground } from '@/components/video-background/VideoBackground';
 import { MAIN_ICON_COLOR } from '@/constants/Colors';
+import { useApi } from '@/contexts/ApiContext';
 
 export const LoginMain = () => {
   const emailRef = useRef<TextInput>(null);
@@ -29,6 +29,7 @@ export const LoginMain = () => {
     setEmailError,
     setLoadingSendEmail,
   } = useLoginPage();
+  const { api } = useApi();
 
   const signIn = async () => {
     try {

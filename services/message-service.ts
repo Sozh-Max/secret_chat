@@ -1,9 +1,9 @@
 import { AGENT_KEYS } from '@/constants/agents-data';
 import { Dispatch, SetStateAction } from 'react';
 import { Dialogs, IDialog, IDialogItem } from '@/contexts/GlobalContext';
-import { api } from '@/api/api';
 import { ROLES } from '@/api/constants';
 import { IMessage } from '@/api/interfaces';
+import { Api } from '@/api/api';
 
 function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -55,7 +55,9 @@ const setData = ({
   });
 }
 
-class MessageService {
+export class MessageService {
+  constructor(private api: Api) {}
+
   async sendMessage({
     id,
     userId,
@@ -95,7 +97,7 @@ class MessageService {
 
     setTimeout(async () => {
       setShowTyping(true);
-      api.sendMessages({
+      this.api.sendMessages({
         userId,
         assistantId: id,
         messages: [
@@ -172,7 +174,7 @@ class MessageService {
     dialog: IDialog;
     id: string;
   }) {
-    return api.sendComplaint({ dialog, id });
+    return this.api.sendComplaint({ dialog, id });
   }
 
   complaintUserById({
@@ -193,5 +195,3 @@ class MessageService {
     });
   }
 }
-
-export const messageService = new MessageService();

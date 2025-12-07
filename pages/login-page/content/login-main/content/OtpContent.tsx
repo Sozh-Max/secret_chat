@@ -3,15 +3,16 @@ import { styles } from '@/pages/login-page/content/login-main/styles';
 import { RefObject, useEffect, useRef, useState } from 'react';
 import { CustomButton } from '@/components/CustomButton/CustomButton';
 import { checkIsDigit } from '@/utils/global';
-import { api } from '@/api/api';
 import { useUser } from '@/contexts/UserContext';
 import { useLoginPage } from '@/contexts/LoginPageContext';
 import { MAIN_ICON_COLOR } from '@/constants/Colors';
+import { useApi } from '@/contexts/ApiContext';
 
 type MiniStoreType = Record<number, TextInput | null>;
 
 export const OtpContent = () => {
   const { bootId, setAuthorizedData } = useUser();
+  const { api } = useApi();
 
   const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
   const [isError, setIsError] = useState<boolean>(false);

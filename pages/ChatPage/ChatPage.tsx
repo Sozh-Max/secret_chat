@@ -10,12 +10,14 @@ import { FormScreenWrapper } from '@/components/FormScreenWrapper/FormScreenWrap
 import { AGENT_KEYS } from '@/constants/agents-data';
 import { SafeAreaInsectComponent } from '@/components/SafeAreaInsectComponent/SafeAreaInsectComponent';
 import { useGlobal } from '@/contexts/GlobalContext';
-import { api } from '@/api/api';
 import { useUser } from '@/contexts/UserContext';
+import { useApi } from '@/contexts/ApiContext';
 
 export const ChatPage = () => {
   const { id } = useLocalSearchParams<{ id: AGENT_KEYS }>();
-  const { userId } = useUser()
+  const { userId } = useUser();
+  const { api } = useApi();
+
   const [loading, setLoading] = useState<boolean>(false);
   const [isShowTyping, setShowTyping] = useState<boolean>(false);
 

@@ -10,14 +10,13 @@ import { IconRating } from '@/components/icons/IconRating';
 import { ThemedText } from '@/components/ThemedText';
 import { IdTypeProps } from '@/interfaces/global';
 import { styles } from '@/pages/ChatPage/content/header/styles';
-import { messageService } from '@/services/message-service';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
 import { DISMISS_ICON_COLOR, MAIN_ICON_COLOR, SUB_MAIN_ICON_COLOR } from '@/constants/Colors';
 import { IconComplaint } from '@/components/icons/IconComplaint';
 import { useComplaint } from '@/contexts/ComplaintContext';
-import { api } from '@/api/api';
 import { useUser } from '@/contexts/UserContext';
+import { useApi } from '@/contexts/ApiContext';
 
 const Header = ({
   id,
@@ -26,7 +25,8 @@ const Header = ({
   const timeoutIdRef = useRef<ReturnType<typeof setTimeout>  | null>(null);
   const { setDialogs, dialogs, setLastMsgGlobalId } = useGlobal();
   const { activateComplaint } = useComplaint();
-  const { userId } = useUser()
+  const { userId } = useUser();
+  const { api, messageService } = useApi();
 
   const dialog = dialogs[id];
 
