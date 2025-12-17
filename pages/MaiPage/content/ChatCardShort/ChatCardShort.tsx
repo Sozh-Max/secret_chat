@@ -23,7 +23,7 @@ const ChatCardShort = ({
 
   return (
     <Pressable
-      style={[styles.item, data.isNotificationMessage && styles.item_notify]}
+      style={[styles.item]}
       onPress={handlePress}
     >
       <View style={styles.avatar_container}>
@@ -37,7 +37,7 @@ const ChatCardShort = ({
         {data.id === AGENT_KEYS.ashley && (
           <Text style={[styles.label, styles.label_hot]}>Hot</Text>
         )}
-        {data.isNotificationMessage && <View style={styles.circle} />}
+        {data.isNotification && <View style={styles.circle} />}
       </View>
       <View style={styles.info}>
         <View style={styles.title_container}>

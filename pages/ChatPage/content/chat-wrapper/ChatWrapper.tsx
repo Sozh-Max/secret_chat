@@ -46,18 +46,18 @@ export const ChatWrapper = ({
   const listRef = useRef<FlatList<any>>(null);
 
   useEffect(() => {
-    if (dialog?.isNotificationMessage) {
+    if (dialog?.isNotification) {
       setDialogs((dialogs) => {
         const currentDialog = dialogs[dialog.id];
 
         if (currentDialog) {
-          currentDialog.isNotificationMessage = false;
+          currentDialog.isNotification = false;
         }
 
         return { ...dialogs };
       });
     }
-  }, [dialog?.isNotificationMessage]);
+  }, [dialog?.isNotification]);
 
   useEffect(() => {
     if (listRef.current) {
@@ -97,7 +97,7 @@ export const ChatWrapper = ({
         )}
         ListHeaderComponent={
           <>
-            {isShowTyping && <TypingComponent id={id} />}
+            {isShowTyping && <TypingComponent />}
             {dialog?.isBlocked && (
               <SystemMessage
                 id={id}

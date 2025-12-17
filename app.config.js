@@ -1,11 +1,42 @@
 module.exports = {
-  name: "Secret Chat",
-  slug: "secret-chat",
-  version: "1.0.0",
-  orientation: "portrait",
-  extra: {
-    GOOGLE_ANDROID_AUTH_CLIENT_ID: process.env.GOOGLE_ANDROID_AUTH_CLIENT_ID,
-    GOOGLE_WEB_AUTH_CLIENT_ID: process.env.GOOGLE_WEB_AUTH_CLIENT_ID,
-    ENV: process.env.ENV || "production",
+  expo: {
+    name: "Secret Chat",
+    slug: "secret-chat",
+    version: "1.0.0",
+    orientation: "portrait",
+    icon: "./assets/images/splash-icon.png",
+
+    splash: {
+      image: "./assets/images/logo.png",
+      resizeMode: "contain", // или "cover"
+      backgroundColor: "#0c003e",
+    },
+
+    plugins: [
+      [
+        "expo-notifications",
+        {
+          icon: "./assets/images/notification-icon.png",  // Та же иконка
+          color: "#ffffff",
+        }
+      ]
+    ],
+
+    android: {
+      package: "com.klomax.secretchat",
+      notification: {
+        icon: "./assets/images/notification-icon.png",
+        color: "#ffffff",
+      },
+      // adaptiveIcon: {
+      //   foregroundImage: "./assets/images/logo.png",
+      // },
+    },
+
+    extra: {
+      GOOGLE_ANDROID_AUTH_CLIENT_ID: process.env.GOOGLE_ANDROID_AUTH_CLIENT_ID,
+      GOOGLE_WEB_AUTH_CLIENT_ID: process.env.GOOGLE_WEB_AUTH_CLIENT_ID,
+      ENV: process.env.ENV || "production",
+    },
   },
 };

@@ -84,8 +84,10 @@ export const LoginMain = () => {
 
     setLoadingSendEmail(true);
 
-    api.sendAuthorizeByEmail(email.trim()).then(() => {
-      setCurrentStep(STEPS.OTP);
+    api.sendAuthorizeByEmail(email.trim()).then((response) => {
+      if (response.ok) {
+        setCurrentStep(STEPS.OTP);
+      }
     }).finally(() => {
       setLoadingSendEmail(false);
     });

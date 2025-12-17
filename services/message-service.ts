@@ -24,6 +24,7 @@ const setData = ({
   timestamp,
   isBlocked,
   lastMsgId,
+  role,
 }: {
   replic: IMessage | null;
   id: AGENT_KEYS;
@@ -31,6 +32,7 @@ const setData = ({
   timestamp: number;
   isBlocked: boolean;
   lastMsgId: number;
+  role?: ROLES;
 }): void => {
   setDialogs((d: Dialogs) => {
     const current = {...d[id]};
@@ -40,6 +42,8 @@ const setData = ({
     }
 
     current.dialog = [...(current.dialog || [])];
+    current.isNotification = role === ROLES.APP;
+
 
     if (!isBlocked && replic) {
       current.dialog.push({
@@ -67,6 +71,7 @@ export class MessageService {
     setLoading,
     setShowTyping,
     setLastMsgGlobalId,
+    role = ROLES.USER,
   }: {
     id: AGENT_KEYS;
     userId: string;
@@ -76,20 +81,23 @@ export class MessageService {
     setLoading: (state: boolean) => void;
     setShowTyping: (state: boolean) => void;
     setLastMsgGlobalId: Dispatch<SetStateAction<number>>;
+    role?: ROLES;
   }): Promise<void> {
     const replic: IMessage = {
       content: message,
-      role: ROLES.USER,
+      role: role,
     };
-    setLoading(true);
-    setData({
-      replic,
-      id,
-      setDialogs,
-      timestamp: Date.now() / 1000,
-      isBlocked: false,
-      lastMsgId: 0,
-    });
+    if (role !== ROLES.APP) {
+      setLoading(true);
+      setData({
+        replic,
+        id,
+        setDialogs,
+        timestamp: Date.now() / 1000,
+        isBlocked: false,
+        lastMsgId: 0,
+      });
+    }
 
     const timeout = getRandomInt(500, 1500);
 
@@ -119,7 +127,7 @@ export class MessageService {
           }
 
           const intervalId = setInterval(() => {
-            if (startTime + 600 < Date.now()) {
+            if (startTime + 3600 < Date.now()) {
               clearInterval(intervalId);
               setShowTyping(false);
 
@@ -132,6 +140,7 @@ export class MessageService {
                   timestamp: responseData.created,
                   isBlocked: responseData.isBlocked,
                   lastMsgId: responseData.lastMsgId,
+                  role,
                 });
               }
             }

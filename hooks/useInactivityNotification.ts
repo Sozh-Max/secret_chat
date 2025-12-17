@@ -6,6 +6,7 @@ import { useUser } from '@/contexts/UserContext';
 import { getNotificationsByUserId, IMessageTemplate, setNotificationsByUserId } from '@/utils/global';
 import { ROLES } from '@/api/constants';
 import { Dialogs } from '@/contexts/GlobalContext';
+import { useApi } from '@/contexts/ApiContext';
 
 const CHANEL_NAME = 'motivational_channel';
 
@@ -54,12 +55,17 @@ Notifications.setNotificationHandler({
 
 export const useInactivityNotification = ({
   setDialogs,
+  dialogs,
+  setLastMsgGlobalId,
 }: {
-  setDialogs: Dispatch<SetStateAction<Dialogs>>,
+  setDialogs: Dispatch<SetStateAction<Dialogs>>;
+  dialogs: Dialogs;
+  setLastMsgGlobalId: Dispatch<SetStateAction<number>>;
 }) => {
   const appState = useRef(AppState.currentState);
   const [permissionGranted, setPermissionGranted] = useState(false);
   const { userId } = useUser();
+  const { messageService } = useApi();
 
   const currentMessageRef = useRef<IMessageTemplate | null>(null);
   const currentMessageTimeRef = useRef<number>(0);
@@ -67,27 +73,41 @@ export const useInactivityNotification = ({
   const setNewBotMessage = async () => {
     const messageData = currentMessageRef.current;
     if (!messageData) return;
-
     currentMessageRef.current = null;
-    setDialogs((dialogs) => {
-      const currentDialog = dialogs[messageData.agent];
-      if (currentDialog) {
-        currentDialog.isNotificationMessage = true;
-        currentDialog.dialog.push({
-          createTime: Date.now() / 1000,
-          replic: {
-            role: ROLES.ASSISTANT,
-            content: messageData.body,
-          }
-        });
 
-        return {
-          ...dialogs,
-        }
-      }
 
-      return dialogs;
+    const dialog = dialogs[messageData.agent];
+    await messageService.sendMessage({
+      id: messageData.agent,
+      userId: userId,
+      message: messageData.body,
+      setDialogs,
+      assistantDialog: dialog?.dialog || [],
+      setLoading: () => {},
+      setShowTyping: () => {},
+      setLastMsgGlobalId,
+      role: ROLES.APP,
     });
+
+    // setDialogs((dialogs) => {
+    //   const currentDialog = dialogs[messageData.agent];
+    //   if (currentDialog) {
+    //     currentDialog.isNotification = true;
+    //     currentDialog.dialog.push({
+    //       createTime: Date.now() / 1000,
+    //       replic: {
+    //         role: ROLES.ASSISTANT,
+    //         content: messageData.body,
+    //       }
+    //     });
+    //
+    //     return {
+    //       ...dialogs,
+    //     }
+    //   }
+    //
+    //   return dialogs;
+    // });
 
     const notifications = await getNotificationsByUserId(userId);
 
@@ -141,7 +161,7 @@ export const useInactivityNotification = ({
 
 
       const secondsDelay = getDelayToNotificationWindow(message.seconds);
-
+      // const secondsDelay = message.seconds;
       currentMessageTimeRef.current = Date.now() + secondsDelay * 1000;
 
       const identifier = await Notifications.scheduleNotificationAsync({
@@ -158,7 +178,7 @@ export const useInactivityNotification = ({
         } as Notifications.SchedulableNotificationTriggerInput,
       });
 
-      //console.log('Запланировано уведомление id=', identifier, 'через (сек):', secondsDelay);
+      console.log('Запланировано уведомление id=', identifier, 'через (сек):', secondsDelay);
 
       const scheduled = await Notifications.getAllScheduledNotificationsAsync();
       //console.log('Запланированные уведомления (после schedule):', scheduled);
@@ -178,7 +198,7 @@ export const useInactivityNotification = ({
     if (Platform.OS === 'android') {
       registerForPushNotificationsAsync();
 
-      const responseListener = Notifications.addNotificationResponseReceivedListener(response => {
+      const responseListener = Notifications.addNotificationResponseReceivedListener(() => {
         // console.log('Пользователь взаимодействовал с уведомлением!', {
         //   notificationId: response.notification.request.identifier,
         //   actionId: response.actionIdentifier,

@@ -35,7 +35,7 @@ export interface IDialog {
   hasVideo: boolean;
   description: string;
   lastMsgId: number;
-  isNotificationMessage?: boolean;
+  isNotification?: boolean;
 }
 
 export type Dialogs = { [key in AGENT_KEYS]?: IDialog }
@@ -62,7 +62,7 @@ export interface IDialogPreview {
   isBlocked: boolean;
   isComplaint?: boolean;
   hasVideo: boolean;
-  isNotificationMessage?: boolean;
+  isNotification?: boolean;
 }
 
 const refreshChats = ({
@@ -88,7 +88,7 @@ const refreshChats = ({
       isBlocked: dialog.isBlocked ?? false,
       isComplaint: dialog.isComplaint ?? false,
       hasVideo: dialog.hasVideo,
-      isNotificationMessage: dialog.isNotificationMessage || false,
+      isNotification: dialog.isNotification || false,
     };
   }).sort((a, b) => b.lastMessageTime - a.lastMessageTime));
 }
@@ -107,12 +107,14 @@ export const GlobalProvider = (
   const [lastMsgGlobalId, setLastMsgGlobalId] = useState<number>(0);
 
   const { userId, bootId, isCheckAuthorized } = useUser();
-  const { api } = useApi();
+  const { api, messageService } = useApi();
 
   useGooglePlayInstallReferrer(api, bootId);
 
   useInactivityNotification({
     setDialogs,
+    dialogs,
+    setLastMsgGlobalId,
   });
 
   useEffect(() => {
@@ -147,6 +149,7 @@ export const GlobalProvider = (
               item.isBlocked = dialog.isBlocked || false;
               item.isComplaint = dialog.isComplaint || false;
               item.lastMsgId = dialog.lastMsgId || 0;
+              item.isNotification = dialog.isNotification ?? false;
             }
           }
         }
@@ -251,6 +254,7 @@ export const GlobalProvider = (
                 dialog.isBlocked = d.isBlocked;
                 dialog.isComplaint = d.isComplaint;
                 dialog.lastMsgId = d.lastMsgId;
+                dialog.isNotification = d.isNotification ?? false;
               }
             });
 
@@ -266,8 +270,6 @@ export const GlobalProvider = (
 
     }, 5000);
 
-
-
     return () => {
       clearInterval(id);
     }
@@ -275,38 +277,40 @@ export const GlobalProvider = (
 
   useEffect(() => {
     const checkFirstMessage = async () => {
-      const notifications = await getNotificationsByUserId(userId);
+      try {
+        const notifications = await getNotificationsByUserId(userId);
 
-      const currentNotice =  notifications.find((note) => note.active && !note.done);
+        const currentNotice =  notifications.find((note) => note.active && !note.done);
 
-      if (currentNotice) {
-        setTimeout(async () => {
-          await setNotificationsByUserId(userId, notifications.map((data) => ({
-            ...data,
-            done: data.id === currentNotice?.id ? true: data.done,
-          })));
+        if (currentNotice) {
+          setTimeout(async () => {
+            await setNotificationsByUserId(userId, notifications.map((data) => ({
+              ...data,
+              done: data.id === currentNotice?.id ? true: data.done,
+            })));
 
-          setDialogs((dialogs) => {
             const currentDialog = dialogs[currentNotice.agent];
-            if (currentDialog) {
-              currentDialog.isNotificationMessage = true;
-              currentDialog.dialog.push({
-                createTime: Date.now() / 1000,
-                replic: {
-                  role: ROLES.ASSISTANT,
-                  content: currentNotice.body,
-                }
-              });
+            if (!currentDialog) return;
 
-              return {
-                ...dialogs,
-              }
-            }
+            const dialog = dialogs[currentNotice.agent];
+            await messageService.sendMessage({
+              id: currentNotice.agent,
+              userId: userId,
+              message: currentNotice.body,
+              setDialogs,
+              assistantDialog: dialog?.dialog || [],
+              setLoading: () => {},
+              setShowTyping: () => {},
+              setLastMsgGlobalId,
+              role: ROLES.APP,
+            });
 
-            return dialogs;
-          });
-          Vibration.vibrate([500, 200, 500, 200, 500]);
-        }, currentNotice.seconds * 1000);
+            Vibration.vibrate([500, 200, 500, 200, 500]);
+
+          }, currentNotice.seconds * 1000);
+        }
+      } catch (e) {
+        console.log(`Error in checkFirstMessage: ${e}`);
       }
     }
 

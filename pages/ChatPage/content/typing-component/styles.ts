@@ -1,12 +1,23 @@
 import { StyleSheet } from 'react-native';
-import { DISMISS_ICON_COLOR, MAIN_ICON_COLOR } from '@/constants/Colors';
+import { CHAT_COLOR, DISMISS_ICON_COLOR, MAIN_ICON_COLOR } from '@/constants/Colors';
 
 export const styles = StyleSheet.create({
   wrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 7,
-    paddingBottom: 16,
+    paddingRight: '23%',
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  container: {
+    backgroundColor: CHAT_COLOR,
+    paddingLeft: 18,
+    paddingRight: 18,
+    paddingTop: 12,
+    paddingBottom: 12,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    borderBottomRightRadius: 12,
+    alignSelf: 'flex-start',
+    maxWidth: '100%',
   },
   assistant: {
     fontSize: 12,
@@ -33,5 +44,5 @@ export const styles = StyleSheet.create({
     borderRightColor: DISMISS_ICON_COLOR,
     borderBottomColor: DISMISS_ICON_COLOR,
     borderLeftColor: DISMISS_ICON_COLOR,
-  }
+  },
 });

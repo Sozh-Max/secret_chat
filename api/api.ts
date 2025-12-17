@@ -68,7 +68,7 @@ export class Api {
         email,
       }),
     });
-  }
+  };
 
   async checkAuthorizeByEmail(
     email: string,

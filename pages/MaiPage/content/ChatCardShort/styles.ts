@@ -32,9 +32,6 @@ export const styles = StyleSheet.create({
     right: 5,
     bottom: 2,
   },
-  item_notify: {
-    backgroundColor: 'rgba(255,255,255,0.1)',
-  },
   img: {
     borderRadius: 30,
     alignSelf: 'center',

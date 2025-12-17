@@ -34,10 +34,10 @@ export const ChatPage = () => {
       api.selectAssistantStatistics({
         assistantId: id,
         userId,
-      })
+      });
     }
 
-  }, []);
+  }, [id, userId]);
   
   useFocusEffect(
     useCallback(() => {

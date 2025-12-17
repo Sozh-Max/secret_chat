@@ -16,8 +16,8 @@ const MESSAGE_TEMPLATES: IMessageTemplate[] = [
   {
     id: 1,
     done: false,
-    title: 'Message from Elise.',
-    body: 'Hello my friend!',
+    title: 'Message from Elise',
+    body: 'Bored out of my mind here 😩 Save me? 🥂',
     agent: AGENT_KEYS.elise,
     active: true,
     seconds: 3,
@@ -25,8 +25,8 @@ const MESSAGE_TEMPLATES: IMessageTemplate[] = [
   {
     id: 2,
     done: false,
-    title: 'Message from Lola.',
-    body: 'Hello my friend!',
+    title: 'Message from Lola',
+    body: 'Just took a super cute selfie 📸 Want to see? 😇',
     agent: AGENT_KEYS.lola,
     active: false,
     seconds: 60 * 60 * 24,
@@ -34,8 +34,8 @@ const MESSAGE_TEMPLATES: IMessageTemplate[] = [
   {
     id: 3,
     done: false,
-    title: 'Message from Jane.',
-    body: 'Nice to meet you dude.',
+    title: 'Message from Jane',
+    body: 'Are you always this quiet? 👻 It’s making me curious...',
     agent: AGENT_KEYS.jane,
     active: false,
     seconds: 60 * 60 * 24 * 3,

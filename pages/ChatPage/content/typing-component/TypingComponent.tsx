@@ -1,17 +1,14 @@
-import { View, Text } from 'react-native';
-import { IdTypeProps } from '@/interfaces/global';
+import { View } from 'react-native';
 import { styles } from '@/pages/ChatPage/content/typing-component/styles';
-import { RotatingIco } from '@/pages/ChatPage/content/typing-component/RotatingIco';
+import { TypingDots } from '@/pages/ChatPage/content/typing-component/ThreeDots';
 
-export const TypingComponent = ({
-  id
-}: IdTypeProps) => {
+export const TypingComponent = () => {
 
   return (
     <View style={styles.wrapper}>
-      <RotatingIco />
-      <Text style={styles.assistant}>{id} </Text>
-      <Text style={styles.typing}>Typing...</Text>
+      <View style={styles.container}>
+        <TypingDots />
+      </View>
     </View>
   )
 }
