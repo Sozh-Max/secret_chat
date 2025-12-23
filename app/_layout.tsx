@@ -21,8 +21,12 @@ import { useEffect } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { ComplaintProvider } from '@/contexts/ComplaintContext';
 import { ApiProvider } from '@/contexts/ApiContext';
+import appsFlyer from 'react-native-appsflyer';
+import { useMode } from '@/hooks/useMode';
+import { useDevice } from '@/hooks/useDevice';
 
 const GOOGLE_WEB_AUTH_CLIENT_ID = Constants.expoConfig?.extra?.GOOGLE_WEB_AUTH_CLIENT_ID;
+const APPSFLYER_DEV_KEY = Constants.expoConfig?.extra?.APPSFLYER_DEV_KEY;
 
 GoogleSignin.configure({
   webClientId: GOOGLE_WEB_AUTH_CLIENT_ID,
@@ -116,6 +120,33 @@ export default function RootLayout() {
     NotoSans_700Bold,
     NotoSans_800ExtraBold,
   });
+
+  const { isDev } = useMode();
+  const { isAndroid } = useDevice();
+
+  console.log('isDev', isDev, APPSFLYER_DEV_KEY);
+
+  useEffect(() => {
+    const options = {
+      devKey: APPSFLYER_DEV_KEY,
+      isDebug: isDev,
+      onInstallConversionDataListener: true,
+      onDeepLinkListener: true,
+    };
+
+    if (isAndroid) {
+      appsFlyer.initSdk(
+        options,
+        (result: string) => {
+          console.log('AppsFlyer init success', result);
+        },
+        (error: Error) => {
+          console.error('AppsFlyer init error', error);
+        }
+      );
+    }
+
+  }, []);
 
   if (!fontsLoaded) {
     return null;

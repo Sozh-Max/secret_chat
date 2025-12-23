@@ -52,6 +52,14 @@
           "icon": "./assets/images/notification-icon.png",
           "color": "#ffffff"
         }
+      ],
+      [
+        "react-native-appsflyer",
+        {
+          "shouldUseStrictMode": false,
+          "shouldUsePurchaseConnector": true,
+          "preferAppsFlyerBackupRules": false
+        }
       ]
     ],
     "experiments": {

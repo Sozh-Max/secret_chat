@@ -12,11 +12,15 @@ import { useLoginPage } from '@/contexts/LoginPageContext';
 import { VideoBackground } from '@/components/video-background/VideoBackground';
 import { MAIN_ICON_COLOR } from '@/constants/Colors';
 import { useApi } from '@/contexts/ApiContext';
+import appsFlyer from 'react-native-appsflyer';
+import { useDevice } from '@/hooks/useDevice';
 
 export const LoginMain = () => {
   const emailRef = useRef<TextInput>(null);
   const { bootId, setAuthorizedData } = useUser();
   const [isEmailFocused, setIsEmailFocused] = useState(false);
+
+  const { isAndroid } = useDevice();
 
   const {
     currentStep,
@@ -46,7 +50,13 @@ export const LoginMain = () => {
             isAuthorized: true,
             userId: data.id,
             email: data.email,
-          })
+          });
+
+          if (isAndroid) {
+            appsFlyer.logEvent('af_complete_authorization', {
+              method: 'google',
+            });
+          }
         }
       }
     } catch (error: any) {

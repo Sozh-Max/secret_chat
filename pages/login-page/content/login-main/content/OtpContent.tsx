@@ -7,6 +7,8 @@ import { useUser } from '@/contexts/UserContext';
 import { useLoginPage } from '@/contexts/LoginPageContext';
 import { MAIN_ICON_COLOR } from '@/constants/Colors';
 import { useApi } from '@/contexts/ApiContext';
+import appsFlyer from 'react-native-appsflyer';
+import { useDevice } from '@/hooks/useDevice';
 
 type MiniStoreType = Record<number, TextInput | null>;
 
@@ -23,6 +25,7 @@ export const OtpContent = () => {
     loadingSendEmail,
     setLoadingSendEmail,
   } = useLoginPage();
+  const { isAndroid } = useDevice();
 
   const miniStore = useRef<MiniStoreType>({
     0: null,
@@ -179,6 +182,11 @@ export const OtpContent = () => {
             userId: data.id,
             email: data.email,
           });
+          if (isAndroid) {
+            appsFlyer.logEvent('af_complete_authorization', {
+              method: 'email',
+            });
+          }
         } else {
           setIsError(true);
         }

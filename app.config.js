@@ -16,10 +16,11 @@ module.exports = {
       [
         "expo-notifications",
         {
-          icon: "./assets/images/notification-icon.png",  // Та же иконка
+          icon: "./assets/images/notification-icon.png",
           color: "#ffffff",
         }
-      ]
+      ],
+      "react-native-appsflyer",
     ],
 
     android: {
@@ -36,7 +37,8 @@ module.exports = {
     extra: {
       GOOGLE_ANDROID_AUTH_CLIENT_ID: process.env.GOOGLE_ANDROID_AUTH_CLIENT_ID,
       GOOGLE_WEB_AUTH_CLIENT_ID: process.env.GOOGLE_WEB_AUTH_CLIENT_ID,
-      ENV: process.env.ENV || "production",
+      APPSFLYER_DEV_KEY: process.env.APPSFLYER_DEV_KEY,
+      ENV: process.env.MODE || "production",
     },
   },
 };
