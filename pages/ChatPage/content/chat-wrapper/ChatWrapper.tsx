@@ -17,14 +17,11 @@ import {
   COMPLAINT_SUCCEED_TEXT,
 } from '@/pages/ChatPage/content/chat-wrapper/constants';
 
-interface IChatWrapperProps extends IdTypeProps {
-  isShowTyping: boolean;
-}
+import { checkTypingMessage } from '@/utils/global';
 
 export const ChatWrapper = ({
   id,
-  isShowTyping,
-}: IChatWrapperProps) => {
+}: IdTypeProps) => {
   const { dialogs, setDialogs } = useGlobal();
   const { showComplaintChat } = useComplaint();
   const [page, setPage] = useState(1);
@@ -34,10 +31,7 @@ export const ChatWrapper = ({
   const dialog = dialogs[id];
   const isKeyboardVisible = useKeyboardStatus();
 
-  const currentDialog = useMemo(() => {
-    const array = dialog?.dialog || [];
-    return [...array].reverse();
-  }, [dialog?.dialog?.length]);
+  const currentDialog = [...(dialog?.dialog || [])].reverse();
 
   const messagesToRender = useMemo(() => {
     return currentDialog.slice(0, page * PAGE_SIZE);
@@ -93,11 +87,15 @@ export const ChatWrapper = ({
         data={messagesToRender}
         keyExtractor={(_, i) => i.toString()}
         renderItem={({ item }) => (
-          <CombinerMessage dialog={item} id={id} />
+          <>
+            {(checkTypingMessage(item))
+              ? <TypingComponent />
+              : <CombinerMessage dialog={item} id={id} />
+            }
+          </>
         )}
         ListHeaderComponent={
           <>
-            {isShowTyping && <TypingComponent />}
             {dialog?.isBlocked && (
               <SystemMessage
                 id={id}

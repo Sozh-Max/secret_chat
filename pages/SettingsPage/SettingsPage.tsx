@@ -7,6 +7,7 @@ import { TemplateContent } from '@/components/TemplateContent/TemplateContent';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { styles } from '@/pages/SettingsPage/styles';
 import { AccountData } from '@/pages/SettingsPage/content/account-data/AccountData';
+import { TokensBuy } from '@/pages/SettingsPage/content/TokensBuy/TokensBuy';
 
 export const SettingsPage = () => {
   const { tokens } = useGlobal();
@@ -39,12 +40,12 @@ export const SettingsPage = () => {
               </View>
             </TemplateContent>
 
-            {/*<TemplateContent*/}
-            {/*  title='Star purchase'*/}
-            {/*  description='To use chat features, view photos, or watch videos, users must have a sufficient star balance'*/}
-            {/*>*/}
-            {/*  <TokensBuy />*/}
-            {/*</TemplateContent>*/}
+            <TemplateContent
+              title='Star purchase'
+              description='To use chat features, view photos, or watch videos, users must have a sufficient star balance'
+            >
+              <TokensBuy />
+            </TemplateContent>
 
             <TemplateContent
               title='Account'

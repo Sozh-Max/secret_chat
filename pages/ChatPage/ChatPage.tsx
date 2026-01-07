@@ -65,7 +65,6 @@ export const ChatPage = () => {
             <View style={{ flex: 1 }}>
               <ChatWrapper
                 id={id}
-                isShowTyping={isShowTyping}
               />
             </View>
 

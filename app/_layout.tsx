@@ -124,8 +124,6 @@ export default function RootLayout() {
   const { isDev } = useMode();
   const { isAndroid } = useDevice();
 
-  console.log('isDev', isDev, APPSFLYER_DEV_KEY);
-
   useEffect(() => {
     const options = {
       devKey: APPSFLYER_DEV_KEY,

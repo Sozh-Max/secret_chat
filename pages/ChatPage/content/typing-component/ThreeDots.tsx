@@ -82,14 +82,20 @@ export const TypingDots = (): JSX.Element => {
                 {
                   scale: dot.interpolate({
                     inputRange: [0, 1],
-                    outputRange: [SCALE_IDLE, SCALE_ACTIVE],
+                    outputRange: [1, 1.5],
+                  }),
+                },
+                {
+                  translateY: dot.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, -1.5],
                   }),
                 },
               ],
             },
           ]}
         >
-          •
+          .
         </Animated.Text>
       ))}
     </View>

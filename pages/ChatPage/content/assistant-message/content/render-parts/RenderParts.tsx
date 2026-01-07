@@ -25,7 +25,6 @@ export const RenderParts = ({
 
   const type = match[1];
   const num = match[2].padStart(2, "0");
-
   if (type === "photo") {
 
     return (

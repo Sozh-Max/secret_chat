@@ -7,7 +7,7 @@ module.exports = {
     icon: "./assets/images/splash-icon.png",
 
     splash: {
-      image: "./assets/images/logo.png",
+      image: "./assets/images/splash-icon.png",
       resizeMode: "contain", // или "cover"
       backgroundColor: "#0c003e",
     },

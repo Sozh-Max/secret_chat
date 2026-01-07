@@ -52,7 +52,11 @@ export const Header = () => {
         {tokens}
       </ThemedText>
       <View>
-        <AnimatedPressBtn style={styles.setting} onPress={handlePressSettings}>
+        <AnimatedPressBtn
+          style={styles.setting}
+          onPress={handlePressSettings}
+          scaleEnd={0.8}
+        >
           <IconMenu />
         </AnimatedPressBtn>
       </View>

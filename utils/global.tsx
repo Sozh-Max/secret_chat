@@ -1,6 +1,8 @@
 import { AsyncStorageService } from '@/services/async-storage-service';
 import { LOCAL_STORAGE_KEYS } from '@/services/constants';
 import { AGENT_KEYS } from '@/constants/agents-data';
+import { IDialogItem } from '@/contexts/GlobalContext';
+import { ROLES } from '@/api/constants';
 
 export interface IMessageTemplate {
   id: number;
@@ -100,3 +102,7 @@ export const setNotificationsByUserId = async (
     console.log(`Error in setNotificationsByUserId: ${e}`);
   }
 }
+
+export const checkTypingMessage = (message: IDialogItem) =>
+  message.replic.role === ROLES.TYPING;
+

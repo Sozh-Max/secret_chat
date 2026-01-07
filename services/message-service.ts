@@ -4,6 +4,7 @@ import { Dialogs, IDialog, IDialogItem } from '@/contexts/GlobalContext';
 import { ROLES } from '@/api/constants';
 import { IMessage } from '@/api/interfaces';
 import { Api } from '@/api/api';
+import { checkTypingMessage } from '@/utils/global';
 
 function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -42,14 +43,26 @@ const setData = ({
     }
 
     current.dialog = [...(current.dialog || [])];
-    current.isNotification = role === ROLES.APP;
 
+    if (!replic ||replic.role === ROLES.ASSISTANT || replic.role === ROLES.TYPING) {
+      current.dialog = current.dialog.filter(dialog => !checkTypingMessage(dialog));
+    }
+    current.isNotification = role === ROLES.APP;
 
     if (!isBlocked && replic) {
       current.dialog.push({
         replic,
         createTime: timestamp ?? (Date.now() / 1000),
       })
+      if (replic?.role === ROLES.USER) {
+        current.dialog.push({
+          replic: {
+            content: '',
+            role: ROLES.TYPING,
+          },
+          createTime: timestamp ?? (Date.now() / 1000),
+        });
+      }
     }
 
     return {
@@ -129,7 +142,6 @@ export class MessageService {
           const intervalId = setInterval(() => {
             if (startTime + 3600 < Date.now()) {
               clearInterval(intervalId);
-              setShowTyping(false);
 
               if (responseData) {
                 setLastMsgGlobalId(responseData.lastMsgGlobalId)
@@ -143,6 +155,7 @@ export class MessageService {
                   role,
                 });
               }
+              setShowTyping(false);
             }
           }, 100);
         }
