@@ -1,16 +1,15 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { View, Text, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 
 import { SafeAreaInsectComponent } from '@/components/SafeAreaInsectComponent/SafeAreaInsectComponent';
 import { Header } from '@/pages/SettingsPage/content/Header/Header';
 import { TemplateContent } from '@/components/TemplateContent/TemplateContent';
-import { useGlobal } from '@/contexts/GlobalContext';
 import { styles } from '@/pages/SettingsPage/styles';
 import { AccountData } from '@/pages/SettingsPage/content/account-data/AccountData';
-import { TokensBuy } from '@/pages/SettingsPage/content/TokensBuy/TokensBuy';
+import { TokensBuy } from '@/pages/SettingsPage/content/tokens-buy/TokensBuy';
+import { Balance } from '@/pages/SettingsPage/content/balance/Balance';
 
 export const SettingsPage = () => {
-  const { tokens } = useGlobal();
 
   return (
     <SafeAreaInsectComponent>
@@ -30,14 +29,8 @@ export const SettingsPage = () => {
 
             <TemplateContent
               title='Balance'
-              description="At launch, we decided to give all users virtually unlimited communication. In the future, we'll expand functionality, including paid features, but at this early stage, that's not our focus"
-              contentTop={true}
             >
-              <View style={styles.balance_container}>
-                <Text style={styles.balance}>
-                  ⭐ {tokens}
-                </Text>
-              </View>
+              <Balance />
             </TemplateContent>
 
             <TemplateContent
@@ -49,9 +42,9 @@ export const SettingsPage = () => {
 
             <TemplateContent
               title='Account'
-              description="To ensure privacy, message history is stored only on this device, we do not collect or store this type of data"
+              description="To ensure privacy, message history is stored only on this device, we do not collect or store this type of data. Certain hidden features are available depending on the user's account level"
             >
-              {/*<LogAccount />*/}
+              {/*<log-account />*/}
               <AccountData />
             </TemplateContent>
 

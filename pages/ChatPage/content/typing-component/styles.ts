@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { CHAT_COLOR, DISMISS_ICON_COLOR, MAIN_ICON_COLOR } from '@/constants/Colors';
+import { TEXT_REGULAR, TEXT_SEMIBOLD } from '@/constants/global';
 
 export const styles = StyleSheet.create({
   wrapper: {
@@ -21,7 +22,7 @@ export const styles = StyleSheet.create({
   },
   assistant: {
     fontSize: 12,
-    fontFamily: 'NotoSans_600SemiBold',
+    fontFamily: TEXT_SEMIBOLD,
     color: '#fff',
     lineHeight: 24,
     textTransform: 'capitalize',
@@ -30,7 +31,7 @@ export const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 24,
     color: DISMISS_ICON_COLOR,
-    fontFamily: 'NotoSans_400Regular',
+    fontFamily: TEXT_REGULAR,
   },
   ico: {
     width: 20,

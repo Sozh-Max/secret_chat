@@ -12,14 +12,4 @@ export const styles = StyleSheet.create({
   inner: {
     paddingBottom: 30,
   },
-  balance_container: {
-    paddingBottom: 15,
-  },
-  balance: {
-    fontSize: 24,
-    lineHeight: 36,
-    color: '#fff',
-    textAlign: 'center',
-    fontFamily: 'NotoSans_600SemiBold',
-  },
 });

@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { styles } from '@/pages/SettingsPage/content/LogAccount/styles';
+import { styles } from '@/pages/SettingsPage/content/log-account/styles';
 import { CustomButton } from '@/components/CustomButton/CustomButton';
 import { IconGoogle } from '@/components/icons/IconGoogle';
 import { IconApple } from '@/components/icons/IconApple';

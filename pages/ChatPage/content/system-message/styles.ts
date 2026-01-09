@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { CHAT_COLOR, MAIN_ICON_COLOR } from '@/constants/Colors';
+import { TEXT_REGULAR, TEXT_SEMIBOLD } from '@/constants/global';
 
 export const styles = StyleSheet.create({
   wrapper: {
@@ -24,13 +25,13 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     color: MAIN_ICON_COLOR,
     lineHeight: 24,
-    fontFamily: 'NotoSans_600SemiBold',
+    fontFamily: TEXT_SEMIBOLD,
   },
   text: {
     fontSize: 14,
     lineHeight: 20,
     color: MAIN_ICON_COLOR,
-    fontFamily: 'NotoSans_400Regular',
+    fontFamily: TEXT_REGULAR,
   },
   img: {
     borderRadius: 8,
