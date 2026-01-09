@@ -3,6 +3,7 @@ import { useGlobal } from '@/contexts/GlobalContext';
 import { styles } from '@/pages/SettingsPage/content/balance/styles';
 
 import StarIcon from '@/assets/images/svg/star_icon.svg';
+import { formatNumberWithCommas } from '@/utils/global';
 
 export const Balance = () => {
   const { tokens } = useGlobal();
@@ -12,7 +13,7 @@ export const Balance = () => {
       <View style={styles.info}>
         <StarIcon width={28} height={28} />
         <Text style={styles.balance}>
-          {tokens}
+          {formatNumberWithCommas(tokens)}
         </Text>
       </View>
     </View>

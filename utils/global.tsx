@@ -106,7 +106,10 @@ export const setNotificationsByUserId = async (
 export const checkTypingMessage = (message: IDialogItem) =>
   message.replic.role === ROLES.TYPING;
 
-export const formatNumberWithCommas = (n: number): string => {
-  return n.toLocaleString("en-US");
+export const formatNumberWithCommas = (n: string | number): string => {
+  const num = typeof n === "string" ? Number(n) : n;
+  if (!Number.isFinite(num)) return String(n);
+
+  return num.toLocaleString("en-US");
 }
 

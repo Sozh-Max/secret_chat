@@ -1,18 +1,15 @@
+import React from 'react';
 import { Animated, Pressable, View, StyleProp, ViewStyle } from 'react-native';
-import { styles } from '@/pages/SettingsPage/content/tokens-buy/styles';
-import React, { useRef, useState } from 'react';
+
 import { CustomButton } from '@/components/CustomButton/CustomButton';
 import { CountItems } from '@/pages/SettingsPage/content/tokens-buy/content/count-items/CountItems';
-import { SmallSale } from '@/pages/SettingsPage/content/tokens-buy/content/sales/content/small-sale/SmallSale';
-import { MediumSale } from '@/pages/SettingsPage/content/tokens-buy/content/sales/content/medium-sale/MediumSale';
-import { HighSale } from '@/pages/SettingsPage/content/tokens-buy/content/sales/content/high-sale/HighSale';
 import { Price } from '@/pages/SettingsPage/content/tokens-buy/content/price/Price';
 import { OldPrice } from '@/pages/SettingsPage/content/tokens-buy/content/old-price/OldPrice';
+import { useTokensBuy } from '@/pages/SettingsPage/content/tokens-buy/logic/useTokensBuy';
+import { getAnimatedStyles } from '@/pages/SettingsPage/content/tokens-buy/logic/getAnimatedStyles';
+import { TOKEN_VALUES } from '@/pages/SettingsPage/content/tokens-buy/constants';
 
-import StarIcon from '@/assets/images/svg/star_icon.svg';
-import StarsIcon1 from '@/assets/images/svg/stars_icon_1.svg';
-import StarsIcon2 from '@/assets/images/svg/stars_icon_2.svg';
-import StarsIcon3 from '@/assets/images/svg/stars_icon_3.svg';
+import { styles } from '@/pages/SettingsPage/content/tokens-buy/styles';
 
 export interface ITokenValue {
   id: number;
@@ -26,97 +23,21 @@ export interface ITokenValue {
   oldPrice: number | null;
 }
 
-const TOKEN_VALUES = [
-  {
-    id: 1,
-    value: 500,
-    icon: <StarIcon height={20} width={20} />,
-    activeColorBg: '#7070704D',
-    borderColor: '#707070',
-    buttonStyle: styles.primary_button,
-    component: <></>,
-    price: 1.99,
-    oldPrice: null,
-  },
-  {
-    id: 2,
-    value: 2500,
-    icon: <StarsIcon1 height={20} width={28} />,
-    activeColorBg: '#7070704D',
-    borderColor: '#707070',
-    buttonStyle: styles.primary_button,
-    component: <SmallSale />,
-    price: 6.99,
-    oldPrice: 9.95,
-  },
-  {
-    id: 3,
-    value: 5000,
-    icon: <StarsIcon2 height={20} width={36} />,
-    activeColorBg: '#D888354D',
-    borderColor: '#D88835',
-    buttonStyle: styles.secondary_button,
-    component: <MediumSale />,
-    price: 11.99,
-    oldPrice: 19.90,
-  },
-  {
-    id: 4,
-    value: 10000,
-    icon: <StarsIcon3 height={20} width={44} />,
-    activeColorBg: '#50AC0033',
-    borderColor: '#50AC00',
-    buttonStyle: styles.thirty_button,
-    component: <HighSale />,
-    price: 19.99,
-    oldPrice: 39.80,
-  },
-];
-
 export const TokensBuy = () => {
-  const [active, setActive] = useState<ITokenValue>(TOKEN_VALUES[0]);
-  const [buttonStyle, setButtonStyle] = useState<StyleProp<ViewStyle>>(styles.primary_button)
-
-  const animatedValues = useRef<Record<number, Animated.Value>>(Object.fromEntries(
-    TOKEN_VALUES.map((val) => [val.id, new Animated.Value(val.id === active.id ? 1 : 0)])
-  )).current;
-
-  const animate = (value: ITokenValue) => {
-    TOKEN_VALUES.forEach((val) => {
-      Animated.timing(animatedValues[val.id], {
-        toValue: val.id === value.id ? 1 : 0,
-        duration: 200,
-        useNativeDriver: false,
-      }).start();
-    });
-  };
-
-  const handlePress = (value: ITokenValue) => {
-    setActive(value);
-    animate(value);
-    setButtonStyle(value.buttonStyle);
-  };
+  const {
+    animatedValues,
+    handlePress,
+    buttonStyle,
+  } = useTokensBuy();
 
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
-        {TOKEN_VALUES.map((token) => {
-          const animatedStyle = {
-            backgroundColor: animatedValues[token.id].interpolate({
-              inputRange: [0, 1],
-              outputRange: ['#171717', token.activeColorBg],
-            }),
-            borderColor: animatedValues[token.id].interpolate({
-              inputRange: [0, 1],
-              outputRange: ['#171717', token.borderColor],
-            }),
-            // transform: [{
-            //   scale: animatedValues[token.id].interpolate({
-            //     inputRange: [0, 1],
-            //     outputRange: [1, 1.02],
-            //   }),
-            // }],
-          };
+        {TOKEN_VALUES.map((token: ITokenValue) => {
+          const animatedStyle = getAnimatedStyles({
+            token,
+            animatedValues,
+          });
 
           return (
             <Pressable
