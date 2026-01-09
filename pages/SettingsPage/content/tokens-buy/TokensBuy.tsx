@@ -1,4 +1,4 @@
-import { Animated, Pressable, View, StyleProp, ViewStyle, ImageSourcePropType } from 'react-native';
+import { Animated, Pressable, View, StyleProp, ViewStyle } from 'react-native';
 import { styles } from '@/pages/SettingsPage/content/tokens-buy/styles';
 import React, { useRef, useState } from 'react';
 import { CustomButton } from '@/components/CustomButton/CustomButton';
@@ -9,10 +9,15 @@ import { HighSale } from '@/pages/SettingsPage/content/tokens-buy/content/sales/
 import { Price } from '@/pages/SettingsPage/content/tokens-buy/content/price/Price';
 import { OldPrice } from '@/pages/SettingsPage/content/tokens-buy/content/old-price/OldPrice';
 
+import StarIcon from '@/assets/images/svg/star_icon.svg';
+import StarsIcon1 from '@/assets/images/svg/stars_icon_1.svg';
+import StarsIcon2 from '@/assets/images/svg/stars_icon_2.svg';
+import StarsIcon3 from '@/assets/images/svg/stars_icon_3.svg';
+
 export interface ITokenValue {
   id: number;
   value: number;
-  iconSource: ImageSourcePropType;
+  icon: React.JSX.Element;
   activeColorBg: string;
   borderColor: string;
   buttonStyle: StyleProp<ViewStyle>;
@@ -25,7 +30,7 @@ const TOKEN_VALUES = [
   {
     id: 1,
     value: 500,
-    iconSource: require(`@/assets/images/svg/star_icon.svg`),
+    icon: <StarIcon height={20} width={20} />,
     activeColorBg: '#7070704D',
     borderColor: '#707070',
     buttonStyle: styles.primary_button,
@@ -36,7 +41,7 @@ const TOKEN_VALUES = [
   {
     id: 2,
     value: 2500,
-    iconSource: require(`@/assets/images/svg/stars_icon_1.svg`),
+    icon: <StarsIcon1 height={20} width={28} />,
     activeColorBg: '#7070704D',
     borderColor: '#707070',
     buttonStyle: styles.primary_button,
@@ -47,7 +52,7 @@ const TOKEN_VALUES = [
   {
     id: 3,
     value: 5000,
-    iconSource: require(`@/assets/images/svg/stars_icon_2.svg`),
+    icon: <StarsIcon2 height={20} width={36} />,
     activeColorBg: '#D888354D',
     borderColor: '#D88835',
     buttonStyle: styles.secondary_button,
@@ -58,7 +63,7 @@ const TOKEN_VALUES = [
   {
     id: 4,
     value: 10000,
-    iconSource: require(`@/assets/images/svg/stars_icon_3.svg`),
+    icon: <StarsIcon3 height={20} width={44} />,
     activeColorBg: '#50AC0033',
     borderColor: '#50AC00',
     buttonStyle: styles.thirty_button,

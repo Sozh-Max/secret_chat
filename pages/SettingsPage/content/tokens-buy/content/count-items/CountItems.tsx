@@ -1,4 +1,4 @@
-import { Image, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { ITokenValue } from '@/pages/SettingsPage/content/tokens-buy/TokensBuy';
 import { styles } from '@/pages/SettingsPage/content/tokens-buy/content/count-items/styles';
@@ -11,11 +11,7 @@ export const CountItems = ({
 }) => {
   return (
     <View style={styles.container}>
-      <Image
-        source={item.iconSource}
-        style={styles.image}
-        resizeMode="contain"
-      />
+      {item.icon}
       <Text style={styles.label}>{formatNumberWithCommas(item.value)} Stars</Text>
     </View>
   );

@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Header } from '@/pages/MaiPage/content/Header/Header';
+import { Header } from '@/pages/MaiPage/content/header/Header';
 import MainChatList from '@/pages/MaiPage/content/MainChatList/MainChatList';
 import Footer from '@/pages/MaiPage/content/Footer/Footer';
 
