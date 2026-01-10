@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useRef } from 'react';
 import { useUser } from './UserContext';
 import { MessageService } from '@/src/services/message-service';
 import { Api } from '@/src/api/api';
@@ -12,13 +12,17 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
   const { logout } = useUser();
 
   const api = new Api(() => logout());
-  const messageService = new MessageService(api);
+
+  const messageServiceRef = useRef<MessageService>(
+    new MessageService(api)
+  );
+
 
   return (
     <ApiContext.Provider
       value={{
         api,
-        messageService,
+        messageService: messageServiceRef.current,
       }}
     >
       {children}

@@ -24,6 +24,7 @@ import { ApiProvider } from '@/src/contexts/ApiContext';
 import appsFlyer from 'react-native-appsflyer';
 import { useMode } from '@/src/hooks/useMode';
 import { useDevice } from '@/src/hooks/useDevice';
+import { PaymentsProvider } from '@/src/contexts/PaymentsContext';
 
 const GOOGLE_WEB_AUTH_CLIENT_ID = Constants.expoConfig?.extra?.GOOGLE_WEB_AUTH_CLIENT_ID;
 const APPSFLYER_DEV_KEY = Constants.expoConfig?.extra?.APPSFLYER_DEV_KEY;
@@ -57,7 +58,6 @@ function RootNavigator() {
       </View>
     );
   }
-
 
   return (
     <Stack
@@ -157,15 +157,17 @@ export default function RootLayout() {
           <GlobalProvider>
             <SafeAreaProvider>
               <ComplaintProvider>
-                <LinearGradient
-                  colors={['rgb(5, 4, 4)', 'rgb(22, 22, 22)']}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 0, y: 1 }}
-                  style={{ flex: 1 }}
-                >
-                  <RootNavigator/>
-                  <StatusBar translucent style="light" backgroundColor="#000000"/>
-                </LinearGradient>
+                <PaymentsProvider>
+                  <LinearGradient
+                    colors={['rgb(5, 4, 4)', 'rgb(22, 22, 22)']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 0, y: 1 }}
+                    style={{ flex: 1 }}
+                  >
+                    <RootNavigator/>
+                    <StatusBar translucent style="light" backgroundColor="#000000"/>
+                  </LinearGradient>
+                </PaymentsProvider>
               </ComplaintProvider>
             </SafeAreaProvider>
           </GlobalProvider>
