@@ -1,0 +1,102 @@
+import { Dimensions, StyleSheet } from 'react-native';
+import { MAIN_ICON_COLOR } from '@/src/constants/Colors';
+
+const screenWidth = Dimensions.get('window').width;
+
+export const styles = StyleSheet.create({
+  avatar_container: {
+    position: 'relative',
+  },
+  item: {
+    paddingTop: 6,
+    paddingRight: 6,
+    paddingBottom: 6,
+    paddingLeft: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(73, 73, 73, 0.1);',
+    flexDirection: 'row',
+    minHeight: 84,
+    alignItems: 'center',
+    gap: 13,
+    position: 'relative',
+  },
+  circle: {
+    width: 12,
+    height: 12,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    backgroundColor: '#21cee6',
+    position: 'absolute',
+    right: 5,
+    bottom: 2,
+  },
+  img: {
+    borderRadius: 30,
+    alignSelf: 'center',
+    width: 60,
+    height: 60,
+  },
+  info: {
+    flexGrow: 1,
+    gap: 8,
+  },
+  title: {
+    fontSize: 14,
+    fontFamily: 'NotoSans_600SemiBold',
+    lineHeight: 18,
+    color: '#fff',
+    maxWidth: screenWidth - 115,
+    textTransform: 'capitalize',
+    marginRight: 3,
+  },
+  title_container: {
+    flexDirection: 'row',
+    gap: 2,
+  },
+  description: {
+    color: MAIN_ICON_COLOR,
+    maxWidth: screenWidth - 115,
+    width: '100%',
+    fontSize: 14,
+    fontFamily: 'NotoSans_400Regular',
+  },
+  message: {
+    color: '#ffffff',
+  },
+  rating: {
+    position: 'absolute',
+    flexDirection: 'row',
+    alignItems: 'center',
+    right: 16,
+    top: 16,
+    gap: 2,
+  },
+  rating_value: {
+    fontSize: 11,
+    lineHeight: 17,
+    fontFamily: 'NotoSans_600SemiBold',
+    color: MAIN_ICON_COLOR,
+  },
+  label: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    fontSize: 9,
+    paddingTop: 2,
+    paddingBottom: 2,
+    paddingLeft: 4,
+    paddingRight: 4,
+    textTransform: 'uppercase',
+    fontFamily: 'NotoSans_800ExtraBold',
+    borderRadius: 8,
+    color: '#ffffff',
+  },
+  label_hot: {
+    backgroundColor: '#ac0034',
+  },
+  label_new: {
+    backgroundColor: '#469501',
+  },
+});

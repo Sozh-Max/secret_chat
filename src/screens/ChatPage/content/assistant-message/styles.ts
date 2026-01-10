@@ -1,0 +1,46 @@
+import { StyleSheet } from 'react-native';
+import { CHAT_COLOR, MAIN_ICON_COLOR } from '@/src/constants/Colors';
+
+export const styles = StyleSheet.create({
+  wrapper: {
+    paddingRight: '23%',
+    paddingTop: 12,
+    paddingBottom: 16,
+  },
+  container: {
+    backgroundColor: CHAT_COLOR,
+    paddingLeft: 18,
+    paddingRight: 18,
+    paddingTop: 12,
+    paddingBottom: 18,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    borderBottomRightRadius: 12,
+    alignSelf: 'flex-start',
+    maxWidth: '100%',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  header_content: {
+    flexDirection: 'row',
+    paddingBottom: 8,
+    gap: 8,
+    alignItems: 'center',
+  },
+  name: {
+    fontSize: 12,
+    fontFamily: 'NotoSans_600SemiBold',
+    color: '#fff',
+    textTransform: 'capitalize',
+  },
+  time: {
+    fontSize: 13,
+    color: MAIN_ICON_COLOR,
+    fontFamily: 'NotoSans_400Regular',
+  },
+  button_complaint: {
+    marginLeft: 15,
+  },
+});

@@ -14,6 +14,12 @@ module.exports = {
 
     plugins: [
       [
+        "expo-router",
+        {
+          "root": "./src/app"
+        }
+      ],
+      [
         "expo-notifications",
         {
           icon: "./assets/images/notification-icon.png",
