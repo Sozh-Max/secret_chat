@@ -5,4 +5,4 @@ import { styles } from '@/pages/SettingsPage/content/tokens-buy/content/price/st
 export const Price = (
   { value }: { value: number}
 ) =>
-  <Text style={styles.text}>$ {value}</Text>
+  <Text style={styles.text}>$ {value.toFixed(2)}</Text>

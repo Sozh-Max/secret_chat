@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native';
 import { IconBackBtn } from '@/components/icons/IconBackBtn';
-import { styles } from '@/pages/SettingsPage/content/Header/styles';
+import { styles } from '@/pages/SettingsPage/content/header/styles';
 import { router } from 'expo-router';
 import { AnimatedPressBtn } from '@/components/AnimatedPressBtn/AnimatedPressBtn';
 import { SUB_MAIN_ICON_COLOR } from '@/constants/Colors';

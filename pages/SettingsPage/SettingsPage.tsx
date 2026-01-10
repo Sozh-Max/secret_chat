@@ -2,7 +2,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { View, ScrollView } from 'react-native';
 
 import { SafeAreaInsectComponent } from '@/components/SafeAreaInsectComponent/SafeAreaInsectComponent';
-import { Header } from '@/pages/SettingsPage/content/Header/Header';
+import { Header } from '@/pages/SettingsPage/content/header/Header';
 import { TemplateContent } from '@/components/TemplateContent/TemplateContent';
 import { styles } from '@/pages/SettingsPage/styles';
 import { AccountData } from '@/pages/SettingsPage/content/account-data/AccountData';
