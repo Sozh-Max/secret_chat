@@ -5,8 +5,8 @@ export const styles = StyleSheet.create({
   text: {
     fontFamily: TEXT_BOLD,
     color: 'white',
-    fontSize: 16,
-    lineHeight: 20,
+    fontSize: 14,
+    lineHeight: 18,
     textAlign: 'right',
   },
 });

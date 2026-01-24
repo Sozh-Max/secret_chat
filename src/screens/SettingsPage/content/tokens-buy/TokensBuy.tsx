@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, Pressable, View, StyleProp, ViewStyle } from 'react-native';
+import { Animated, Pressable, View, StyleProp, ViewStyle, TextStyle } from 'react-native';
 
 import { CustomButton } from '@/src/components/CustomButton/CustomButton';
 import { CountItems } from '@/src/screens/SettingsPage/content/tokens-buy/content/count-items/CountItems';
@@ -18,6 +18,7 @@ export interface ITokenValue {
   activeColorBg: string;
   borderColor: string;
   buttonStyle: StyleProp<ViewStyle>;
+  buttonTextStyle: StyleProp<TextStyle>;
   component: React.ReactNode;
   price: number;
   oldPrice: number | null;
@@ -28,6 +29,7 @@ export const TokensBuy = () => {
     animatedValues,
     handlePress,
     buttonStyle,
+    buttonTextStyle,
   } = useTokensBuy();
 
   return (
@@ -60,8 +62,9 @@ export const TokensBuy = () => {
       </View>
       <View style={styles.btn_container}>
         <CustomButton
-          text="Buy Now"
+          text="Buy now"
           customStyle={buttonStyle}
+          customTextStyle={buttonTextStyle}
         />
       </View>
     </View>

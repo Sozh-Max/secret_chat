@@ -5,9 +5,9 @@ import { Text, View, Pressable } from 'react-native';
 import { AGENT_KEYS, IMG_THUMB_MAP } from '@/src/constants/agents-data';
 import { IDialogPreview } from '@/src/contexts/GlobalContext';
 import { IconPlayShort } from '@/src/components/icons/IconPlayShort';
-import { IconRating } from '@/src/components/icons/IconRating';
 import { IconBlock } from '@/src/components/icons/IconBlock';
 import { styles } from '@/src/screens/MaiPage/content/ChatCardShort/styles';
+import StarIcon from '@/assets/images/svg/star_icon.svg';
 
 const ChatCardShort = ({
   data,
@@ -56,7 +56,7 @@ const ChatCardShort = ({
         </Text>
       </View>
       <View style={styles.rating}>
-        <IconRating />
+        <StarIcon width={14} height={14} />
         <Text style={styles.rating_value}>{data.cost}</Text>
       </View>
     </Pressable>

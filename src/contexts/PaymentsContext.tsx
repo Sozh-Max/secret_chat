@@ -11,19 +11,19 @@ export const PaymentsProvider = ({ children }: { children: ReactNode }) => {
 
   const revenueCatServiceRef = useRef<RevenueCatService>(new RevenueCatService());
 
-  useEffect(() => {
-    revenueCatServiceRef.current.initRevenueCat();
-  }, []);
-
-  useEffect(() => {
-    const runRevenueAccount = async () => {
-      await revenueCatServiceRef.current.logout();
-      if (userId) {
-        await revenueCatServiceRef.current.login(userId);
-      }
-    }
-    runRevenueAccount();
-  }, [userId]);
+  // useEffect(() => {
+  //   revenueCatServiceRef.current.initRevenueCat();
+  // }, []);
+  //
+  // useEffect(() => {
+  //   const runRevenueAccount = async () => {
+  //     await revenueCatServiceRef.current.logout();
+  //     if (userId) {
+  //       await revenueCatServiceRef.current.login(userId);
+  //     }
+  //   }
+  //   runRevenueAccount();
+  // }, [userId]);
 
   return (
     <PaymentsContext.Provider

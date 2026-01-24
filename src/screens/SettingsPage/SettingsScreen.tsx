@@ -27,13 +27,13 @@ export const SettingsScreen = () => (
 
           <TemplateContent
             title="Balance"
+            description="To use chat features, view photos, or watch videos, users must have a sufficient star balance"
           >
             <Balance/>
           </TemplateContent>
 
           <TemplateContent
             title="Star purchase"
-            description="To use chat features, view photos, or watch videos, users must have a sufficient star balance"
           >
             <TokensBuy/>
           </TemplateContent>

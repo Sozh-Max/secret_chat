@@ -5,7 +5,6 @@ import { useGlobal } from '@/src/contexts/GlobalContext';
 import { IconMenu } from '@/src/components/icons/IconMenu';
 import { AnimatedPressBtn } from '@/src/components/AnimatedPressBtn/AnimatedPressBtn';
 import { router } from 'expo-router';
-import StarIcon from '@/assets/images/svg/star_icon.svg';
 import { styles } from '@/src/screens/MaiPage/content/header/styles';
 import { formatNumberWithCommas } from '@/src/utils/global';
 
@@ -27,7 +26,6 @@ export const Header = () => {
         />
       </View>
       <View style={styles.balance}>
-        <StarIcon width={14} height={14} />
         <Text style={styles.balance_text}>
           {formatNumberWithCommas(tokens)}
         </Text>

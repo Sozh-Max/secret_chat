@@ -6,7 +6,6 @@ import { useRef, useState } from 'react';
 import { IconBackBtn } from '@/src/components/icons/IconBackBtn';
 import { IMG_THUMB_MAP } from '@/src/constants/agents-data';
 import { IconRemove } from '@/src/components/icons/IconRemove';
-import { IconRating } from '@/src/components/icons/IconRating';
 import { ThemedText } from '@/src/components/ThemedText';
 import { IdTypeProps } from '@/src/interfaces/global';
 import { styles } from '@/src/screens/ChatPage/content/header/styles';
@@ -17,6 +16,7 @@ import { IconComplaint } from '@/src/components/icons/IconComplaint';
 import { useComplaint } from '@/src/contexts/ComplaintContext';
 import { useUser } from '@/src/contexts/UserContext';
 import { useApi } from '@/src/contexts/ApiContext';
+import StarIcon from '@/assets/images/svg/star_icon.svg';
 
 const Header = ({
   id,
@@ -99,7 +99,7 @@ const Header = ({
       <View style={styles.info}>
         <ThemedText style={styles.label}>{id}</ThemedText>
         <View style={styles.rating}>
-          <IconRating/>
+          <StarIcon width={14} height={14} />
           <Text style={styles.rating_value}>{dialog?.cost || 0}</Text>
         </View>
       </View>

@@ -5,8 +5,8 @@ export const styles = StyleSheet.create({
   text: {
     fontFamily: TEXT_REGULAR,
     color: '#969696',
-    fontSize: 12,
-    lineHeight: 17,
+    fontSize: 10,
+    lineHeight: 15,
     textDecorationLine: 'line-through',
     textAlign: 'right',
   },

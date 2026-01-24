@@ -1,4 +1,4 @@
-import { PressableProps, StyleProp, Text, ViewStyle } from 'react-native';
+import { PressableProps, StyleProp, Text, TextStyle, ViewStyle } from 'react-native';
 import { styles } from '@/src/components/CustomButton/styles';
 import { AnimatedPressBtn } from '@/src/components/AnimatedPressBtn/AnimatedPressBtn';
 import { ReactNode, RefObject } from 'react';
@@ -10,6 +10,7 @@ type CustomButtonProps = {
   disabled?: boolean;
   customRef?: RefObject<any> | null;
   customStyle?: StyleProp<ViewStyle>;
+  customTextStyle?: StyleProp<TextStyle>;
 }
 
 export const CustomButton = ({
@@ -19,6 +20,7 @@ export const CustomButton = ({
   disabled = false,
   customRef = null,
   customStyle,
+  customTextStyle,
 }: CustomButtonProps) => (
   <AnimatedPressBtn
     style={({ pressed }) => [
@@ -32,7 +34,7 @@ export const CustomButton = ({
     customRef={customRef}
   >
     {Icon && <>{Icon}</>}
-    <Text style={[styles.text, disabled && styles.text_disabled]}>
+    <Text style={[styles.text, disabled && styles.text_disabled, customTextStyle && customTextStyle]}>
       {text}
     </Text>
   </AnimatedPressBtn>

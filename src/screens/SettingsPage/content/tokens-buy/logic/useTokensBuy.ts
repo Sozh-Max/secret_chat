@@ -1,12 +1,15 @@
 import { useRef, useState } from 'react';
 import { TOKEN_VALUES } from '@/src/screens/SettingsPage/content/tokens-buy/constants';
-import { Animated, StyleProp, ViewStyle } from 'react-native';
-import { styles } from '@/src/screens/SettingsPage/content/tokens-buy/styles';
+import { Animated, StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { ITokenValue } from '@/src/screens/SettingsPage/content/tokens-buy/TokensBuy';
 
+const START_VALUE = 2;
+const START_TOKEN_VALUE = TOKEN_VALUES[START_VALUE];
+
 export const useTokensBuy = () => {
-  const [active, setActive] = useState<ITokenValue>(TOKEN_VALUES[0]);
-  const [buttonStyle, setButtonStyle] = useState<StyleProp<ViewStyle>>(styles.primary_button)
+  const [active, setActive] = useState<ITokenValue>(START_TOKEN_VALUE);
+  const [buttonStyle, setButtonStyle] = useState<StyleProp<ViewStyle>>(START_TOKEN_VALUE.buttonStyle);
+  const [buttonTextStyle, setButtonTextStyle] = useState<StyleProp<TextStyle>>(START_TOKEN_VALUE.buttonTextStyle);
 
   const animatedValues = useRef<Record<number, Animated.Value>>(Object.fromEntries(
     TOKEN_VALUES.map((val) => [val.id, new Animated.Value(val.id === active.id ? 1 : 0)])
@@ -26,11 +29,13 @@ export const useTokensBuy = () => {
     setActive(value);
     animate(value);
     setButtonStyle(value.buttonStyle);
+    setButtonTextStyle(value.buttonTextStyle);
   };
 
   return {
     animatedValues,
     handlePress,
     buttonStyle,
+    buttonTextStyle,
   }
 }

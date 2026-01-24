@@ -17,8 +17,8 @@ export const styles = StyleSheet.create({
     paddingVertical: 2,
   },
   text: {
-    fontSize: 11,
-    lineHeight: 14,
+    fontSize: 9,
+    lineHeight: 12,
     fontFamily: TEXT_REGULAR,
     color: COLOR,
   },

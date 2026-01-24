@@ -9,8 +9,9 @@ import StarsIcon2 from '@/assets/images/svg/stars_icon_2.svg';
 import StarsIcon3 from '@/assets/images/svg/stars_icon_3.svg';
 
 import { styles } from '@/src/screens/SettingsPage/content/tokens-buy/styles';
+import { ITokenValue } from '@/src/screens/SettingsPage/content/tokens-buy/TokensBuy';
 
-export const TOKEN_VALUES = [
+export const TOKEN_VALUES: ITokenValue[] = [
   {
     id: 1,
     value: 500,
@@ -18,6 +19,7 @@ export const TOKEN_VALUES = [
     activeColorBg: '#7070704D',
     borderColor: '#707070',
     buttonStyle: styles.primary_button,
+    buttonTextStyle: { color: '#ffffff' },
     component: <></>,
     price: 1.99,
     oldPrice: null,
@@ -29,6 +31,7 @@ export const TOKEN_VALUES = [
     activeColorBg: '#7070704D',
     borderColor: '#707070',
     buttonStyle: styles.primary_button,
+    buttonTextStyle: { color: '#ffffff' },
     component: <SmallSale />,
     price: 6.99,
     oldPrice: 9.95,
@@ -40,6 +43,7 @@ export const TOKEN_VALUES = [
     activeColorBg: '#D888354D',
     borderColor: '#D88835',
     buttonStyle: styles.secondary_button,
+    buttonTextStyle: { color: '#000000' },
     component: <MediumSale />,
     price: 11.99,
     oldPrice: 19.90,
@@ -51,6 +55,7 @@ export const TOKEN_VALUES = [
     activeColorBg: '#50AC0033',
     borderColor: '#50AC00',
     buttonStyle: styles.thirty_button,
+    buttonTextStyle: { color: '#000000' },
     component: <HighSale />,
     price: 19.99,
     oldPrice: 39.80,

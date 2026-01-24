@@ -75,7 +75,6 @@ export const useInactivityNotification = ({
     if (!messageData) return;
     currentMessageRef.current = null;
 
-
     const dialog = dialogs[messageData.agent];
     await messageService.sendMessage({
       id: messageData.agent,

@@ -36,6 +36,7 @@ export interface IDialog {
   description: string;
   lastMsgId: number;
   isNotification?: boolean;
+  isNotificationSend?: boolean;
 }
 
 export type Dialogs = { [key in AGENT_KEYS]?: IDialog }
@@ -63,6 +64,7 @@ export interface IDialogPreview {
   isComplaint?: boolean;
   hasVideo: boolean;
   isNotification?: boolean;
+  isNotificationSend?: boolean;
 }
 
 const refreshChats = ({
@@ -89,6 +91,7 @@ const refreshChats = ({
       isComplaint: dialog.isComplaint ?? false,
       hasVideo: dialog.hasVideo,
       isNotification: dialog.isNotification || false,
+      isNotificationSend: dialog.isNotificationSend || false,
     };
   }).sort((a, b) => b.lastMessageTime - a.lastMessageTime));
 }
@@ -150,6 +153,7 @@ export const GlobalProvider = (
               item.isComplaint = dialog.isComplaint || false;
               item.lastMsgId = dialog.lastMsgId || 0;
               item.isNotification = dialog.isNotification ?? false;
+              item.isNotificationSend = dialog.isNotificationSend ?? false;
             }
           }
         }
@@ -255,6 +259,7 @@ export const GlobalProvider = (
                 dialog.isComplaint = d.isComplaint;
                 dialog.lastMsgId = d.lastMsgId;
                 dialog.isNotification = d.isNotification ?? false;
+                dialog.isNotificationSend = d.isNotificationSend ?? false;
               }
             });
 
