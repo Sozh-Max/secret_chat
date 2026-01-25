@@ -1,6 +1,6 @@
 import { AGENT_KEYS } from '@/src/constants/agents-data';
 import { Dispatch, SetStateAction } from 'react';
-import { Dialogs, IDialog, IDialogItem } from '@/src/contexts/GlobalContext';
+import { IDialogs, IDialog, IDialogItem } from '@/src/contexts/GlobalContext';
 import { ROLES } from '@/src/api/constants';
 import { IMessage } from '@/src/api/interfaces';
 import { Api } from '@/src/api/api';
@@ -29,13 +29,13 @@ const setData = ({
 }: {
   replic: IMessage | null;
   id: AGENT_KEYS;
-  setDialogs: Dispatch<SetStateAction<Dialogs>>;
+  setDialogs: Dispatch<SetStateAction<IDialogs>>;
   timestamp: number;
   isBlocked: boolean;
   lastMsgId: number;
   role?: ROLES;
 }): void => {
-  setDialogs((d: Dialogs) => {
+  setDialogs((d: IDialogs) => {
     const current = {...d[id]};
     current.lastMsgId = lastMsgId;
     if (isBlocked) {
@@ -44,22 +44,38 @@ const setData = ({
 
     current.dialog = [...(current.dialog || [])];
 
-    if (!replic ||replic.role === ROLES.ASSISTANT || replic.role === ROLES.TYPING) {
-      current.dialog = current.dialog.filter(dialog => !checkTypingMessage(dialog));
-    }
+    // if (!replic || replic.role === ROLES.ASSISTANT || replic.role === ROLES.TYPING) {
+    //   current.dialog = current.dialog.filter(dialog => !checkTypingMessage(dialog));
+    // }
     current.isNotification = role === ROLES.APP;
 
     if (!isBlocked && replic) {
-      current.dialog.push({
-        replic,
-        createTime: timestamp ?? (Date.now() / 1000),
-      })
-      if (replic?.role === ROLES.USER) {
+      if (replic?.role === ROLES.ASSISTANT) {
+        const typingElement = current.dialog.find(elem => elem.replic.role === ROLES.TYPING);
+        if (typingElement) {
+          typingElement.replic = replic;
+          typingElement.createTime = timestamp ?? (Date.now() / 1000);
+        } else {
+          current.dialog.push({
+            replic,
+            createTime: timestamp ?? (Date.now() / 1000),
+          });
+        }
+      } else if (replic?.role === ROLES.USER) {
+        current.dialog.push({
+          replic,
+          createTime: timestamp ?? (Date.now() / 1000),
+        });
         current.dialog.push({
           replic: {
             content: '',
             role: ROLES.TYPING,
           },
+          createTime: timestamp ?? (Date.now() / 1000),
+        });
+      } else {
+        current.dialog.push({
+          replic,
           createTime: timestamp ?? (Date.now() / 1000),
         });
       }
@@ -88,7 +104,7 @@ export class MessageService {
     id: AGENT_KEYS;
     userId: string;
     message: string;
-    setDialogs: Dispatch<SetStateAction<Dialogs>>;
+    setDialogs: Dispatch<SetStateAction<IDialogs>>;
     assistantDialog: IDialogItem[];
     setLoading: (state: boolean) => void;
     setLastMsgGlobalId: Dispatch<SetStateAction<number>>;
@@ -121,7 +137,7 @@ export class MessageService {
         messages: [
           ...assistantDialog?.map((dialog) => dialog.replic),
           replic,
-        ]
+        ],
       }).then(async (data) => {
         if (data.ok) {
           // @ts-ignore
@@ -167,10 +183,10 @@ export class MessageService {
     lastMsgId,
   }:  {
     id: AGENT_KEYS;
-    setDialogs: Dispatch<SetStateAction<Dialogs>>;
+    setDialogs: Dispatch<SetStateAction<IDialogs>>;
     lastMsgId: number;
   }): void {
-    setDialogs((d: Dialogs) => {
+    setDialogs((d: IDialogs) => {
       const current = {...d[id]};
       current.dialog = [];
       current.lastMsgId = lastMsgId;
@@ -195,10 +211,10 @@ export class MessageService {
     id,
     setDialogs,
   }: {
-    setDialogs: Dispatch<SetStateAction<Dialogs>>,
+    setDialogs: Dispatch<SetStateAction<IDialogs>>,
     id: AGENT_KEYS,
   }) {
-    setDialogs((d: Dialogs) => {
+    setDialogs((d: IDialogs) => {
       const current = {...d[id]};
       current.isComplaint = true;
 

@@ -8,7 +8,6 @@ import { SystemMessage } from '@/src/screens/ChatPage/content/system-message/Sys
 import { IdTypeProps } from '@/src/interfaces/global';
 import { useGlobal } from '@/src/contexts/GlobalContext';
 import { CombinerMessage } from '@/src/screens/ChatPage/content/combiner-message/CombinerMessage';
-import { TypingComponent } from '@/src/screens/ChatPage/content/typing-component/TypingComponent';
 import { useKeyboardStatus } from '@/src/hooks/useKeyboardStatus';
 import { useComplaint } from '@/src/contexts/ComplaintContext';
 import {
@@ -87,12 +86,13 @@ export const ChatWrapper = ({
         data={messagesToRender}
         keyExtractor={(_, i) => i.toString()}
         renderItem={({ item }) => (
-          <>
-            {(checkTypingMessage(item))
-              ? <TypingComponent />
-              : <CombinerMessage dialog={item} id={id} />
-            }
-          </>
+          // <>
+          //   {(checkTypingMessage(item))
+          //     ? <TypingComponent />
+          //     : <CombinerMessage dialog={item} id={id} />
+          //   }
+          // </>
+          <CombinerMessage dialog={item} id={id} />
         )}
         ListHeaderComponent={
           <>

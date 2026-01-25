@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { IDialogItem, useGlobal } from '@/src/contexts/GlobalContext';
 import { IconResponse } from '@/src/components/icons/IconResponse';
@@ -11,6 +11,8 @@ import { AnimatedPressBtn } from '@/src/components/AnimatedPressBtn/AnimatedPres
 import { useComplaint } from '@/src/contexts/ComplaintContext';
 import { IconComplaintFlag } from '@/src/components/icons/IconComplaintFlag';
 import { getHoursAndMinutesFromMs } from '@/src/services/message-service';
+import { ROLES } from '@/src/api/constants';
+import { TypingDots } from '@/src/screens/ChatPage/content/assistant-message/content/tree-dots/ThreeDots';
 
 export const AssistantMessage = ({
   dialog,
@@ -34,27 +36,36 @@ export const AssistantMessage = ({
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
-        <View style={styles.header}>
-          <View style={styles.header_content}>
-            <IconResponse/>
-            <Text style={styles.name}>{id}</Text>
-            <Text style={styles.time}>{getHoursAndMinutesFromMs(dialog.createTime)}</Text>
-          </View>
-          <AnimatedPressBtn
-            style={styles.button_complaint}
-            onPress={handlePressComplaint}
-          >
-            <IconComplaintFlag
-              color={(userDialog?.isComplaint || userDialog?.isBlocked) ? DISMISS_ICON_COLOR : MAIN_ICON_COLOR}
-            />
-          </AnimatedPressBtn>
-        </View>
-        <View style={{ gap: 4, flexWrap: 'wrap' }}>
-          <RenderParts
-            part={content}
-            id={id}
-          />
-        </View>
+        {dialog.replic.role === ROLES.TYPING
+          ? (
+            <TypingDots />
+          )
+           : (
+             <>
+               <View style={styles.header}>
+                 <View style={styles.header_content}>
+                   <IconResponse/>
+                   <Text style={styles.name}>{id}</Text>
+                   <Text style={styles.time}>{getHoursAndMinutesFromMs(dialog.createTime)}</Text>
+                 </View>
+                 <AnimatedPressBtn
+                   style={styles.button_complaint}
+                   onPress={handlePressComplaint}
+                 >
+                   <IconComplaintFlag
+                     color={(userDialog?.isComplaint || userDialog?.isBlocked) ? DISMISS_ICON_COLOR : MAIN_ICON_COLOR}
+                   />
+                 </AnimatedPressBtn>
+               </View>
+               <View style={{ gap: 4, flexWrap: 'wrap' }}>
+                 <RenderParts
+                   part={content}
+                   id={id}
+                 />
+               </View>
+             </>
+          )
+        }
       </View>
     </View>
   );

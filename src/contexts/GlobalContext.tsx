@@ -15,7 +15,7 @@ import { useGooglePlayInstallReferrer } from '@/src/hooks/useGooglePlayInstallRe
 import { useUser } from '@/src/contexts/UserContext';
 import * as NavigationBar from 'expo-navigation-bar';
 import { useInactivityNotification } from '@/src/hooks/useInactivityNotification';
-import { getNotificationsByUserId, setNotificationsByUserId } from '@/src/utils/global';
+import { getNotifications } from '@/src/utils/global';
 import { ROLES } from '@/src/api/constants';
 import { Platform, Vibration } from 'react-native';
 import { PLATFORM } from '@/src/services/constants';
@@ -39,13 +39,13 @@ export interface IDialog {
   isNotificationSend?: boolean;
 }
 
-export type Dialogs = { [key in AGENT_KEYS]?: IDialog }
+export type IDialogs = { [key in AGENT_KEYS]?: IDialog }
 
 type GlobalContextType = {
   tokens: number;
-  dialogs: Dialogs;
+  dialogs: IDialogs;
   dialogPreview: IDialogPreview[];
-  setDialogs: Dispatch<SetStateAction<Dialogs>>;
+  setDialogs: Dispatch<SetStateAction<IDialogs>>;
   updateBalance: (amount: number) => void;
   deviceRegion: string;
   activeChatVideoId: number;
@@ -71,7 +71,7 @@ const refreshChats = ({
   dialogs,
   setDialogPreview,
 }: {
-  dialogs: Dialogs;
+  dialogs: IDialogs;
   setDialogPreview: Dispatch<SetStateAction<IDialogPreview[]>>;
 }) => {
   setDialogPreview(INIT_AGENT_LIST.map((key: AGENT_KEYS) => {
@@ -103,7 +103,7 @@ export const GlobalProvider = (
   { children: ReactNode }
 ) => {
   const [tokens, setTokens] = useState<number>(0);
-  const [dialogs, setDialogs] = useState<Dialogs>({});
+  const [dialogs, setDialogs] = useState<IDialogs>({});
   const [dialogPreview, setDialogPreview] = useState<IDialogPreview[]>([]);
   const [deviceRegion] = useState<string>(mainUtils.getDeviceRegion());
   const [activeChatVideoId, setActiveChatVideoId] = useState<number>(0);
@@ -190,8 +190,8 @@ export const GlobalProvider = (
   }, []);
 
   const clearDialogs = useCallback(() => {
-    setDialogs((dialogs: Dialogs) => {
-      const newDialogs: Dialogs = {};
+    setDialogs((dialogs: IDialogs) => {
+      const newDialogs: IDialogs = {};
 
       for (const key in dialogs) {
         const value = dialogs[key as AGENT_KEYS];
@@ -283,17 +283,12 @@ export const GlobalProvider = (
   useEffect(() => {
     const checkFirstMessage = async () => {
       try {
-        const notifications = await getNotificationsByUserId(userId);
+        const notifications = await getNotifications(dialogs);
 
         const currentNotice =  notifications.find((note) => note.active && !note.done);
 
         if (currentNotice) {
           setTimeout(async () => {
-            await setNotificationsByUserId(userId, notifications.map((data) => ({
-              ...data,
-              done: data.id === currentNotice?.id ? true: data.done,
-            })));
-
             const currentDialog = dialogs[currentNotice.agent];
             if (!currentDialog) return;
 

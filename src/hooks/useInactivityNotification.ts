@@ -3,9 +3,9 @@ import { AppState, Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import { useUser } from '@/src/contexts/UserContext';
-import { getNotificationsByUserId, IMessageTemplate, setNotificationsByUserId } from '@/src/utils/global';
+import { getNotifications, IMessageTemplate } from '@/src/utils/global';
 import { ROLES } from '@/src/api/constants';
-import { Dialogs } from '@/src/contexts/GlobalContext';
+import { IDialogs } from '@/src/contexts/GlobalContext';
 import { useApi } from '@/src/contexts/ApiContext';
 
 const CHANEL_NAME = 'motivational_channel';
@@ -58,8 +58,8 @@ export const useInactivityNotification = ({
   dialogs,
   setLastMsgGlobalId,
 }: {
-  setDialogs: Dispatch<SetStateAction<Dialogs>>;
-  dialogs: Dialogs;
+  setDialogs: Dispatch<SetStateAction<IDialogs>>;
+  dialogs: IDialogs;
   setLastMsgGlobalId: Dispatch<SetStateAction<number>>;
 }) => {
   const appState = useRef(AppState.currentState);
@@ -106,15 +106,6 @@ export const useInactivityNotification = ({
     //
     //   return dialogs;
     // });
-
-    const notifications = await getNotificationsByUserId(userId);
-
-    if (notifications) {
-      await setNotificationsByUserId(userId, notifications.map((data) => ({
-        ...data,
-        done: data.id === messageData?.id ? true: data.done,
-      })));
-    }
   }
 
   // Функция запроса прав (Критично для Android 13+)
@@ -151,7 +142,7 @@ export const useInactivityNotification = ({
     try {
       await Notifications.cancelAllScheduledNotificationsAsync();
 
-      const notifications = await getNotificationsByUserId(userId);
+      const notifications = await getNotifications(dialogs);
       const message = notifications.find((m) => !m.done && !m.active);
       if (!message?.title && !message?.body) return;
 

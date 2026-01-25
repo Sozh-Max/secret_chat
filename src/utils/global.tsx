@@ -1,7 +1,5 @@
-import { AsyncStorageService } from '@/src/services/async-storage-service';
-import { LOCAL_STORAGE_KEYS } from '@/src/services/constants';
 import { AGENT_KEYS } from '@/src/constants/agents-data';
-import { IDialogItem } from '@/src/contexts/GlobalContext';
+import { IDialogs, IDialogItem, IDialog } from '@/src/contexts/GlobalContext';
 import { ROLES } from '@/src/api/constants';
 
 export interface IMessageTemplate {
@@ -48,58 +46,22 @@ export const checkIsDigit = (str: string): boolean => {
   return /^\d+$/.test(str);
 }
 
-export const getNotificationsByUserId = async (userId: string): Promise<IMessageTemplate[]> => {
+export const getNotifications = async (dialogs: IDialogs): Promise<IMessageTemplate[]> => {
   try {
-    const notificationsString = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.NOTIFICATIONS);
-    const notifications = JSON.parse(notificationsString || '{}');
-    const NEW_MESSAGE_TEMPLATES = [...MESSAGE_TEMPLATES];
+    const NEW_MESSAGE_TEMPLATES: IMessageTemplate[] = [];
 
-    if (!notifications) {
-      const newNotifications = {
-        [userId]: NEW_MESSAGE_TEMPLATES,
+    for (const message of MESSAGE_TEMPLATES) {
+      const dialog = dialogs[message.agent] as IDialog;
+
+      if (dialog && !dialog.isNotificationSend) {
+        NEW_MESSAGE_TEMPLATES.push(message);
       }
-      await AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(newNotifications));
-
-      return NEW_MESSAGE_TEMPLATES;
     }
-    // @ts-ignore
-    const userNotifications = notifications[userId];
-
-    if (userNotifications) {
-      return userNotifications as IMessageTemplate[];
-    }
-
-    // @ts-ignore
-    notifications[userId] = NEW_MESSAGE_TEMPLATES;
-
-    await AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(notifications));
 
     return NEW_MESSAGE_TEMPLATES;
   } catch (e) {
     console.log(`Error in getNotificationsByUserId: ${e}`);
     return MESSAGE_TEMPLATES;
-  }
-}
-
-export const setNotificationsByUserId = async (
-  userId: string,
-  data: IMessageTemplate[],
-): Promise<void> => {
-  try {
-    const notificationsString = await AsyncStorageService.getData(LOCAL_STORAGE_KEYS.NOTIFICATIONS);
-    const notifications = JSON.parse(notificationsString || '{}');
-    if (notifications) {
-      // @ts-ignore
-      notifications[userId] = data;
-      await AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(notifications));
-    } else {
-      const newNotifications = {
-        [userId]: data,
-      }
-      await AsyncStorageService.storeData(LOCAL_STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(newNotifications));
-    }
-  } catch (e) {
-    console.log(`Error in setNotificationsByUserId: ${e}`);
   }
 }
 
