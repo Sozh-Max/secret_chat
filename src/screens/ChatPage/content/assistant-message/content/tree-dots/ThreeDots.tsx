@@ -1,16 +1,10 @@
 import React, { JSX, useEffect, useRef } from "react";
-import {
-  View,
-  Animated,
-  StyleSheet,
-  ViewStyle,
-  TextStyle,
-} from "react-native";
+import { View, Animated, StyleSheet, ViewStyle } from "react-native";
 
 const DOT_COUNT = 3;
 
-const FADE_IN_DURATION = 180;
-const FADE_OUT_DURATION = 220;
+const FADE_IN_DURATION = 150;
+const FADE_OUT_DURATION = 200;
 const WAVE_PAUSE = 150;
 
 export const TypingDots = (): JSX.Element => {
@@ -64,54 +58,47 @@ export const TypingDots = (): JSX.Element => {
   }, [dots]);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} needsOffscreenAlphaCompositing>
       {dots.map((dot: Animated.Value, index: number) => (
-        <Animated.Text
+        <Animated.View
           key={index}
           style={[
             styles.dot,
             {
-              opacity: dot.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0.3, 1],
-              }),
               transform: [
                 {
                   scale: dot.interpolate({
                     inputRange: [0, 1],
-                    outputRange: [1, 1.5],
-                  }),
-                },
-                {
-                  translateY: dot.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [0, -1.5],
+                    outputRange: [1, 1.7],
                   }),
                 },
               ],
             },
           ]}
-        >
-          .
-        </Animated.Text>
+        />
       ))}
     </View>
   );
-}
+};
 
 interface Styles {
   container: ViewStyle;
-  dot: TextStyle;
+  dot: ViewStyle;
 }
+
+const DOT_SIZE = 4;
 
 const styles = StyleSheet.create<Styles>({
   container: {
     flexDirection: "row",
     alignItems: "center",
+    paddingTop: 10,
   },
   dot: {
-    fontSize: 24,
+    width: DOT_SIZE,
+    height: DOT_SIZE,
+    borderRadius: DOT_SIZE / 2,
     marginHorizontal: 3,
-    color: '#ffffff',
+    backgroundColor: "rgba(255,255,255,1)",
   },
 });

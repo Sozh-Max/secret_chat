@@ -108,6 +108,7 @@ export const GlobalProvider = (
   const [deviceRegion] = useState<string>(mainUtils.getDeviceRegion());
   const [activeChatVideoId, setActiveChatVideoId] = useState<number>(0);
   const [lastMsgGlobalId, setLastMsgGlobalId] = useState<number>(0);
+  const [isFirstCheck, setIsFirstCheck] = useState<boolean>(false);
 
   const { userId, bootId, isCheckAuthorized } = useUser();
   const { api, messageService } = useApi();
@@ -226,58 +227,58 @@ export const GlobalProvider = (
   }, [dialogs, setDialogPreview]);
 
   useEffect(() => {
-    const id = setInterval(async () => {
-      try {
-        if (userId) {
-          const dialogsData = [];
-          for (const key in dialogs) {
-            // @ts-ignore
-            const dialog: IDialog = dialogs[key];
-            dialogsData.push({
-              assistantId: dialog.id,
-              lastMsgId: dialog.lastMsgId,
-            });
-          }
-          const data = await api.syncDialogs({
-            userId,
-            lastMsgGlobalId,
-            data: dialogsData,
-          });
+    // const id = setInterval(async () => {
+    //   try {
+    //     if (userId) {
+    //       const dialogsData = [];
+    //       for (const key in dialogs) {
+    //         // @ts-ignore
+    //         const dialog: IDialog = dialogs[key];
+    //         dialogsData.push({
+    //           assistantId: dialog.id,
+    //           lastMsgId: dialog.lastMsgId,
+    //         });
+    //       }
+    //       const data = await api.syncDialogs({
+    //         userId,
+    //         lastMsgGlobalId,
+    //         data: dialogsData,
+    //       });
+    //
+    //       if (data?.balance) {
+    //         setTokens(data.balance);
+    //       }
+    //
+    //       setDialogs(((dialogs) => {
+    //         // @ts-ignore
+    //         data.dialogs?.forEach((d) => {
+    //           // @ts-ignore
+    //           const dialog = dialogs[d.id];
+    //           if (dialog) {
+    //             dialog.dialog = d.dialog;
+    //             dialog.isBlocked = d.isBlocked;
+    //             dialog.isComplaint = d.isComplaint;
+    //             dialog.lastMsgId = d.lastMsgId;
+    //             dialog.isNotification = d.isNotification ?? false;
+    //             dialog.isNotificationSend = d.isNotificationSend ?? false;
+    //           }
+    //         });
+    //
+    //         return {
+    //           ...dialogs,
+    //         }
+    //       }));
+    //       setLastMsgGlobalId(data.lastMsgGlobalId);
+    //     }
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
+    //
+    // }, 5000);
 
-          if (data?.balance) {
-            setTokens(data.balance);
-          }
-
-          setDialogs(((dialogs) => {
-            // @ts-ignore
-            data.dialogs?.forEach((d) => {
-              // @ts-ignore
-              const dialog = dialogs[d.id];
-              if (dialog) {
-                dialog.dialog = d.dialog;
-                dialog.isBlocked = d.isBlocked;
-                dialog.isComplaint = d.isComplaint;
-                dialog.lastMsgId = d.lastMsgId;
-                dialog.isNotification = d.isNotification ?? false;
-                dialog.isNotificationSend = d.isNotificationSend ?? false;
-              }
-            });
-
-            return {
-              ...dialogs,
-            }
-          }));
-          setLastMsgGlobalId(data.lastMsgGlobalId);
-        }
-      } catch (e) {
-        console.log(e);
-      }
-
-    }, 5000);
-
-    return () => {
-      clearInterval(id);
-    }
+    // return () => {
+    //   clearInterval(id);
+    // }
   }, [userId, lastMsgGlobalId, dialogs, setDialogs]);
 
   useEffect(() => {
@@ -288,6 +289,7 @@ export const GlobalProvider = (
         const currentNotice =  notifications.find((note) => note.active && !note.done);
 
         if (currentNotice) {
+          setIsFirstCheck(true);
           setTimeout(async () => {
             const currentDialog = dialogs[currentNotice.agent];
             if (!currentDialog) return;
@@ -313,10 +315,10 @@ export const GlobalProvider = (
       }
     }
 
-    if (userId && dialogs?.elise && Platform.OS === PLATFORM.ANDROID) {
+    if (!isFirstCheck && userId && dialogs?.elise && Platform.OS === PLATFORM.ANDROID) {
       checkFirstMessage();
     }
-  }, [userId, dialogs?.elise, setDialogs]);
+  }, [userId, dialogs?.elise, setDialogs, isFirstCheck]);
 
   const updateBalance = async (amount: number) => {
     const requestData = await api.addBalance(amount, userId);

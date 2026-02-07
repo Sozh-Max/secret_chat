@@ -4,7 +4,6 @@ import { IDialogs, IDialog, IDialogItem } from '@/src/contexts/GlobalContext';
 import { ROLES } from '@/src/api/constants';
 import { IMessage } from '@/src/api/interfaces';
 import { Api } from '@/src/api/api';
-import { checkTypingMessage } from '@/src/utils/global';
 
 function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -44,9 +43,6 @@ const setData = ({
 
     current.dialog = [...(current.dialog || [])];
 
-    // if (!replic || replic.role === ROLES.ASSISTANT || replic.role === ROLES.TYPING) {
-    //   current.dialog = current.dialog.filter(dialog => !checkTypingMessage(dialog));
-    // }
     current.isNotification = role === ROLES.APP;
 
     if (!isBlocked && replic) {
@@ -157,7 +153,8 @@ export class MessageService {
               clearInterval(intervalId);
 
               if (responseData) {
-                setLastMsgGlobalId(responseData.lastMsgGlobalId)
+                setLastMsgGlobalId(responseData.lastMsgGlobalId);
+                setLoading(false);
                 setData({
                   replic: replic ?? null,
                   id,
@@ -171,7 +168,7 @@ export class MessageService {
             }
           }, 100);
         }
-      }).finally(() => {
+      }).catch(() => {
         setLoading(false);
       });
     }, timeout);

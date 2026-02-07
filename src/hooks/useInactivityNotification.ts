@@ -7,6 +7,7 @@ import { getNotifications, IMessageTemplate } from '@/src/utils/global';
 import { ROLES } from '@/src/api/constants';
 import { IDialogs } from '@/src/contexts/GlobalContext';
 import { useApi } from '@/src/contexts/ApiContext';
+import { AGENT_KEYS } from '@/src/constants/agents-data';
 
 const CHANEL_NAME = 'motivational_channel';
 
@@ -52,7 +53,6 @@ Notifications.setNotificationHandler({
   }),
 });
 
-
 export const useInactivityNotification = ({
   setDialogs,
   dialogs,
@@ -66,6 +66,7 @@ export const useInactivityNotification = ({
   const [permissionGranted, setPermissionGranted] = useState(false);
   const { userId } = useUser();
   const { messageService } = useApi();
+  const wasNotifiedAgentsRef = useRef<Set<AGENT_KEYS>>(new Set());
 
   const currentMessageRef = useRef<IMessageTemplate | null>(null);
   const currentMessageTimeRef = useRef<number>(0);
@@ -73,6 +74,9 @@ export const useInactivityNotification = ({
   const setNewBotMessage = async () => {
     const messageData = currentMessageRef.current;
     if (!messageData) return;
+    if (wasNotifiedAgentsRef.current.has(messageData.agent)) return;
+    wasNotifiedAgentsRef.current.add(messageData.agent);
+
     currentMessageRef.current = null;
 
     const dialog = dialogs[messageData.agent];
@@ -143,6 +147,7 @@ export const useInactivityNotification = ({
       await Notifications.cancelAllScheduledNotificationsAsync();
 
       const notifications = await getNotifications(dialogs);
+
       const message = notifications.find((m) => !m.done && !m.active);
       if (!message?.title && !message?.body) return;
 
@@ -158,6 +163,7 @@ export const useInactivityNotification = ({
           title: message.title,
           body: message.body,
           sound: true,
+          data: { agent: message.agent },
         } as Notifications.NotificationContentInput,
         trigger: {
           type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
@@ -188,6 +194,7 @@ export const useInactivityNotification = ({
       registerForPushNotificationsAsync();
 
       const responseListener = Notifications.addNotificationResponseReceivedListener(() => {
+
         // console.log('Пользователь взаимодействовал с уведомлением!', {
         //   notificationId: response.notification.request.identifier,
         //   actionId: response.actionIdentifier,

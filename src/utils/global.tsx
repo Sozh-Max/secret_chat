@@ -46,7 +46,9 @@ export const checkIsDigit = (str: string): boolean => {
   return /^\d+$/.test(str);
 }
 
-export const getNotifications = async (dialogs: IDialogs): Promise<IMessageTemplate[]> => {
+export const getNotifications = async (
+  dialogs: IDialogs,
+): Promise<IMessageTemplate[]> => {
   try {
     const NEW_MESSAGE_TEMPLATES: IMessageTemplate[] = [];
 
@@ -57,7 +59,6 @@ export const getNotifications = async (dialogs: IDialogs): Promise<IMessageTempl
         NEW_MESSAGE_TEMPLATES.push(message);
       }
     }
-
     return NEW_MESSAGE_TEMPLATES;
   } catch (e) {
     console.log(`Error in getNotificationsByUserId: ${e}`);
