@@ -4,6 +4,7 @@ export const styles = StyleSheet.create({
   container: {
     // position: 'fixed',
     flexDirection: 'row',
+    alignItems: 'center',
     height: 50,
     // left: 0,
     // bottom: 0,
@@ -16,6 +17,31 @@ export const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  uploadedImageWrapper: {
+    width: 50,
+    height: 50,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  uploadedImageContainer: {
+    position: 'relative',
+    width: 40,
+    height: 40,
+  },
+  uploadedImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 3,
+  },
+  uploadedImageRemove: {
+    width: 16,
+    height: 16,
+    position: 'absolute',
+    right: -5,
+    top: -5,
+    zIndex: 10,
   },
   button_start: {
     paddingLeft: 4,

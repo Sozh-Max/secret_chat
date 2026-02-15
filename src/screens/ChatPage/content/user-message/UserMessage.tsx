@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { IDialogItem } from '@/src/contexts/GlobalContext';
 import { styles } from '@/src/screens/ChatPage/content/user-message/styles';
 import { IconResponse } from '@/src/components/icons/IconResponse';
@@ -19,6 +19,15 @@ export const UserMessage = ({
         </View>
       </View>
       <Text style={styles.content}>{dialog.replic.content}</Text>
+      {dialog.replic.imageUrl && (
+        <Image
+          source={{
+            uri: dialog.replic.imageUrl,
+          }}
+          style={styles.image}
+          resizeMode="contain"
+        />
+      )}
     </View>
   </View>
 )

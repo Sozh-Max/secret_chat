@@ -96,6 +96,7 @@ export class MessageService {
     setLoading,
     setLastMsgGlobalId,
     role = ROLES.USER,
+    imageUrl = null,
   }: {
     id: AGENT_KEYS;
     userId: string;
@@ -105,10 +106,12 @@ export class MessageService {
     setLoading: (state: boolean) => void;
     setLastMsgGlobalId: Dispatch<SetStateAction<number>>;
     role?: ROLES;
+    imageUrl?: string | null;
   }): Promise<void> {
     const replic: IMessage = {
       content: message,
       role: role,
+      imageUrl,
     };
     if (role !== ROLES.APP) {
       setLoading(true);

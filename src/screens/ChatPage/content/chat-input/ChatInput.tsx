@@ -1,9 +1,8 @@
-import { Pressable, TextInput, View, Text } from 'react-native';
+import { Pressable, TextInput, View, Image } from 'react-native';
 import IconSend from '@/src/components/icons/IconSend';
-import IconSmile from '@/src/components/icons/IconSmile';
+import IconImage from '@/src/components/icons/IconImage';
 import { useEffect, useState } from 'react';
 import { MAIN_ICON_COLOR, DISMISS_ICON_COLOR, SUB_MAIN_ICON_COLOR } from '@/src/constants/Colors';
-import { EMOJI_LIST } from '@/src/screens/ChatPage/content/chat-input/constants';
 import { AnimatedPressBtn } from '@/src/components/AnimatedPressBtn/AnimatedPressBtn';
 import { IdTypeProps } from '@/src/interfaces/global';
 import { useGlobal } from '@/src/contexts/GlobalContext';
@@ -11,11 +10,31 @@ import { styles } from '@/src/screens/ChatPage/content/chat-input/styles';
 import { useUser } from '@/src/contexts/UserContext';
 import { CLEAR_HISTORY_SYMBOLS } from '@/src/constants/global';
 import { useApi } from '@/src/contexts/ApiContext';
+import { pickImage } from '@/src/utils/pick-image';
+import IconCloseCircle from '@/src/components/icons/IconCloseCircle';
 
 interface ChatInputProps extends IdTypeProps {
   setLoading: (loading: boolean) => void;
   loading: boolean;
 }
+
+const transformUploadedSize = (w: number, h: number, size = 40) => {
+  const def = { width: size, height: size };
+
+  if (!w || !h) return def;
+
+  const ratio = w / h;
+
+  if (ratio > 1) {
+    return { width: size, height: size / ratio };
+  }
+
+  if (ratio < 1) {
+    return { width: size * ratio, height: size };
+  }
+
+  return def;
+};
 
 const ChatInput = ({
   id,
@@ -23,26 +42,48 @@ const ChatInput = ({
   loading,
 }: ChatInputProps) => {
   const [text, setText] = useState<string>('');
-  const [isVisiblePicker, setIsVisiblePicker] = useState<boolean>(false);
+  const [uploadUrl, setUploadUrl] = useState<string | null>(null);
+  const [loadingImage, setLoadingImage] = useState<boolean>(false);
+  const [uploadImageSizes, setUploadImageSizes] = useState<{width: number; height: number;}>({
+    width: 0,
+    height: 0,
+  });
+  const [localPreviewUri, setLocalPreviewUri] = useState<string | null>(null);
   const { dialogs, setDialogs, tokens, updateBalance, setLastMsgGlobalId } = useGlobal();
   const { userId, logout } = useUser();
   const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
   const { messageService } = useApi();
   const dialog = dialogs[id];
+  const { api } = useApi();
 
   const isBlocked = dialog?.isBlocked || dialog?.isComplaint;
+  const globalLoading = loading || loadingImage;
 
-  const handlePressEmoji = (emoji: string) => {
-    if (!isBlocked) {
-      setText(text => text + emoji);
-    }
-  };
 
-  const handleToggleEmojiPicker = () => {
-    if (!isBlocked) {
-      setIsVisiblePicker(val => !val);
+  const selectPicture = async () => {
+    if (isBlocked || globalLoading) return;
+    try {
+      const asset = await pickImage();
+      if (asset) {
+        setLoadingImage(true);
+        setLocalPreviewUri(asset.uri)
+        setUploadImageSizes({
+          width: asset.width || 0,
+          height: asset.height || 0,
+        })
+        const { data } = await api.uploadPicture({ userId: userId, fileUri: asset.uri });
+        if (data.url) {
+          setUploadUrl(data.url);
+        }
+      }
+    } catch(e) {
+      console.log(e);
+      clearUploadedImage();
+    } finally {
+      setLoadingImage(false);
     }
-  };
+  }
+
 
   const sendMessage = async () => {
     if (tokens - (dialog?.cost || 0) < 0) {
@@ -50,8 +91,9 @@ const ChatInput = ({
       return;
     }
 
-    if (!isBlocked && !loading && text.trim()) {
+    if (!isBlocked && !globalLoading && text.trim()) {
       setText('');
+      clearUploadedImage();
       updateBalance(-(dialog?.cost || 0));
 
       await messageService.sendMessage({
@@ -62,6 +104,7 @@ const ChatInput = ({
         assistantDialog: dialog?.dialog || [],
         setLoading,
         setLastMsgGlobalId,
+        imageUrl: uploadUrl || null,
       });
     }
 
@@ -71,17 +114,55 @@ const ChatInput = ({
   };
 
   useEffect(() => {
-    if (isBlocked || loading) {
-      setIsVisiblePicker(false);
+    if (isBlocked || globalLoading) {
       setText('');
     }
-  }, [isBlocked, loading, setIsVisiblePicker]);
+  }, [
+    isBlocked,
+    globalLoading,
+  ]);
+
+  const clearUploadedImage = () => {
+    setLocalPreviewUri(null);
+    setUploadUrl(null);
+  }
+
+  // const previewUri = uploadUrl || localPreviewUri;
+  const previewUri = localPreviewUri;
+
+  const { width: imgW, height: imgH } = transformUploadedSize(uploadImageSizes.width, uploadImageSizes.height);
 
   return (
     <View style={styles.container}>
-      <AnimatedPressBtn style={[styles.button, styles.button_start]} onPress={handleToggleEmojiPicker}>
-        <IconSmile color={isBlocked ? DISMISS_ICON_COLOR : MAIN_ICON_COLOR}/>
-      </AnimatedPressBtn>
+      {previewUri ? (
+        <View
+          style={styles.uploadedImageWrapper}
+        >
+          <View style={{
+            ...styles.uploadedImageContainer,
+            width: imgW,
+            height: imgH,
+          }}>
+            <Pressable style={styles.uploadedImageRemove} onPress={clearUploadedImage}>
+              <IconCloseCircle size={16} />
+            </Pressable>
+            <Image
+              source={{ uri: previewUri as string }}
+              style={{
+                ...styles.uploadedImage,
+                width: imgW,
+                height: imgH,
+              }}
+              resizeMode="contain"
+            />
+          </View>
+
+        </View>
+      ) : (
+        <AnimatedPressBtn style={[styles.button, styles.button_start]} onPress={selectPicture}>
+          <IconImage color={isBlocked ? DISMISS_ICON_COLOR : MAIN_ICON_COLOR}/>
+        </AnimatedPressBtn>
+      )}
 
       <TextInput
         style={styles.input}
@@ -102,19 +183,9 @@ const ChatInput = ({
 
       <Pressable style={[styles.button, styles.button_finish]} onPress={sendMessage}>
         <IconSend
-          color={(isBlocked || loading) ? DISMISS_ICON_COLOR : isInputFocused ? SUB_MAIN_ICON_COLOR : MAIN_ICON_COLOR}
+          color={(isBlocked || globalLoading) ? DISMISS_ICON_COLOR : isInputFocused ? SUB_MAIN_ICON_COLOR : MAIN_ICON_COLOR}
         />
       </Pressable>
-
-      {isVisiblePicker && (
-        <View style={styles.emoji_picker}>
-          {EMOJI_LIST.map((emoji) => (
-            <AnimatedPressBtn key={emoji} style={styles.emoji_btn} onPress={() => handlePressEmoji(emoji)}>
-              <Text style={styles.emoji}>{emoji}</Text>
-            </AnimatedPressBtn>
-          ))}
-        </View>
-      )}
     </View>
   );
 };

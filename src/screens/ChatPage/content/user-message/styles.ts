@@ -45,4 +45,9 @@ export const styles = StyleSheet.create({
   iconWrap: {
     marginLeft: 8,
   },
+  image: {
+    marginTop: 10,
+    width: 150,
+    height: 150,
+  }
 });

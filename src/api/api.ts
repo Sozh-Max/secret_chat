@@ -186,4 +186,36 @@ export class Api {
       }),
     });
   };
+
+  uploadPicture = async ({
+    userId,
+    fileUri,
+  }: {
+    userId: string;
+    fileUri: string;
+  }) => {
+    const form = new FormData();
+
+    form.append("userId", userId);
+
+    form.append("file", {
+      uri: fileUri,
+      name: "photo.jpg",
+      type: "image/jpeg",
+    } as any);
+
+    const resp = await fetch(`${this.link}/user/images/upload`, {
+      method: "POST",
+      body: form,
+    });
+
+    if (!resp.ok) {
+      const text = await resp.text();
+      throw new Error(`Upload failed: ${resp.status} ${text}`);
+    }
+
+    return resp.json();
+  }
+
+
 }
