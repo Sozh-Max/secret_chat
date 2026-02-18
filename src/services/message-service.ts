@@ -84,6 +84,24 @@ const setData = ({
   });
 }
 
+const removeTyping = ({
+  id,
+  setDialogs,
+}: {
+  id: AGENT_KEYS,
+  setDialogs: Dispatch<SetStateAction<IDialogs>>;
+}) => {
+  setDialogs((dialog: IDialogs) => {
+    const current = {...dialog[id]};
+    current.dialog = [...(current?.dialog?.filter((d: IDialogItem) => d.replic.role !== ROLES.TYPING) || [])];
+    current.isBlocked = true;
+    return {
+      ...dialog,
+      [id]: current,
+    }
+  });
+}
+
 export class MessageService {
   constructor(private api: Api) {}
 
@@ -96,7 +114,7 @@ export class MessageService {
     setLoading,
     setLastMsgGlobalId,
     role = ROLES.USER,
-    imageUrl = null,
+    image = null,
   }: {
     id: AGENT_KEYS;
     userId: string;
@@ -106,13 +124,14 @@ export class MessageService {
     setLoading: (state: boolean) => void;
     setLastMsgGlobalId: Dispatch<SetStateAction<number>>;
     role?: ROLES;
-    imageUrl?: string | null;
+    image?: string | null;
   }): Promise<void> {
     const replic: IMessage = {
       content: message,
       role: role,
-      imageUrl,
+      image,
     };
+
     if (role !== ROLES.APP) {
       setLoading(true);
       setData({
@@ -143,6 +162,15 @@ export class MessageService {
           const response = await data.json();
           const responseData = response.data;
 
+          if (responseData?.isBlocked) {
+            removeTyping({
+              id,
+              setDialogs,
+            });
+            setLoading(false);
+            return;
+          }
+
           const replic = responseData.choices[0].message;
 
           const match = replic?.content?.match(/{{2,3}(photo|video)_(\d+)}{2,3}/);
@@ -152,6 +180,7 @@ export class MessageService {
           }
 
           const intervalId = setInterval(() => {
+
             if (startTime + 3600 < Date.now()) {
               clearInterval(intervalId);
 

@@ -63,7 +63,12 @@ export const styles = StyleSheet.create({
     color: '#fff',
     textTransform: 'capitalize',
   },
-
+  label_container: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
   rating: {
     flexDirection: 'row',
     alignItems: 'center',

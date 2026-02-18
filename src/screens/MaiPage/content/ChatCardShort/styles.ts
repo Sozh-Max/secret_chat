@@ -53,6 +53,7 @@ export const styles = StyleSheet.create({
   },
   title_container: {
     flexDirection: 'row',
+    alignItems: 'center',
     gap: 2,
   },
   description: {

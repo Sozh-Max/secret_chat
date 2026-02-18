@@ -44,10 +44,7 @@ const ChatInput = ({
   const [text, setText] = useState<string>('');
   const [uploadUrl, setUploadUrl] = useState<string | null>(null);
   const [loadingImage, setLoadingImage] = useState<boolean>(false);
-  const [uploadImageSizes, setUploadImageSizes] = useState<{width: number; height: number;}>({
-    width: 0,
-    height: 0,
-  });
+
   const [localPreviewUri, setLocalPreviewUri] = useState<string | null>(null);
   const { dialogs, setDialogs, tokens, updateBalance, setLastMsgGlobalId } = useGlobal();
   const { userId, logout } = useUser();
@@ -67,10 +64,10 @@ const ChatInput = ({
       if (asset) {
         setLoadingImage(true);
         setLocalPreviewUri(asset.uri)
-        setUploadImageSizes({
-          width: asset.width || 0,
-          height: asset.height || 0,
-        })
+        // setUploadImageSizes({
+        //   width: asset.width || 0,
+        //   height: asset.height || 0,
+        // })
         const { data } = await api.uploadPicture({ userId: userId, fileUri: asset.uri });
         if (data.url) {
           setUploadUrl(data.url);
@@ -87,7 +84,7 @@ const ChatInput = ({
 
   const sendMessage = async () => {
     if (tokens - (dialog?.cost || 0) < 0) {
-      alert('You haven\'t tokens!');
+      alert("You haven't tokens!");
       return;
     }
 
@@ -104,7 +101,7 @@ const ChatInput = ({
         assistantDialog: dialog?.dialog || [],
         setLoading,
         setLastMsgGlobalId,
-        imageUrl: uploadUrl || null,
+        image: uploadUrl || null,
       });
     }
 
@@ -114,12 +111,12 @@ const ChatInput = ({
   };
 
   useEffect(() => {
-    if (isBlocked || globalLoading) {
+    if (isBlocked || loading) {
       setText('');
     }
   }, [
     isBlocked,
-    globalLoading,
+    loading,
   ]);
 
   const clearUploadedImage = () => {
@@ -130,7 +127,7 @@ const ChatInput = ({
   // const previewUri = uploadUrl || localPreviewUri;
   const previewUri = localPreviewUri;
 
-  const { width: imgW, height: imgH } = transformUploadedSize(uploadImageSizes.width, uploadImageSizes.height);
+  //const { width: imgW, height: imgH } = transformUploadedSize(uploadImageSizes.width, uploadImageSizes.height);
 
   return (
     <View style={styles.container}>
@@ -138,29 +135,28 @@ const ChatInput = ({
         <View
           style={styles.uploadedImageWrapper}
         >
-          <View style={{
-            ...styles.uploadedImageContainer,
-            width: imgW,
-            height: imgH,
-          }}>
-            <Pressable style={styles.uploadedImageRemove} onPress={clearUploadedImage}>
+          <View style={styles.uploadedImageContainer}>
+            <Pressable
+              style={styles.uploadedImageRemove}
+              onPress={clearUploadedImage}
+            >
               <IconCloseCircle size={16} />
             </Pressable>
             <Image
               source={{ uri: previewUri as string }}
-              style={{
-                ...styles.uploadedImage,
-                width: imgW,
-                height: imgH,
-              }}
-              resizeMode="contain"
+              style={styles.uploadedImage}
+              resizeMode="cover"
             />
           </View>
 
         </View>
       ) : (
-        <AnimatedPressBtn style={[styles.button, styles.button_start]} onPress={selectPicture}>
-          <IconImage color={isBlocked ? DISMISS_ICON_COLOR : MAIN_ICON_COLOR}/>
+        <AnimatedPressBtn
+          style={[styles.button, styles.button_start]}
+          onPress={selectPicture}
+          disabled={!dialog?.verified}
+        >
+          <IconImage color={(isBlocked || !dialog?.verified) ? DISMISS_ICON_COLOR : MAIN_ICON_COLOR} />
         </AnimatedPressBtn>
       )}
 
@@ -183,7 +179,7 @@ const ChatInput = ({
 
       <Pressable style={[styles.button, styles.button_finish]} onPress={sendMessage}>
         <IconSend
-          color={(isBlocked || globalLoading) ? DISMISS_ICON_COLOR : isInputFocused ? SUB_MAIN_ICON_COLOR : MAIN_ICON_COLOR}
+          color={(isBlocked || globalLoading || !text) ? DISMISS_ICON_COLOR : isInputFocused ? SUB_MAIN_ICON_COLOR : MAIN_ICON_COLOR}
         />
       </Pressable>
     </View>

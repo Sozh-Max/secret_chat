@@ -37,6 +37,7 @@ export interface IDialog {
   lastMsgId: number;
   isNotification?: boolean;
   isNotificationSend?: boolean;
+  verified: boolean;
 }
 
 export type IDialogs = { [key in AGENT_KEYS]?: IDialog }
@@ -65,6 +66,7 @@ export interface IDialogPreview {
   hasVideo: boolean;
   isNotification?: boolean;
   isNotificationSend?: boolean;
+  verified: boolean;
 }
 
 const refreshChats = ({
@@ -92,6 +94,7 @@ const refreshChats = ({
       hasVideo: dialog.hasVideo,
       isNotification: dialog.isNotification || false,
       isNotificationSend: dialog.isNotificationSend || false,
+      verified: dialog.verified || false,
     };
   }).sort((a, b) => b.lastMessageTime - a.lastMessageTime));
 }
@@ -112,7 +115,7 @@ export const GlobalProvider = (
 
   const { userId, bootId, isCheckAuthorized } = useUser();
   const { api, messageService } = useApi();
-
+  console.log(isFirstCheck);
   useGooglePlayInstallReferrer(api, bootId);
 
   useInactivityNotification({
@@ -139,6 +142,7 @@ export const GlobalProvider = (
             isComplaint: false,
             hasVideo: Boolean(obj.vid_count),
             description: obj.description ?? '',
+            verified: obj.verified ?? false,
             lastMsgId: 0,
           }
         }
@@ -227,61 +231,6 @@ export const GlobalProvider = (
   }, [dialogs, setDialogPreview]);
 
   useEffect(() => {
-    // const id = setInterval(async () => {
-    //   try {
-    //     if (userId) {
-    //       const dialogsData = [];
-    //       for (const key in dialogs) {
-    //         // @ts-ignore
-    //         const dialog: IDialog = dialogs[key];
-    //         dialogsData.push({
-    //           assistantId: dialog.id,
-    //           lastMsgId: dialog.lastMsgId,
-    //         });
-    //       }
-    //       const data = await api.syncDialogs({
-    //         userId,
-    //         lastMsgGlobalId,
-    //         data: dialogsData,
-    //       });
-    //
-    //       if (data?.balance) {
-    //         setTokens(data.balance);
-    //       }
-    //
-    //       setDialogs(((dialogs) => {
-    //         // @ts-ignore
-    //         data.dialogs?.forEach((d) => {
-    //           // @ts-ignore
-    //           const dialog = dialogs[d.id];
-    //           if (dialog) {
-    //             dialog.dialog = d.dialog;
-    //             dialog.isBlocked = d.isBlocked;
-    //             dialog.isComplaint = d.isComplaint;
-    //             dialog.lastMsgId = d.lastMsgId;
-    //             dialog.isNotification = d.isNotification ?? false;
-    //             dialog.isNotificationSend = d.isNotificationSend ?? false;
-    //           }
-    //         });
-    //
-    //         return {
-    //           ...dialogs,
-    //         }
-    //       }));
-    //       setLastMsgGlobalId(data.lastMsgGlobalId);
-    //     }
-    //   } catch (e) {
-    //     console.log(e);
-    //   }
-    //
-    // }, 5000);
-
-    // return () => {
-    //   clearInterval(id);
-    // }
-  }, [userId, lastMsgGlobalId, dialogs, setDialogs]);
-
-  useEffect(() => {
     const checkFirstMessage = async () => {
       try {
         const notifications = await getNotifications(dialogs);
@@ -319,6 +268,10 @@ export const GlobalProvider = (
       checkFirstMessage();
     }
   }, [userId, dialogs?.elise, setDialogs, isFirstCheck]);
+
+  useEffect(() => {
+    if (!userId) setIsFirstCheck(false);
+  }, [userId]);
 
   const updateBalance = async (amount: number) => {
     const requestData = await api.addBalance(amount, userId);

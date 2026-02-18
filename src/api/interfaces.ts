@@ -4,7 +4,7 @@ import { ROLES } from '@/src/api/constants';
 export interface IMessage {
   role: ROLES;
   content: string;
-  imageUrl?: string | null;
+  image?: string | null;
 }
 
 export interface IMessagesRequest {

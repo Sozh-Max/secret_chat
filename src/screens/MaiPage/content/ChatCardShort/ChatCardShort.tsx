@@ -4,10 +4,11 @@ import { Text, View, Pressable } from 'react-native';
 
 import { AGENT_KEYS, IMG_THUMB_MAP } from '@/src/constants/agents-data';
 import { IDialogPreview } from '@/src/contexts/GlobalContext';
-import { IconPlayShort } from '@/src/components/icons/IconPlayShort';
+// import { IconPlayShort } from '@/src/components/icons/IconPlayShort';
 import { IconBlock } from '@/src/components/icons/IconBlock';
 import { styles } from '@/src/screens/MaiPage/content/ChatCardShort/styles';
 import StarIcon from '@/assets/images/svg/star_icon.svg';
+import IconVerified from '@/src/components/icons/IconVerify';
 
 const ChatCardShort = ({
   data,
@@ -47,8 +48,11 @@ const ChatCardShort = ({
           {(data.isBlocked || data.isComplaint) && (
             <IconBlock />
           )}
-          {data.hasVideo && (
-            <IconPlayShort />
+          {/*{data.hasVideo && (*/}
+          {/*  <IconPlayShort />*/}
+          {/*)}*/}
+          {data.verified && (
+            <IconVerified size={18} />
           )}
         </View>
         <Text style={[styles.description, data.message && styles.message]} numberOfLines={1} ellipsizeMode="tail">

@@ -45,9 +45,14 @@ export const styles = StyleSheet.create({
   iconWrap: {
     marginLeft: 8,
   },
+
+  imagePressable: {
+    marginBottom: 5,
+    width: '100%',
+  },
+
   image: {
-    marginTop: 10,
-    width: 150,
-    height: 150,
-  }
+    width: '100%',
+    borderRadius: 8,
+  },
 });

@@ -17,6 +17,7 @@ import { useComplaint } from '@/src/contexts/ComplaintContext';
 import { useUser } from '@/src/contexts/UserContext';
 import { useApi } from '@/src/contexts/ApiContext';
 import StarIcon from '@/assets/images/svg/star_icon.svg';
+import IconVerified from '@/src/components/icons/IconVerify';
 
 const Header = ({
   id,
@@ -97,7 +98,12 @@ const Header = ({
         style={styles.img}
       />
       <View style={styles.info}>
-        <ThemedText style={styles.label}>{id}</ThemedText>
+        <View style={styles.label_container}>
+          <ThemedText style={styles.label}>{id}</ThemedText>
+          {dialog?.verified && (
+            <IconVerified size={18} />
+          )}
+        </View>
         <View style={styles.rating}>
           <StarIcon width={14} height={14} />
           <Text style={styles.rating_value}>{dialog?.cost || 0}</Text>
