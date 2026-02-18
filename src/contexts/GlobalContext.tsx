@@ -22,6 +22,7 @@ import { PLATFORM } from '@/src/services/constants';
 import { useApi } from '@/src/contexts/ApiContext';
 
 export interface IDialogItem {
+  msgId: number;
   replic: IMessage;
   createTime: number;
 }
@@ -115,7 +116,7 @@ export const GlobalProvider = (
 
   const { userId, bootId, isCheckAuthorized } = useUser();
   const { api, messageService } = useApi();
-  console.log(isFirstCheck);
+
   useGooglePlayInstallReferrer(api, bootId);
 
   useInactivityNotification({
@@ -153,7 +154,10 @@ export const GlobalProvider = (
           for (let dialog of requestDialogsData.dialogs) {
             const item: IDialog | undefined = dialogsData[dialog.id as AGENT_KEYS];
             if (item) {
-              item.dialog = dialog.dialog as IDialogItem[];
+              item.dialog = dialog.dialog.map((d: IDialogItem, index: number) => ({
+                ...d,
+                msgId: index + 1,
+              })) as IDialogItem[];
               item.isBlocked = dialog.isBlocked || false;
               item.isComplaint = dialog.isComplaint || false;
               item.lastMsgId = dialog.lastMsgId || 0;

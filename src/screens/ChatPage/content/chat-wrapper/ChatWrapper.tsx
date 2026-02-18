@@ -1,6 +1,6 @@
+import React, { useMemo, useEffect, useRef, useState, useCallback } from 'react';
 import { FlatList } from 'react-native';
 import { ImageBackground } from 'expo-image';
-import { useMemo, useEffect, useRef, useState } from 'react';
 
 import { IMG_POSTER_MAP } from '@/src/constants/agents-data';
 import { styles } from '@/src/screens/ChatPage/content/chat-wrapper/styles';
@@ -16,11 +16,9 @@ import {
   COMPLAINT_SUCCEED_TEXT,
 } from '@/src/screens/ChatPage/content/chat-wrapper/constants';
 
-import { checkTypingMessage } from '@/src/utils/global';
+import type { IDialogItem } from '@/src/contexts/GlobalContext';
 
-export const ChatWrapper = ({
-  id,
-}: IdTypeProps) => {
+export const ChatWrapper = ({ id }: IdTypeProps) => {
   const { dialogs, setDialogs } = useGlobal();
   const { showComplaintChat } = useComplaint();
   const [page, setPage] = useState(1);
@@ -30,98 +28,90 @@ export const ChatWrapper = ({
   const dialog = dialogs[id];
   const isKeyboardVisible = useKeyboardStatus();
 
-  const currentDialog = [...(dialog?.dialog || [])].reverse();
+  const currentDialog: IDialogItem[] = useMemo(() => {
+    return (dialog?.dialog ?? []).slice().reverse();
+  }, [dialog?.dialog]);
 
-  const messagesToRender = useMemo(() => {
+  const messagesToRender: IDialogItem[] = useMemo(() => {
     return currentDialog.slice(0, page * PAGE_SIZE);
   }, [currentDialog, page]);
 
-  const listRef = useRef<FlatList<any>>(null);
+  const listRef = useRef<FlatList<IDialogItem>>(null);
 
   useEffect(() => {
-    if (dialog?.isNotification) {
-      setDialogs((dialogs) => {
-        const currentDialog = dialogs[dialog.id];
+    if (!dialog?.isNotification) return;
 
-        if (currentDialog) {
-          currentDialog.isNotification = false;
-        }
+    setDialogs((prev) => {
+      const d = prev[id];
+      if (!d) return prev;
+      if (!d.isNotification) return prev;
 
-        return { ...dialogs };
-      });
-    }
-  }, [dialog?.isNotification]);
-
-  useEffect(() => {
-    if (listRef.current) {
-      listRef.current.scrollToOffset({ offset: 0, animated: true });
-    }
-  }, [
-    currentDialog.length,
-    dialog?.isBlocked,
-    dialog?.isComplaint,
-  ]);
+      return {
+        ...prev,
+        [id]: {
+          ...d,
+          isNotification: false,
+        },
+      };
+    });
+  }, [dialog?.isNotification, id, setDialogs]);
 
   useEffect(() => {
-    if (isKeyboardVisible) {
-      setTimeout(() => {
-        listRef.current?.scrollToOffset({ offset: 0, animated: true });
-      }, 100);
-    }
+    listRef.current?.scrollToOffset({ offset: 0, animated: true });
+  }, [currentDialog.length, dialog?.isBlocked, dialog?.isComplaint]);
+
+  useEffect(() => {
+    if (!isKeyboardVisible) return;
+
+    const t = setTimeout(() => {
+      listRef.current?.scrollToOffset({ offset: 0, animated: true });
+    }, 100);
+
+    return () => clearTimeout(t);
   }, [isKeyboardVisible]);
 
-  const loadMore = () => {
+  const loadMore = useCallback(() => {
     if (messagesToRender.length < currentDialog.length) {
       setPage((prev) => prev + 1);
     }
-  };
+  }, [messagesToRender.length, currentDialog.length]);
+
+
+  const keyExtractor = useCallback((item: IDialogItem) => String(item.msgId), []);
+
+  const renderItem = useCallback(
+    ({ item }: { item: IDialogItem }) => <CombinerMessage dialog={item} id={id} />,
+    [id]
+  );
+
+  const header = useMemo(() => {
+    return (
+      <>
+        {dialog?.isBlocked && <SystemMessage id={id} message={BLOCKED_TEXT} />}
+
+        {id === showComplaintChat && (
+          <SystemMessage id={id} message={COMPLAINT_FAILED_TEXT} />
+        )}
+
+        {dialog?.isComplaint && <SystemMessage id={id} message={COMPLAINT_SUCCEED_TEXT} />}
+      </>
+    );
+  }, [dialog?.isBlocked, dialog?.isComplaint, id, showComplaintChat]);
+
+  const footer = useMemo(() => {
+    return <SystemMessage id={id} isImage message={dialog?.description} />;
+  }, [dialog?.description, id]);
 
   return (
-    <ImageBackground
-      source={IMG_POSTER_MAP[id]}
-      style={styles.image_background}
-    >
+    <ImageBackground source={IMG_POSTER_MAP[id]} style={styles.image_background}>
       <FlatList
         ref={listRef}
         data={messagesToRender}
-        keyExtractor={(_, i) => i.toString()}
-        renderItem={({ item }) => (
-          // <>
-          //   {(checkTypingMessage(item))
-          //     ? <TypingComponent />
-          //     : <CombinerMessage dialog={item} id={id} />
-          //   }
-          // </>
-          <CombinerMessage dialog={item} id={id} />
-        )}
-        ListHeaderComponent={
-          <>
-            {dialog?.isBlocked && (
-              <SystemMessage
-                id={id}
-                message={BLOCKED_TEXT}
-              />
-            )}
-            {(id === showComplaintChat) && (
-              <SystemMessage
-                id={id}
-                message={COMPLAINT_FAILED_TEXT}
-              />
-            )}
-            {dialog?.isComplaint && (
-              <SystemMessage
-                id={id}
-                message={COMPLAINT_SUCCEED_TEXT}
-              />
-            )}
-          </>
-        }
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+        ListHeaderComponent={header}
+        ListFooterComponent={footer}
         style={styles.wrapper}
-        ListFooterComponent={<SystemMessage
-          id={id}
-          isImage
-          message={dialog?.description}
-        />}
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}

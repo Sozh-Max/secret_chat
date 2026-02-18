@@ -55,12 +55,14 @@ const setData = ({
           current.dialog.push({
             replic,
             createTime: timestamp ?? (Date.now() / 1000),
+            msgId: (current.dialog[current.dialog.length - 1]?.msgId || Date.now()) + 1,
           });
         }
       } else if (replic?.role === ROLES.USER) {
         current.dialog.push({
           replic,
           createTime: timestamp ?? (Date.now() / 1000),
+          msgId: (current.dialog[current.dialog.length - 1]?.msgId || Date.now()) + 1,
         });
         current.dialog.push({
           replic: {
@@ -68,11 +70,13 @@ const setData = ({
             role: ROLES.TYPING,
           },
           createTime: timestamp ?? (Date.now() / 1000),
+          msgId: (current.dialog[current.dialog.length - 1]?.msgId || Date.now()) + 1,
         });
       } else {
         current.dialog.push({
           replic,
           createTime: timestamp ?? (Date.now() / 1000),
+          msgId: (current.dialog[current.dialog.length - 1]?.msgId || Date.now()) + 1,
         });
       }
     }
