@@ -101,12 +101,10 @@ const Header = ({
       <View style={styles.info}>
         <View style={styles.label_container}>
           <ThemedText style={styles.label}>{id}</ThemedText>
-          {(dialog?.isBlocked || dialog?.isComplaint) && (
-            <IconBlock />
-          )}
-          {dialog?.verified && (
-            <IconVerified size={18} />
-          )}
+          <View style={styles.badges}>
+            {(dialog?.isBlocked || dialog?.isComplaint) && <IconBlock />}
+            {dialog?.verified && <IconVerified size={18} />}
+          </View>
         </View>
         <View style={styles.rating}>
           <StarIcon width={14} height={14} />

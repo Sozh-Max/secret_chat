@@ -58,7 +58,7 @@ const ChatInput = ({
 
 
   const selectPicture = async () => {
-    if (isBlocked || globalLoading) return;
+    if (isBlocked || globalLoading || !dialog?.verified) return;
     try {
       const asset = await pickImage();
       if (asset) {
@@ -158,7 +158,6 @@ const ChatInput = ({
         <AnimatedPressBtn
           style={[styles.button, styles.button_start]}
           onPress={selectPicture}
-          disabled={!dialog?.verified}
         >
           <IconImage color={(isBlocked || !dialog?.verified) ? DISMISS_ICON_COLOR : MAIN_ICON_COLOR} />
         </AnimatedPressBtn>
@@ -181,11 +180,11 @@ const ChatInput = ({
         onFocus={() => setIsInputFocused(true)}
       />
 
-      <Pressable style={[styles.button, styles.button_finish]} onPress={sendMessage}>
+      <AnimatedPressBtn style={[styles.button, styles.button_finish]} onPress={sendMessage}>
         <IconSend
           color={(isBlocked || globalLoading || !text) ? DISMISS_ICON_COLOR : isInputFocused ? SUB_MAIN_ICON_COLOR : MAIN_ICON_COLOR}
         />
-      </Pressable>
+      </AnimatedPressBtn>
     </View>
   );
 };

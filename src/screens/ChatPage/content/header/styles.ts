@@ -67,6 +67,12 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 1,
+  },
+  badges: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 3,
     gap: 2,
   },
   rating: {

@@ -21,9 +21,6 @@ const ChatCardShort = ({
       params: { id: data.id },
     });
   }
-  // if (data.id === AGENT_KEYS.elise) {
-  //   console.log(data.isNotification);
-  // }
 
   return (
     <Pressable
@@ -48,15 +45,14 @@ const ChatCardShort = ({
           <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
             {data.id}
           </Text>
-          {(data.isBlocked || data.isComplaint) && (
-            <IconBlock />
-          )}
-          {/*{data.hasVideo && (*/}
-          {/*  <IconPlayShort />*/}
-          {/*)}*/}
-          {data.verified && (
-            <IconVerified size={18} />
-          )}
+          <View style={styles.badges}>
+            {(data.isBlocked || data.isComplaint) && (
+              <IconBlock />
+            )}
+            {data.verified && (
+              <IconVerified size={18} />
+            )}
+          </View>
         </View>
         <Text style={[styles.description, data.message && styles.message]} numberOfLines={1} ellipsizeMode="tail">
           {data.message || data.description}

@@ -49,11 +49,16 @@ export const styles = StyleSheet.create({
     color: '#fff',
     maxWidth: screenWidth - 115,
     textTransform: 'capitalize',
-    marginRight: 3,
   },
   title_container: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 1,
+  },
+  badges: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 3,
     gap: 2,
   },
   description: {
