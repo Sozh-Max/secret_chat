@@ -64,14 +64,14 @@ const setData = ({
           createTime: timestamp ?? (Date.now() / 1000),
           msgId: (current.dialog[current.dialog.length - 1]?.msgId || Date.now()) + 1,
         });
-        current.dialog.push({
-          replic: {
-            content: '',
-            role: ROLES.TYPING,
-          },
-          createTime: timestamp ?? (Date.now() / 1000),
-          msgId: (current.dialog[current.dialog.length - 1]?.msgId || Date.now()) + 1,
-        });
+        // current.dialog.push({
+        //   replic: {
+        //     content: '',
+        //     role: ROLES.TYPING,
+        //   },
+        //   createTime: timestamp ?? (Date.now() / 1000),
+        //   msgId: (current.dialog[current.dialog.length - 1]?.msgId || Date.now()) + 1,
+        // });
       } else {
         current.dialog.push({
           replic,
@@ -99,6 +99,33 @@ const removeTyping = ({
     const current = {...dialog[id]};
     current.dialog = [...(current?.dialog?.filter((d: IDialogItem) => d.replic.role !== ROLES.TYPING) || [])];
     current.isBlocked = true;
+    return {
+      ...dialog,
+      [id]: current,
+    }
+  });
+}
+
+const addTyping = ({
+  id,
+  setDialogs,
+}: {
+  id: AGENT_KEYS,
+  setDialogs: Dispatch<SetStateAction<IDialogs>>;
+}) => {
+  setDialogs((dialog: IDialogs) => {
+    const current = {...dialog[id]};
+    current.dialog = [...(current.dialog || [])];
+
+    current.dialog.push({
+      replic: {
+        content: '',
+        role: ROLES.TYPING,
+      },
+      createTime: (Date.now() / 1000),
+      msgId: (current.dialog[current.dialog.length - 1]?.msgId || Date.now()) + 1,
+    });
+
     return {
       ...dialog,
       [id]: current,
@@ -146,9 +173,18 @@ export class MessageService {
         isBlocked: false,
         lastMsgId: 0,
       });
+
+      const timeout = getRandomInt(400, 1000);
+
+      setTimeout(() => {
+        addTyping({
+          id,
+          setDialogs,
+        })
+      }, timeout)
     }
 
-    const timeout = getRandomInt(500, 1500);
+    const timeout = getRandomInt(1000, 1800);
 
     const startTime = Date.now();
 

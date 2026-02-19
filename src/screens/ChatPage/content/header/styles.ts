@@ -54,7 +54,7 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     marginRight: 13,
-    gap: 2,
+    gap: 3,
   },
   label: {
     fontSize: 14,
@@ -67,7 +67,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 2,
   },
   rating: {
     flexDirection: 'row',

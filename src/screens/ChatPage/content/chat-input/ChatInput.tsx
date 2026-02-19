@@ -142,11 +142,15 @@ const ChatInput = ({
             >
               <IconCloseCircle size={16} />
             </Pressable>
-            <Image
-              source={{ uri: previewUri as string }}
-              style={styles.uploadedImage}
-              resizeMode="cover"
-            />
+            <Pressable
+              onPress={selectPicture}
+            >
+              <Image
+                source={{ uri: previewUri as string }}
+                style={styles.uploadedImage}
+                resizeMode="cover"
+              />
+            </Pressable>
           </View>
 
         </View>

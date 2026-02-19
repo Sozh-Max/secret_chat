@@ -18,6 +18,7 @@ import { useUser } from '@/src/contexts/UserContext';
 import { useApi } from '@/src/contexts/ApiContext';
 import StarIcon from '@/assets/images/svg/star_icon.svg';
 import IconVerified from '@/src/components/icons/IconVerify';
+import { IconBlock } from '@/src/components/icons/IconBlock';
 
 const Header = ({
   id,
@@ -100,6 +101,9 @@ const Header = ({
       <View style={styles.info}>
         <View style={styles.label_container}>
           <ThemedText style={styles.label}>{id}</ThemedText>
+          {(dialog?.isBlocked || dialog?.isComplaint) && (
+            <IconBlock />
+          )}
           {dialog?.verified && (
             <IconVerified size={18} />
           )}

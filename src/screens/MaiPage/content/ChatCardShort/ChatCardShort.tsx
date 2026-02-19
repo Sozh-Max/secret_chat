@@ -21,6 +21,9 @@ const ChatCardShort = ({
       params: { id: data.id },
     });
   }
+  // if (data.id === AGENT_KEYS.elise) {
+  //   console.log(data.isNotification);
+  // }
 
   return (
     <Pressable

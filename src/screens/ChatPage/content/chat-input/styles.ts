@@ -27,20 +27,20 @@ export const styles = StyleSheet.create({
   },
   uploadedImageContainer: {
     position: 'relative',
-    width: 36,
-    height: 36,
+    width: 25,
+    height: 25,
   },
   uploadedImage: {
-    width: 36,
-    height: 36,
+    width: 25,
+    height: 25,
     borderRadius: 3,
   },
   uploadedImageRemove: {
-    width: 16,
-    height: 16,
+    width: 20,
+    height: 20,
     position: 'absolute',
-    right: -5,
-    top: -5,
+    right: -12,
+    top: -7,
     zIndex: 10,
   },
   button_start: {

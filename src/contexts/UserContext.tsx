@@ -73,12 +73,8 @@ export const UserProvider = (
     await AsyncStorageService.removeData(
       LOCAL_STORAGE_KEYS.USER_DATA,
     );
-    router.navigate({
-      pathname: '/login',
-      params: {
-        // дополнительные параметры если нужны
-      }
-    });
+    router.dismissAll();
+    router.replace('/login');
   }
 
   return (
