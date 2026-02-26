@@ -39,8 +39,10 @@ export const styles = StyleSheet.create({
   },
   secondary_button: {
     backgroundColor: '#E69B07',
+    borderTopColor: '#dec487'
   },
   thirty_button: {
     backgroundColor: '#50AC00',
+    borderTopColor: '#abe17c',
   },
 });
