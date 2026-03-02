@@ -1,11 +1,11 @@
 import { DarkTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack, useRouter } from 'expo-router';
+import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-get-random-values';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { GlobalProvider } from '@/src/contexts/GlobalContext';
+import { GlobalProvider, useGlobal } from '@/src/contexts/GlobalContext';
 import Constants from 'expo-constants';
 import {
   useFonts,
@@ -38,77 +38,97 @@ GoogleSignin.configure({
 
 function RootNavigator() {
   const { isAuthorized, isCheckAuthorized } = useUser();
+  const { isGlobalHydrated, hadCache, isInitReady } = useGlobal();
   const router = useRouter();
+  const segments = useSegments();
+
+  const isOnLogin = segments?.[0] === 'login';
+
+  const shouldShowLoader =
+    !isCheckAuthorized ||
+    (isAuthorized && (
+      !isGlobalHydrated ||
+      (!hadCache && !isInitReady)
+    ));
 
   useEffect(() => {
     if (!isCheckAuthorized) return;
+    if (shouldShowLoader) return;
 
     if (isAuthorized) {
-      router.replace('/');
+      if (isOnLogin) router.replace('/');
     } else {
-      router.replace('/login');
+      if (!isOnLogin) router.replace('/login');
     }
-  }, [isCheckAuthorized, isAuthorized]);
-
-  if (!isCheckAuthorized) {
-
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'black' }}>
-        <ActivityIndicator size="large" color="white"/>
-      </View>
-    );
-  }
+  }, [isCheckAuthorized, shouldShowLoader, isAuthorized, isOnLogin, router]);
 
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-        cardStyleInterpolator: ({ current, layouts }) => ({
-          cardStyle: {
-            transform: [
-              {
-                translateX: current.progress.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [-layouts.screen.width, 0],
-                }),
-              },
-            ],
+    <View style={{ flex: 1 }}>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          cardStyleInterpolator: ({ current, layouts }) => ({
+            cardStyle: {
+              transform: [
+                {
+                  translateX: current.progress.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [-layouts.screen.width, 0],
+                  }),
+                },
+              ],
+            },
+          }),
+          transitionSpec: {
+            open: { animation: 'spring', config: { duration: 200 } },
+            close: { animation: 'spring', config: { duration: 200 } },
           },
-        }),
-        transitionSpec: {
-          open: { animation: 'spring', config: { duration: 200 } },
-          close: { animation: 'spring', config: { duration: 200 } },
-        },
-      }}
-    >
-      <Stack.Screen name="login"/>
-      <Stack.Screen name="index"/>
-      <Stack.Screen name="chat"/>
-      <Stack.Screen name="settings"/>
-      <Stack.Screen name="+not-found"/>
-
-      <Stack.Screen
-        name="image-modal"
-        options={{
-          presentation: 'transparentModal',
-          gestureEnabled: true,
-          headerShown: false,
-          animation: 'fade',
-          contentStyle: { backgroundColor: 'transparent' },
         }}
-      />
+      >
+        <Stack.Screen name="login" />
+        <Stack.Screen name="index" />
+        <Stack.Screen name="chat" />
+        <Stack.Screen name="settings" />
+        <Stack.Screen name="+not-found" />
 
-      <Stack.Screen
-        name="modal-bottom"
-        options={{
-          presentation: 'transparentModal',
-          gestureEnabled: true,
-          headerShown: false,
-          animation: 'fade',
-          contentStyle: { backgroundColor: 'transparent' },
-        }}
-      />
-    </Stack>
+        <Stack.Screen
+          name="image-modal"
+          options={{
+            presentation: 'transparentModal',
+            gestureEnabled: true,
+            headerShown: false,
+            animation: 'fade',
+            contentStyle: { backgroundColor: 'transparent' },
+          }}
+        />
+
+        <Stack.Screen
+          name="modal-bottom"
+          options={{
+            presentation: 'transparentModal',
+            gestureEnabled: true,
+            headerShown: false,
+            animation: 'fade',
+            contentStyle: { backgroundColor: 'transparent' },
+          }}
+        />
+      </Stack>
+
+      {shouldShowLoader && (
+        <View
+          style={{
+            position: 'absolute',
+            top: 0, left: 0, right: 0, bottom: 0,
+            backgroundColor: 'black',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          pointerEvents="auto"
+        >
+          <ActivityIndicator size="large" color="white" />
+        </View>
+      )}
+    </View>
   );
 }
 
