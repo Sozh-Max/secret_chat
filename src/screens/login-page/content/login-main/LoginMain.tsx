@@ -14,10 +14,12 @@ import { MAIN_ICON_COLOR } from '@/src/constants/Colors';
 import { useApi } from '@/src/contexts/ApiContext';
 import appsFlyer from 'react-native-appsflyer';
 import { useDevice } from '@/src/hooks/useDevice';
+import { useGlobal } from '@/src/contexts/GlobalContext';
 
 export const LoginMain = () => {
   const emailRef = useRef<TextInput>(null);
   const { bootId, setAuthorizedData } = useUser();
+  const { setShowGlobalLoader } = useGlobal();
   const [isEmailFocused, setIsEmailFocused] = useState(false);
 
   const { isAndroid } = useDevice();
@@ -57,6 +59,8 @@ export const LoginMain = () => {
               method: 'google',
             });
           }
+
+          setShowGlobalLoader(true)
         }
       }
     } catch (error: any) {

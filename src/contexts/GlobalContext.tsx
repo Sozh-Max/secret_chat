@@ -44,7 +44,7 @@ export interface IDialog {
 export type IDialogs = { [key in AGENT_KEYS]?: IDialog }
 
 type GlobalContextType = {
-  tokens: number;
+  tokens: number | null;
   dialogs: IDialogs;
   dialogPreview: IDialogPreview[];
   setDialogs: Dispatch<SetStateAction<IDialogs>>;
@@ -54,6 +54,9 @@ type GlobalContextType = {
   setActiveChatVideoId: Dispatch<SetStateAction<number>>;
   lastMsgGlobalId: number;
   setLastMsgGlobalId: Dispatch<SetStateAction<number>>;
+  isAppReady: boolean;
+  showGlobalLoader: boolean;
+  setShowGlobalLoader: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface IDialogPreview {
@@ -106,13 +109,15 @@ export const GlobalProvider = (
   { children }:
   { children: ReactNode }
 ) => {
-  const [tokens, setTokens] = useState<number>(0);
+  const [tokens, setTokens] = useState<number | null>(null);
   const [dialogs, setDialogs] = useState<IDialogs>({});
   const [dialogPreview, setDialogPreview] = useState<IDialogPreview[]>([]);
   const [deviceRegion] = useState<string>(mainUtils.getDeviceRegion());
   const [activeChatVideoId, setActiveChatVideoId] = useState<number>(0);
   const [lastMsgGlobalId, setLastMsgGlobalId] = useState<number>(0);
   const [isFirstCheck, setIsFirstCheck] = useState<boolean>(false);
+  const [isAppReady, setIsAppReady] = useState<boolean>(false);
+  const [showGlobalLoader, setShowGlobalLoader] = useState<boolean>(false);
 
   const { userId, bootId, isCheckAuthorized } = useUser();
   const { api, messageService } = useApi();
@@ -180,6 +185,8 @@ export const GlobalProvider = (
           dialogs: dialogsData,
           setDialogPreview,
         });
+        setIsAppReady(true);
+        setShowGlobalLoader(false);
       } catch (e) {
         console.log(e);
       }
@@ -222,6 +229,8 @@ export const GlobalProvider = (
   useEffect(() => {
     if (!userId) {
       clearDialogs();
+      setDialogPreview([]);
+      setLastMsgGlobalId(0);
     }
   }, [userId]);
 
@@ -283,18 +292,23 @@ export const GlobalProvider = (
   }
 
   return (
-    <GlobalContext.Provider value={{
-      tokens,
-      dialogs,
-      setDialogs,
-      dialogPreview,
-      updateBalance,
-      deviceRegion,
-      activeChatVideoId,
-      setActiveChatVideoId,
-      lastMsgGlobalId,
-      setLastMsgGlobalId,
-    }}>
+    <GlobalContext.Provider
+      value={{
+        tokens,
+        dialogs,
+        setDialogs,
+        dialogPreview,
+        updateBalance,
+        deviceRegion,
+        activeChatVideoId,
+        setActiveChatVideoId,
+        lastMsgGlobalId,
+        setLastMsgGlobalId,
+        isAppReady,
+        showGlobalLoader,
+        setShowGlobalLoader,
+      }}
+    >
       {children}
     </GlobalContext.Provider>
   );

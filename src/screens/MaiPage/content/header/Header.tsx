@@ -25,11 +25,13 @@ export const Header = () => {
           style={styles.logo}
         />
       </View>
-      <View style={styles.balance}>
-        <Text style={styles.balance_text}>
-          {formatNumberWithCommas(tokens)}
-        </Text>
-      </View>
+      {Number.isInteger(tokens) && (
+        <View style={styles.balance}>
+          <Text style={styles.balance_text}>
+            {formatNumberWithCommas(tokens as number)}
+          </Text>
+        </View>
+      )}
       <View>
         <AnimatedPressBtn
           style={styles.setting}

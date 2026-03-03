@@ -18,24 +18,6 @@ interface ChatInputProps extends IdTypeProps {
   loading: boolean;
 }
 
-const transformUploadedSize = (w: number, h: number, size = 40) => {
-  const def = { width: size, height: size };
-
-  if (!w || !h) return def;
-
-  const ratio = w / h;
-
-  if (ratio > 1) {
-    return { width: size, height: size / ratio };
-  }
-
-  if (ratio < 1) {
-    return { width: size * ratio, height: size };
-  }
-
-  return def;
-};
-
 const ChatInput = ({
   id,
   setLoading,
@@ -83,7 +65,7 @@ const ChatInput = ({
 
 
   const sendMessage = async () => {
-    if (tokens - (dialog?.cost || 0) < 0) {
+    if ((tokens || 0) - (dialog?.cost || 0) < 0) {
       alert("You haven't tokens!");
       return;
     }

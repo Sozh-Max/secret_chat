@@ -9,11 +9,13 @@ import { MAIN_ICON_COLOR } from '@/src/constants/Colors';
 import { useApi } from '@/src/contexts/ApiContext';
 import appsFlyer from 'react-native-appsflyer';
 import { useDevice } from '@/src/hooks/useDevice';
+import { useGlobal } from '@/src/contexts/GlobalContext';
 
 type MiniStoreType = Record<number, TextInput | null>;
 
 export const OtpContent = () => {
   const { bootId, setAuthorizedData } = useUser();
+  const { setShowGlobalLoader } = useGlobal();
   const { api } = useApi();
 
   const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
@@ -187,6 +189,7 @@ export const OtpContent = () => {
               method: 'email',
             });
           }
+          setShowGlobalLoader(true);
         } else {
           setIsError(true);
         }

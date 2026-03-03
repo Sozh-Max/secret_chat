@@ -5,7 +5,7 @@ import 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-get-random-values';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { GlobalProvider } from '@/src/contexts/GlobalContext';
+import { GlobalProvider, useGlobal } from '@/src/contexts/GlobalContext';
 import Constants from 'expo-constants';
 import {
   useFonts,
@@ -17,7 +17,7 @@ import {
 } from '@expo-google-fonts/noto-sans';
 import { LinearGradient } from 'expo-linear-gradient';
 import { UserProvider, useUser } from '@/src/contexts/UserContext';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { ComplaintProvider } from '@/src/contexts/ComplaintContext';
 import { ApiProvider } from '@/src/contexts/ApiContext';
@@ -25,6 +25,9 @@ import appsFlyer from 'react-native-appsflyer';
 import { useMode } from '@/src/hooks/useMode';
 import { useDevice } from '@/src/hooks/useDevice';
 import { PaymentsProvider } from '@/src/contexts/PaymentsContext';
+import * as SplashScreen from 'expo-splash-screen';
+import { FullscreenLoader } from '@/src/components/Loaders/FullscreenLoader/FullscreenLoader';
+
 
 const GOOGLE_WEB_AUTH_CLIENT_ID = Constants.expoConfig?.extra?.GOOGLE_WEB_AUTH_CLIENT_ID;
 const APPSFLYER_DEV_KEY = Constants.expoConfig?.extra?.APPSFLYER_DEV_KEY;
@@ -36,9 +39,31 @@ GoogleSignin.configure({
   forceCodeForRefreshToken: true,
 });
 
+SplashScreen.preventAutoHideAsync();
+
+
 function RootNavigator() {
-  const { isAuthorized, isCheckAuthorized } = useUser();
+  const { isAuthorized, isCheckAuthorized, userId } = useUser();
+  const { isAppReady } = useGlobal();
   const router = useRouter();
+  const [isSplashHide, setIsSplashHide] = useState(false);
+
+  const splashHide = () => {
+    SplashScreen.hide();
+    setIsSplashHide(true);
+  }
+
+  useEffect(() => {
+    if (isAppReady && !isSplashHide) {
+      splashHide();
+    }
+  }, [isAppReady, isSplashHide]);
+
+  useEffect(() => {
+    if (!userId && isCheckAuthorized && !isSplashHide) {
+      splashHide();
+    }
+  }, [userId, isCheckAuthorized, isSplashHide]);
 
   useEffect(() => {
     if (!isCheckAuthorized) return;
@@ -165,6 +190,7 @@ export default function RootLayout() {
                     style={{ flex: 1 }}
                   >
                     <RootNavigator/>
+                    <FullscreenLoader />
                     <StatusBar translucent style="light" backgroundColor="#000000"/>
                   </LinearGradient>
                 </PaymentsProvider>
