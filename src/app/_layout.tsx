@@ -17,7 +17,7 @@ import {
 } from '@expo-google-fonts/noto-sans';
 import { LinearGradient } from 'expo-linear-gradient';
 import { UserProvider, useUser } from '@/src/contexts/UserContext';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { ComplaintProvider } from '@/src/contexts/ComplaintContext';
 import { ApiProvider } from '@/src/contexts/ApiContext';
@@ -27,7 +27,6 @@ import { useDevice } from '@/src/hooks/useDevice';
 import { PaymentsProvider } from '@/src/contexts/PaymentsContext';
 import * as SplashScreen from 'expo-splash-screen';
 import { FullscreenLoader } from '@/src/components/Loaders/FullscreenLoader/FullscreenLoader';
-
 
 const GOOGLE_WEB_AUTH_CLIENT_ID = Constants.expoConfig?.extra?.GOOGLE_WEB_AUTH_CLIENT_ID;
 const APPSFLYER_DEV_KEY = Constants.expoConfig?.extra?.APPSFLYER_DEV_KEY;
@@ -39,47 +38,48 @@ GoogleSignin.configure({
   forceCodeForRefreshToken: true,
 });
 
-SplashScreen.preventAutoHideAsync();
-
+SplashScreen.preventAutoHideAsync().catch(() => {});
 
 function RootNavigator() {
   const { isAuthorized, isCheckAuthorized, userId } = useUser();
   const { isAppReady } = useGlobal();
   const router = useRouter();
-  const [isSplashHide, setIsSplashHide] = useState(false);
 
-  const splashHide = () => {
-    SplashScreen.hide();
-    setIsSplashHide(true);
-  }
+  const didHideSplash = useRef(false);
 
   useEffect(() => {
-    if (isAppReady && !isSplashHide) {
-      splashHide();
-    }
-  }, [isAppReady, isSplashHide]);
+    const canHide =
+      isCheckAuthorized && (!isAuthorized ? true : isAppReady);
 
-  useEffect(() => {
-    if (!userId && isCheckAuthorized && !isSplashHide) {
-      splashHide();
-    }
-  }, [userId, isCheckAuthorized, isSplashHide]);
+    if (!canHide) return;
+    if (didHideSplash.current) return;
+
+    didHideSplash.current = true;
+    SplashScreen.hideAsync().catch(() => {});
+  }, [isCheckAuthorized, isAuthorized, isAppReady]);
 
   useEffect(() => {
     if (!isCheckAuthorized) return;
 
+    // навигация как у тебя
     if (isAuthorized) {
       router.replace('/');
     } else {
       router.replace('/login');
     }
-  }, [isCheckAuthorized, isAuthorized]);
+  }, [isCheckAuthorized, isAuthorized, router]);
 
   if (!isCheckAuthorized) {
-
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'black' }}>
-        <ActivityIndicator size="large" color="white"/>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: 'black',
+        }}
+      >
+        <ActivityIndicator size="large" color="white" />
       </View>
     );
   }
@@ -106,11 +106,11 @@ function RootNavigator() {
         },
       }}
     >
-      <Stack.Screen name="login"/>
-      <Stack.Screen name="index"/>
-      <Stack.Screen name="chat"/>
-      <Stack.Screen name="settings"/>
-      <Stack.Screen name="+not-found"/>
+      <Stack.Screen name="login" />
+      <Stack.Screen name="index" />
+      <Stack.Screen name="chat" />
+      <Stack.Screen name="settings" />
+      <Stack.Screen name="+not-found" />
 
       <Stack.Screen
         name="image-modal"
@@ -160,16 +160,11 @@ export default function RootLayout() {
     if (isAndroid) {
       appsFlyer.initSdk(
         options,
-        (result: string) => {
-          console.log('AppsFlyer init success', result);
-        },
-        (error: Error) => {
-          console.error('AppsFlyer init error', error);
-        }
+        (result: string) => console.log('AppsFlyer init success', result),
+        (error: Error) => console.error('AppsFlyer init error', error)
       );
     }
-
-  }, []);
+  }, [isAndroid, isDev]);
 
   if (!fontsLoaded) {
     return null;
@@ -189,9 +184,9 @@ export default function RootLayout() {
                     end={{ x: 0, y: 1 }}
                     style={{ flex: 1 }}
                   >
-                    <RootNavigator/>
+                    <RootNavigator />
                     <FullscreenLoader />
-                    <StatusBar translucent style="light" backgroundColor="#000000"/>
+                    <StatusBar translucent style="light" backgroundColor="#000000" />
                   </LinearGradient>
                 </PaymentsProvider>
               </ComplaintProvider>

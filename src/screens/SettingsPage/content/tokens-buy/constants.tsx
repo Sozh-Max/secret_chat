@@ -14,6 +14,7 @@ import { ITokenValue } from '@/src/screens/SettingsPage/content/tokens-buy/Token
 export const TOKEN_VALUES: ITokenValue[] = [
   {
     id: 1,
+    identifier: 'token_500',
     value: 500,
     icon: <StarIcon height={20} width={20} />,
     activeColorBg: '#7070704D',
@@ -26,6 +27,7 @@ export const TOKEN_VALUES: ITokenValue[] = [
   },
   {
     id: 2,
+    identifier: 'token_2500',
     value: 2500,
     icon: <StarsIcon1 height={20} width={28} />,
     activeColorBg: '#7070704D',
@@ -38,6 +40,7 @@ export const TOKEN_VALUES: ITokenValue[] = [
   },
   {
     id: 3,
+    identifier: 'token_5000',
     value: 5000,
     icon: <StarsIcon2 height={20} width={36} />,
     activeColorBg: '#D888354D',
@@ -50,6 +53,7 @@ export const TOKEN_VALUES: ITokenValue[] = [
   },
   {
     id: 4,
+    identifier: 'token_10000',
     value: 10000,
     icon: <StarsIcon3 height={20} width={44} />,
     activeColorBg: '#50AC0033',

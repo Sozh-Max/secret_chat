@@ -1,51 +1,55 @@
-import Purchases from 'react-native-purchases';
-import { PurchasesPackage } from '@revenuecat/purchases-typescript-internal';
+import Purchases, { LOG_LEVEL, PurchasesOffering, PurchasesPackage } from 'react-native-purchases';
+import { Platform } from 'react-native';
+import Constants from 'expo-constants';
 
 const API_KEYS = {
-  //ios: "public_ios_sdk_key",
-  android: "public_android_sdk_key",
+  ios: Constants.expoConfig?.extra?.REVENUE_CAT_API_KEY,
+  android: Constants.expoConfig?.extra?.REVENUE_CAT_API_KEY,
 };
 
 export class RevenueCatService {
+  private configured = false;
 
   async initRevenueCat(): Promise<void> {
-    await Purchases.setLogLevel(Purchases.LOG_LEVEL.DEBUG);
+    if (this.configured) return;
 
+    await Purchases.setLogLevel(LOG_LEVEL.DEBUG);
     Purchases.configure({
-      //apiKey: Platform.OS === "ios" ? API_KEYS.ios : API_KEYS.android,
-      apiKey: API_KEYS.android,
+      apiKey: Platform.OS === 'ios' ? API_KEYS.ios : API_KEYS.android,
     });
+
+    this.configured = true;
   }
 
   async login(userId: string) {
     const { customerInfo, created } = await Purchases.logIn(userId);
+    return { customerInfo, created };
   }
 
   async logout() {
-    await Purchases.logOut();
+    return await Purchases.logOut();
   }
 
   async getOfferings() {
-    const offerings = await Purchases.getOfferings();
-    // offerings.current.availablePackages => варианты подписки/покупок
-    return offerings;
+    return await Purchases.getOfferings();
   }
 
-  async purchase(pkg: PurchasesPackage) {
-    try {
-      const { customerInfo } = await Purchases.purchasePackage(pkg);
+  async getCurrentOffering(): Promise<PurchasesOffering | null> {
+    const offerings = await Purchases.getOfferings();
+    return offerings.current ?? null;
+  }
 
-      // customerInfo.entitlements.active => активные entitlements
-      return customerInfo;
+  async purchaseTokenPackage(pkg: PurchasesPackage) {
+    try {
+      const { customerInfo, productIdentifier } = await Purchases.purchasePackage(pkg);
+      return { customerInfo, productIdentifier };
     } catch (e: any) {
-      if (!e.userCancelled) {
-        throw e;
-      }
+      if (e?.userCancelled) return null;
+      throw e;
     }
   }
 
-  async hasPro() {
-    const info = await Purchases.getCustomerInfo();
-    return Boolean(info.entitlements.active["pro"]);
+  async getCustomerInfo() {
+    return await Purchases.getCustomerInfo();
   }
 }

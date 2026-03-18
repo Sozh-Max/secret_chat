@@ -30,7 +30,7 @@ module.exports = {
     ],
 
     android: {
-      package: "com.klomax.secretchat",
+      package: "com.itona.secretchat",
       notification: {
         icon: "./assets/images/notification-icon.png",
         color: "#ffffff",
@@ -43,6 +43,7 @@ module.exports = {
     extra: {
       GOOGLE_ANDROID_AUTH_CLIENT_ID: process.env.GOOGLE_ANDROID_AUTH_CLIENT_ID,
       GOOGLE_WEB_AUTH_CLIENT_ID: process.env.GOOGLE_WEB_AUTH_CLIENT_ID,
+      REVENUE_CAT_API_KEY: process.env.REVENUE_CAT_API_KEY,
       APPSFLYER_DEV_KEY: process.env.APPSFLYER_DEV_KEY,
       ENV: process.env.MODE || "production",
     },

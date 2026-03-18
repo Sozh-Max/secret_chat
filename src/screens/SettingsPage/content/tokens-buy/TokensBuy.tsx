@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Animated, Pressable, View, StyleProp, ViewStyle, TextStyle } from 'react-native';
 
 import { CustomButton } from '@/src/components/CustomButton/CustomButton';
@@ -10,9 +10,12 @@ import { getAnimatedStyles } from '@/src/screens/SettingsPage/content/tokens-buy
 import { TOKEN_VALUES } from '@/src/screens/SettingsPage/content/tokens-buy/constants';
 
 import { styles } from '@/src/screens/SettingsPage/content/tokens-buy/styles';
+import { usePayments } from '@/src/contexts/PaymentsContext';
+import { PurchasesPackage } from 'react-native-purchases';
 
 export interface ITokenValue {
   id: number;
+  identifier: string;
   value: number;
   icon: React.JSX.Element;
   activeColorBg: string;
@@ -30,12 +33,18 @@ export const TokensBuy = () => {
     handlePress,
     buttonStyle,
     buttonTextStyle,
+    offering,
+    handleBuy,
   } = useTokensBuy();
 
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
-        {TOKEN_VALUES.map((token: ITokenValue) => {
+        {offering.map((offer: PurchasesPackage) => {
+          const token: ITokenValue | undefined = TOKEN_VALUES.find((t: ITokenValue) => t.identifier === offer.identifier);
+
+          if (!token) return null;
+
           const animatedStyle = getAnimatedStyles({
             token,
             animatedValues,
@@ -53,7 +62,7 @@ export const TokensBuy = () => {
                 </View>
                 <View style={styles.item_col}>
                   {token.oldPrice && <OldPrice value={token.oldPrice} />}
-                  <Price value={token.price} />
+                  <Price value={offer.product.price} />
                 </View>
               </Animated.View>
             </Pressable>
@@ -61,11 +70,14 @@ export const TokensBuy = () => {
         })}
       </View>
       <View style={styles.btn_container}>
-        <CustomButton
-          text="Buy now"
-          customStyle={buttonStyle}
-          customTextStyle={buttonTextStyle}
-        />
+        {offering.length > 0 && (
+          <CustomButton
+            text="Buy now"
+            handlePress={handleBuy}
+            customStyle={buttonStyle}
+            customTextStyle={buttonTextStyle}
+          />
+        )}
       </View>
     </View>
   );
