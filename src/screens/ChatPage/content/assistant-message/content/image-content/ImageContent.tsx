@@ -1,15 +1,20 @@
 import { Image, Pressable } from 'react-native';
 import { styles } from '@/src/screens/ChatPage/content/assistant-message/content/image-content/styles';
 import { router } from 'expo-router';
+import Constants from 'expo-constants';
+import { AGENT_KEYS } from '@/src/constants/agents-data';
+
+const STORAGE_URL = Constants.expoConfig?.extra?.STORAGE_URL;
 
 export const ImageContent = ({
   id,
   num,
 }: {
-  id: string;
+  id: AGENT_KEYS;
   num: string;
 }) => {
   const url = `https://app.neuronautica.com/storage/${id}/photo/${num}.jpg`;
+  const newUrl = `${STORAGE_URL}/${id}/photo/${num}.jpg`;
 
   return (
     <Pressable
@@ -21,7 +26,7 @@ export const ImageContent = ({
       }
       style={styles.imageWrapper}
     >
-      <Image source={{ uri: url }} style={styles.image} resizeMode="cover" />
+      <Image source={{ uri: AGENT_KEYS.wendy === id ? newUrl : url }} style={styles.image} resizeMode="cover" />
     </Pressable>
   )
 }

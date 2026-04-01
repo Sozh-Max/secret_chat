@@ -40,11 +40,36 @@ export const TokensBuy = () => {
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
-        {offering.map((offer: PurchasesPackage) => {
-          const token: ITokenValue | undefined = TOKEN_VALUES.find((t: ITokenValue) => t.identifier === offer.identifier);
+        {/*{offering.map((offer: PurchasesPackage) => {*/}
+        {/*  const token: ITokenValue | undefined = TOKEN_VALUES.find((t: ITokenValue) => t.identifier === offer.identifier);*/}
 
-          if (!token) return null;
+        {/*  if (!token) return null;*/}
 
+        {/*  const animatedStyle = getAnimatedStyles({*/}
+        {/*    token,*/}
+        {/*    animatedValues,*/}
+        {/*  });*/}
+
+        {/*  return (*/}
+        {/*    <Pressable*/}
+        {/*      key={token.id}*/}
+        {/*      onPress={() => handlePress(token)}*/}
+        {/*    >*/}
+        {/*      <Animated.View style={[styles.item, animatedStyle]}>*/}
+        {/*        <View style={styles.item_col}>*/}
+        {/*          <CountItems item={token} />*/}
+        {/*          {token.component}*/}
+        {/*        </View>*/}
+        {/*        <View style={styles.item_col}>*/}
+        {/*          {token.oldPrice && <OldPrice value={token.oldPrice} />}*/}
+        {/*          <Price value={offer.product.price} />*/}
+        {/*        </View>*/}
+        {/*      </Animated.View>*/}
+        {/*    </Pressable>*/}
+        {/*  );*/}
+        {/*})}*/}
+
+        {TOKEN_VALUES.map((token: ITokenValue) => {
           const animatedStyle = getAnimatedStyles({
             token,
             animatedValues,
@@ -62,7 +87,7 @@ export const TokensBuy = () => {
                 </View>
                 <View style={styles.item_col}>
                   {token.oldPrice && <OldPrice value={token.oldPrice} />}
-                  <Price value={offer.product.price} />
+                  <Price value={token.price} />
                 </View>
               </Animated.View>
             </Pressable>
@@ -70,14 +95,20 @@ export const TokensBuy = () => {
         })}
       </View>
       <View style={styles.btn_container}>
-        {offering.length > 0 && (
-          <CustomButton
-            text="Buy now"
-            handlePress={handleBuy}
-            customStyle={buttonStyle}
-            customTextStyle={buttonTextStyle}
-          />
-        )}
+        {/*{offering.length > 0 && (*/}
+        {/*  <CustomButton*/}
+        {/*    text="Buy now"*/}
+        {/*    handlePress={handleBuy}*/}
+        {/*    customStyle={buttonStyle}*/}
+        {/*    customTextStyle={buttonTextStyle}*/}
+        {/*  />*/}
+        {/*)}*/}
+        <CustomButton
+          text="Buy now"
+          handlePress={handleBuy}
+          customStyle={buttonStyle}
+          customTextStyle={buttonTextStyle}
+        />
       </View>
     </View>
   );

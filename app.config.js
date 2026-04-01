@@ -45,6 +45,7 @@ module.exports = {
       GOOGLE_WEB_AUTH_CLIENT_ID: process.env.GOOGLE_WEB_AUTH_CLIENT_ID,
       REVENUE_CAT_API_KEY: process.env.REVENUE_CAT_API_KEY,
       APPSFLYER_DEV_KEY: process.env.APPSFLYER_DEV_KEY,
+      STORAGE_URL: process.env.STORAGE_URL,
       ENV: process.env.MODE || "production",
     },
   },

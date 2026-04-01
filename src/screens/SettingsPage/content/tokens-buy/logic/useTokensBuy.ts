@@ -49,15 +49,15 @@ export const useTokensBuy = () => {
   };
 
   const handleBuy = async (): Promise<void> => {
-    const pkg = offering.find(o => o.identifier === active.identifier);
-    if (pkg) {
-      try {
-        const a = await revenueCatService.purchaseTokenPackage(pkg);
-        console.log(a);
-      } catch (e) {
-        console.log(e);
-      }
-    }
+    // const pkg = offering.find(o => o.identifier === active.identifier);
+    // if (pkg) {
+    //   try {
+    //     const a = await revenueCatService.purchaseTokenPackage(pkg);
+    //     console.log(a);
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
+    // }
   }
 
   return {

@@ -13,11 +13,11 @@ const Footer = () => {
     <View
       style={styles.wrapper}
     >
-      <Pressable onPress={() => openLink('https://caramel-crater-22c.notion.site/Secret-Chat-Privacy-Policy-1d51e68b6acd80daafbed8587d78a87b')}>
+      <Pressable onPress={() => openLink('https://developtechs.com/privacy-notice/')}>
         <Text style={styles.link}>Privacy Policy</Text>
       </Pressable>
       <Text style={styles.separator}>•</Text>
-      <Pressable onPress={() => openLink('https://caramel-crater-22c.notion.site/Secret-Chat-Terms-of-Use-1d51e68b6acd8040a79bff797fd3346e')}>
+      <Pressable onPress={() => openLink('https://developtechs.com/terms-of-use/')}>
         <Text style={styles.link}>Terms of Use</Text>
       </Pressable>
     </View>

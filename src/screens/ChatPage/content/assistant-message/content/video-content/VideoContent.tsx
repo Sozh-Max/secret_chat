@@ -4,12 +4,16 @@ import { styles } from '@/src/screens/ChatPage/content/assistant-message/content
 import { useGlobal } from '@/src/contexts/GlobalContext';
 import { VideoPlayer } from '@/src/screens/ChatPage/content/assistant-message/content/video-content/VideoPlayer';
 import { useState } from 'react';
+import { AGENT_KEYS } from '@/src/constants/agents-data';
+import Constants from 'expo-constants';
+
+const STORAGE_URL = Constants.expoConfig?.extra?.STORAGE_URL;
 
 export const VideoContent = ({
   id,
   num,
 }: {
-  id: string;
+  id: AGENT_KEYS;
   num: string;
 }) => {
   const { activeChatVideoId, setActiveChatVideoId} = useGlobal();
@@ -20,6 +24,9 @@ export const VideoContent = ({
   const videoSource = `https://app.neuronautica.com/storage/${id}/video/${num}.mp4`;
   const thumbImg = `https://app.neuronautica.com/storage/${id}/video/posters/${num}.jpg`;
 
+  const newVideoSource = `${STORAGE_URL}/${id}/video/${num}.mp4`;
+  const newThumbImg = `${STORAGE_URL}/${id}/video/posters/${num}.jpg`;
+
   const handlePress = (id: number) => {
     setActiveChatVideoId(id);
     setTempId(id);
@@ -28,7 +35,7 @@ export const VideoContent = ({
   return (
     <View style={styles.wrapper}>
       {isActiveVideo && (
-        <VideoPlayer videoSource={videoSource} />
+        <VideoPlayer videoSource={AGENT_KEYS.wendy === id ? newVideoSource : videoSource} />
       )}
       {!isActiveVideo && (
         <View
@@ -36,7 +43,7 @@ export const VideoContent = ({
         >
           <Image
             source={{
-              uri: thumbImg,
+              uri: AGENT_KEYS.wendy === id ? newThumbImg : thumbImg,
             }}
             style={styles.image}
             resizeMode="cover"
