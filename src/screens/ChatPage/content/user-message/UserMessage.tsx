@@ -1,13 +1,17 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { View, Text, Image, Pressable, Animated } from 'react-native';
+import { View, Text, Image as RNImage, Pressable, Animated } from 'react-native';
+import { Image } from 'expo-image';
 import { IDialogItem } from '@/src/contexts/GlobalContext';
 import { styles } from '@/src/screens/ChatPage/content/user-message/styles';
 import { IconResponse } from '@/src/components/icons/IconResponse';
 import { getHoursAndMinutesFromMs } from '@/src/services/message-service';
 import { router } from 'expo-router';
+import { ChatMediaSkeleton } from '@/src/components/ChatMediaSkeleton/ChatMediaSkeleton';
 
 const UserMessageImpl = ({ dialog }: { dialog: IDialogItem }) => {
   const url = dialog.replic.image;
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [hasImageError, setHasImageError] = useState(false);
 
   // ---- Анимация: сначала bubble fade/slide, потом текст
   const bubble = useRef(new Animated.Value(0)).current; // 0..1
@@ -33,13 +37,14 @@ const UserMessageImpl = ({ dialog }: { dialog: IDialogItem }) => {
     ]).start();
   }, [bubble, text]);
 
-  // ---- Размер картинки (как у вас)
   const [imgRatio, setImgRatio] = useState<number | null>(null); // width/height
 
   useEffect(() => {
     if (!url) return;
+    setIsImageLoaded(false);
+    setHasImageError(false);
 
-    Image.getSize(
+    RNImage.getSize(
       url,
       (w, h) => {
         if (w > 0 && h > 0) setImgRatio(w / h);
@@ -86,6 +91,15 @@ const UserMessageImpl = ({ dialog }: { dialog: IDialogItem }) => {
     };
   }, [text]);
 
+  const handlePressable = () => {
+    if (!hasImageError) {
+      router.push({
+        pathname: '/image-modal',
+        params: { url },
+      })
+    }
+  }
+
   return (
     <Animated.View style={[styles.wrapper, bubbleStyle]}>
       <View style={styles.container}>
@@ -99,19 +113,21 @@ const UserMessageImpl = ({ dialog }: { dialog: IDialogItem }) => {
 
         {url && (
           <Pressable
-            onPress={() =>
-              router.push({
-                pathname: '/image-modal',
-                params: { url },
-              })
-            }
+            onPress={handlePressable}
             style={styles.imagePressable}
           >
+            {!isImageLoaded && (
+              <ChatMediaSkeleton
+                style={imgRatio ? { width: '100%', aspectRatio: imgRatio, borderRadius: 8 } : styles.imageSkeleton}
+              />
+            )}
             <Image
-              source={{ uri: url }}
-              // @ts-ignore
-              style={imageStyle}
-              resizeMode="contain"
+              source={hasImageError ? null : url}
+              style={hasImageError ? styles.imageHidden : imageStyle}
+              contentFit="contain"
+              cachePolicy="disk"
+              onLoad={() => setIsImageLoaded(true)}
+              onError={() => setHasImageError(true)}
             />
           </Pressable>
         )}

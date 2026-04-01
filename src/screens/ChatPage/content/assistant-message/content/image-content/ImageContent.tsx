@@ -1,10 +1,11 @@
-import { Image, Pressable } from 'react-native';
+import { useState } from 'react';
+import { Image } from 'expo-image';
+import { Pressable, View } from 'react-native';
 import { styles } from '@/src/screens/ChatPage/content/assistant-message/content/image-content/styles';
 import { router } from 'expo-router';
-import Constants from 'expo-constants';
 import { AGENT_KEYS } from '@/src/constants/agents-data';
-
-const STORAGE_URL = Constants.expoConfig?.extra?.STORAGE_URL;
+import { getAgentPhotoUrl } from '@/src/utils/chat-image-cache';
+import { ChatMediaSkeleton } from '@/src/components/ChatMediaSkeleton/ChatMediaSkeleton';
 
 export const ImageContent = ({
   id,
@@ -13,20 +14,37 @@ export const ImageContent = ({
   id: AGENT_KEYS;
   num: string;
 }) => {
-  const url = `https://app.neuronautica.com/storage/${id}/photo/${num}.jpg`;
-  const newUrl = `${STORAGE_URL}/${id}/photo/${num}.jpg`;
+  const url = getAgentPhotoUrl(id, num);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  const handlePress = () => {
+    if (!isLoaded && !hasError) {
+      router.push({
+        pathname: '/image-modal',
+        params: { url },
+      });
+    }
+  }
 
   return (
     <Pressable
-      onPress={() =>
-        router.push({
-          pathname: '/image-modal',
-          params: { url },
-        })
-      }
+      onPress={handlePress}
       style={styles.imageWrapper}
     >
-      <Image source={{ uri: AGENT_KEYS.wendy === id ? newUrl : url }} style={styles.image} resizeMode="cover" />
+      <View>
+        {!isLoaded && <ChatMediaSkeleton style={styles.imageSkeleton} />}
+        {!hasError && (
+          <Image
+            source={url}
+            style={styles.image}
+            contentFit="cover"
+            cachePolicy="disk"
+            onLoad={() => setIsLoaded(true)}
+            onError={() => setHasError(true)}
+          />
+        )}
+      </View>
     </Pressable>
   )
 }

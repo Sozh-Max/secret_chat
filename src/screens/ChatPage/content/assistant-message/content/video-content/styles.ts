@@ -37,4 +37,10 @@ export const styles = StyleSheet.create({
     borderRadius: 6,
     marginVertical: 3,
   },
+  imageSkeleton: {
+    width: '100%',
+    aspectRatio: 256 / 459,
+    borderRadius: 6,
+    marginVertical: 3,
+  },
 });

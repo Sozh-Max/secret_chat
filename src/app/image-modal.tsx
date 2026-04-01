@@ -1,6 +1,7 @@
 // app/image-modal.tsx
 import React, { useEffect, useMemo, useState } from 'react';
-import { Image, Pressable, View, Platform, useWindowDimensions } from 'react-native';
+import { Pressable, View, Platform, useWindowDimensions } from 'react-native';
+import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as NavigationBar from 'expo-navigation-bar';
 import { AGENT_KEYS, IMG_PREVIEW_MAP } from '@/src/constants/agents-data';
@@ -72,10 +73,11 @@ export default function ImageModal() {
           }}
         >
           <Image
-            source={sourceId ? IMG_PREVIEW_MAP[sourceId] : { uri: url }}
+            source={sourceId ? IMG_PREVIEW_MAP[sourceId] : url}
             onLoad={handleLoad}
             style={{ width: '100%', height: '100%' }}
-            resizeMode="contain"
+            contentFit="contain"
+            cachePolicy="disk"
           />
         </View>
       </Pressable>

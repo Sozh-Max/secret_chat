@@ -15,6 +15,7 @@ import {
   COMPLAINT_FAILED_TEXT,
   COMPLAINT_SUCCEED_TEXT,
 } from '@/src/screens/ChatPage/content/chat-wrapper/constants';
+import { collectDialogImageUrls, prefetchChatImages } from '@/src/utils/chat-image-cache';
 
 import type { IDialogItem } from '@/src/contexts/GlobalContext';
 
@@ -58,7 +59,12 @@ export const ChatWrapper = ({ id }: IdTypeProps) => {
     return currentDialog.slice(0, page * PAGE_SIZE);
   }, [currentDialog, page]);
 
-  // ✅ убрать нотификацию без мутаций
+  useEffect(() => {
+    const urls = collectDialogImageUrls(dialog?.dialog ?? [], id);
+
+    void prefetchChatImages(urls);
+  }, [dialog?.dialog, id]);
+
   useEffect(() => {
     if (!dialog?.isNotification) return;
 

@@ -55,4 +55,14 @@ export const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 8,
   },
+  imageSkeleton: {
+    width: '100%',
+    height: 220,
+    borderRadius: 8,
+    marginBottom: 5,
+  },
+  imageHidden: {
+    width: 0,
+    height: 0,
+  },
 });

@@ -10,6 +10,12 @@ export const styles = StyleSheet.create({
     marginVertical: 3,
     borderRadius: 8,
   },
+  imageSkeleton: {
+    width: '100%',
+    aspectRatio: 256 / 459,
+    marginVertical: 3,
+    borderRadius: 8,
+  },
   modalImageWrapper: {
     width: '90%',
     aspectRatio: 256 / 459,
