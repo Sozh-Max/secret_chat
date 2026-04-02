@@ -31,10 +31,11 @@ module.exports = {
 
     android: {
       package: "com.itona.secretchat",
-      notification: {
-        icon: "./assets/images/notification-icon.png",
-        color: "#ffffff",
-      },
+      // notification: {
+      //   icon: "./assets/images/notification-icon.png",
+      //   color: "#ffffff",
+      // },
+      permissions: ["NOTIFICATIONS", "SCHEDULE_EXACT_ALARM"],
       // adaptiveIcon: {
       //   foregroundImage: "./assets/images/logo.png",
       // },
@@ -47,6 +48,31 @@ module.exports = {
       APPSFLYER_DEV_KEY: process.env.APPSFLYER_DEV_KEY,
       STORAGE_URL: process.env.STORAGE_URL,
       ENV: process.env.MODE || "production",
+    },
+
+    scheme: "secretchat",
+    userInterfaceStyle: "dark",
+    newArchEnabled: true,
+
+    ios: {
+      supportsTablet: true,
+    },
+
+    androidNavigationBar: {
+      visible: "sticky-immersive",
+      barStyle: "dark-content",
+      backgroundColor: "#000000",
+    },
+
+
+    web: {
+      bundler: "metro",
+      output: "static",
+      favicon: "./assets/images/logo.png",
+    },
+
+    experiments: {
+      typedRoutes: true,
     },
   },
 };
