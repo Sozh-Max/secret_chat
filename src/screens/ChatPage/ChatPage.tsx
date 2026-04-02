@@ -12,6 +12,7 @@ import { SafeAreaInsectComponent } from '@/src/components/SafeAreaInsectComponen
 import { useGlobal } from '@/src/contexts/GlobalContext';
 import { useUser } from '@/src/contexts/UserContext';
 import { useApi } from '@/src/contexts/ApiContext';
+import { AnimatedScreen } from '@/src/components/animated-screen/AnimatedScreen';
 
 export const ChatPage = () => {
   const { id } = useLocalSearchParams<{ id: AGENT_KEYS }>();
@@ -47,34 +48,36 @@ export const ChatPage = () => {
   );
 
   return (
-    <SafeAreaInsectComponent>
-      <FormScreenWrapper>
-        <LinearGradient
-          colors={['rgb(5, 4, 4)', 'rgb(22, 22, 22)']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          style={{ flex: 1 }}
-        >
-          <View style={{ flex: 1 }}>
-
-            <Header
-              id={id}
-            />
-
+    <AnimatedScreen>
+      <SafeAreaInsectComponent>
+        <FormScreenWrapper>
+          <LinearGradient
+            colors={['rgb(5, 4, 4)', 'rgb(22, 22, 22)']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={{ flex: 1 }}
+          >
             <View style={{ flex: 1 }}>
-              <ChatWrapper
+
+              <Header
                 id={id}
               />
-            </View>
 
-            <ChatInput
-              id={id}
-              setLoading={setLoading}
-              loading={loading}
-            />
-          </View>
-        </LinearGradient>
-      </FormScreenWrapper>
-    </SafeAreaInsectComponent>
+              <View style={{ flex: 1 }}>
+                <ChatWrapper
+                  id={id}
+                />
+              </View>
+
+              <ChatInput
+                id={id}
+                setLoading={setLoading}
+                loading={loading}
+              />
+            </View>
+          </LinearGradient>
+        </FormScreenWrapper>
+      </SafeAreaInsectComponent>
+    </AnimatedScreen>
   );
 };

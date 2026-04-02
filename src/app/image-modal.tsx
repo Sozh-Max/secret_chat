@@ -4,10 +4,14 @@ import { Pressable, View, Platform, useWindowDimensions } from 'react-native';
 import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as NavigationBar from 'expo-navigation-bar';
-import { AGENT_KEYS, IMG_PREVIEW_MAP } from '@/src/constants/agents-data';
+import { AGENT_KEYS } from '@/src/constants/agents-data';
 import { PLATFORM } from '@/src/services/constants';
+import Constants from 'expo-constants';
+import { ChatMediaSkeleton } from '@/src/components/ChatMediaSkeleton/ChatMediaSkeleton';
 
 type Size = { w: number; h: number };
+
+const STORAGE_URL = Constants.expoConfig?.extra?.STORAGE_URL;
 
 function fitIntoBox(img: Size, box: Size): Size {
   if (!img.w || !img.h) return { w: box.w, h: box.h };
@@ -23,6 +27,9 @@ function fitIntoBox(img: Size, box: Size): Size {
 export default function ImageModal() {
   const router = useRouter();
   const { url, sourceId } = useLocalSearchParams<{ url: string; sourceId: AGENT_KEYS }>();
+
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [hasImageError, setHasImageError] = useState(false);
 
   const { width: screenW, height: screenH } = useWindowDimensions();
 
@@ -53,6 +60,7 @@ export default function ImageModal() {
   }, [imgSize, maxBox]);
 
   const handleLoad = (e: any) => {
+    setIsImageLoaded(true);
     const { width, height } = e?.nativeEvent?.source ?? {};
     if (width && height) setImgSize({ w: width, h: height });
   };
@@ -72,13 +80,17 @@ export default function ImageModal() {
             backgroundColor: '#000',
           }}
         >
-          <Image
-            source={sourceId ? IMG_PREVIEW_MAP[sourceId] : url}
-            onLoad={handleLoad}
-            style={{ width: '100%', height: '100%' }}
-            contentFit="contain"
-            cachePolicy="disk"
-          />
+          {!isImageLoaded && <ChatMediaSkeleton style={{ width: '100%', height: '100%' }} />}
+          {!hasImageError && (
+            <Image
+              source={sourceId ? `${STORAGE_URL}/${sourceId}/preview.jpg` : url}
+              onLoad={handleLoad}
+              style={{ width: '100%', height: '100%' }}
+              contentFit="contain"
+              cachePolicy="disk"
+              onError={() => setHasImageError(true)}
+            />
+          )}
         </View>
       </Pressable>
     </View>

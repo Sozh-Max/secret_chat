@@ -3,21 +3,35 @@ import { Image } from 'expo-image';
 
 import { styles } from '@/src/screens/ChatPage/content/system-message/styles';
 import { IconSystem } from '@/src/components/icons/IconSystem';
-import { IMG_PREVIEW_MAP } from '@/src/constants/agents-data';
 import { router } from 'expo-router';
 import { IdTypeProps } from '@/src/interfaces/global';
-
+import Constants from 'expo-constants';
+import React, { useState } from 'react';
+import { ChatMediaSkeleton } from '@/src/components/ChatMediaSkeleton/ChatMediaSkeleton';
+import { SkeletonBlock } from '@/src/components/skeleton-block/SkeletonBlock';
 
 interface SystemMessageType extends IdTypeProps {
   message?: string;
   isImage?: boolean;
 }
 
+const STORAGE_URL = Constants.expoConfig?.extra?.STORAGE_URL;
+
 export const SystemMessage = ({
   id,
   message,
   isImage = false,
 }: SystemMessageType) => {
+  const [hasImageError, setHasImageError] = useState(false);
+
+  const handlePress = () => {
+    if (!hasImageError) {
+      router.push({
+        pathname: '/image-modal',
+        params: { sourceId: id },
+      })
+    }
+  }
 
   return (
     <View style={styles.wrapper}>
@@ -35,14 +49,25 @@ export const SystemMessage = ({
 
         {isImage && (
           <Pressable
-            onPress={() =>
-              router.push({
-                pathname: '/image-modal',
-                params: { sourceId: id },
-              })
-            }
+            onPress={handlePress}
           >
-            <Image source={IMG_PREVIEW_MAP[id]} style={styles.img} />
+            <SkeletonBlock
+              url={`${STORAGE_URL}/${id}/preview.jpg`}
+              containerStyle={styles.img}
+              skeletonStyle={styles.img}
+              imageStyle={styles.img}
+              handleError={setHasImageError}
+            />
+            {/*{!isImageLoaded && <ChatMediaSkeleton style={styles.img} />}*/}
+            {/*{!hasImageError && (*/}
+            {/*  <Image*/}
+            {/*    source={`${STORAGE_URL}/${id}/preview.jpg`}*/}
+            {/*    style={styles.img}*/}
+            {/*    cachePolicy="disk"*/}
+            {/*    onLoad={() => setIsImageLoaded(true)}*/}
+            {/*    onError={() => setHasImageError(true)}*/}
+            {/*  />*/}
+            {/*)}*/}
           </Pressable>
         )}
       </View>

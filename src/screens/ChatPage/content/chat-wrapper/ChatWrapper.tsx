@@ -2,7 +2,6 @@ import React, { useMemo, useEffect, useRef, useState, useCallback } from 'react'
 import { FlatList, NativeSyntheticEvent, NativeScrollEvent, Platform } from 'react-native';
 import { ImageBackground } from 'expo-image';
 
-import { IMG_POSTER_MAP } from '@/src/constants/agents-data';
 import { styles } from '@/src/screens/ChatPage/content/chat-wrapper/styles';
 import { SystemMessage } from '@/src/screens/ChatPage/content/system-message/SystemMessage';
 import { IdTypeProps } from '@/src/interfaces/global';
@@ -16,8 +15,10 @@ import {
   COMPLAINT_SUCCEED_TEXT,
 } from '@/src/screens/ChatPage/content/chat-wrapper/constants';
 import { collectDialogImageUrls, prefetchChatImages } from '@/src/utils/chat-image-cache';
-
 import type { IDialogItem } from '@/src/contexts/GlobalContext';
+import Constants from 'expo-constants';
+
+const STORAGE_URL = Constants.expoConfig?.extra?.STORAGE_URL;
 
 export const ChatWrapper = ({ id }: IdTypeProps) => {
   const { dialogs, setDialogs } = useGlobal();
@@ -144,7 +145,10 @@ export const ChatWrapper = ({ id }: IdTypeProps) => {
   }, [dialog?.description, id]);
 
   return (
-    <ImageBackground source={IMG_POSTER_MAP[id]} style={styles.image_background}>
+    <ImageBackground
+      source={`${STORAGE_URL}/${id}/poster.webp`}
+      style={styles.image_background}
+    >
       <FlatList
         ref={listRef}
         data={messagesToRender}

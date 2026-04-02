@@ -2,13 +2,19 @@ import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { Text, View, Pressable } from 'react-native';
 
-import { AGENT_KEYS, IMG_THUMB_MAP } from '@/src/constants/agents-data';
+import { AGENT_KEYS } from '@/src/constants/agents-data';
 import { IDialogPreview } from '@/src/contexts/GlobalContext';
 // import { IconPlayShort } from '@/src/components/icons/IconPlayShort';
 import { IconBlock } from '@/src/components/icons/IconBlock';
 import { styles } from '@/src/screens/MaiPage/content/ChatCardShort/styles';
 import StarIcon from '@/assets/images/svg/star_icon.svg';
 import IconVerified from '@/src/components/icons/IconVerify';
+import Constants from 'expo-constants';
+import { useState } from 'react';
+import { ChatMediaSkeleton } from '@/src/components/ChatMediaSkeleton/ChatMediaSkeleton';
+import { SkeletonBlock } from '@/src/components/skeleton-block/SkeletonBlock';
+
+const STORAGE_URL = Constants.expoConfig?.extra?.STORAGE_URL;
 
 const ChatCardShort = ({
   data,
@@ -28,9 +34,11 @@ const ChatCardShort = ({
       onPress={handlePress}
     >
       <View style={styles.avatar_container}>
-        <Image
-          source={IMG_THUMB_MAP[data.id]}
-          style={styles.img}
+        <SkeletonBlock
+          url={`${STORAGE_URL}/${data.id}/thumb.jpg`}
+          containerStyle={styles.img}
+          skeletonStyle={styles.img}
+          imageStyle={styles.img}
         />
         {data.id === AGENT_KEYS.wendy && (
           <Text style={[styles.label, styles.label_new]}>New</Text>

@@ -4,7 +4,6 @@ import { Image } from 'expo-image';
 import { useRef, useState } from 'react';
 
 import { IconBackBtn } from '@/src/components/icons/IconBackBtn';
-import { IMG_THUMB_MAP } from '@/src/constants/agents-data';
 import { IconRemove } from '@/src/components/icons/IconRemove';
 import { ThemedText } from '@/src/components/ThemedText';
 import { IdTypeProps } from '@/src/interfaces/global';
@@ -20,6 +19,9 @@ import StarIcon from '@/assets/images/svg/star_icon.svg';
 import IconVerified from '@/src/components/icons/IconVerify';
 import { IconBlock } from '@/src/components/icons/IconBlock';
 
+import { SkeletonBlock } from '@/src/components/skeleton-block/SkeletonBlock';
+import { STORAGE_URL } from '@/src/constants/global';
+
 const Header = ({
   id,
 }: IdTypeProps) => {
@@ -29,6 +31,8 @@ const Header = ({
   const { activateComplaint } = useComplaint();
   const { userId } = useUser();
   const { api, messageService } = useApi();
+  // const [isImageLoaded, setIsImageLoaded] = useState(false);
+  // const [hasImageError, setHasImageError] = useState(false);
 
   const dialog = dialogs[id];
 
@@ -93,10 +97,21 @@ const Header = ({
       >
         <IconBackBtn color={SUB_MAIN_ICON_COLOR} />
       </AnimatedPressBtn>
-
-      <Image
-        source={IMG_THUMB_MAP[id]}
-        style={styles.img}
+      {/*{!isImageLoaded && <ChatMediaSkeleton style={styles.imageSkeleton} />}*/}
+      {/*{!hasImageError && (*/}
+      {/*  <Image*/}
+      {/*    source={`${STORAGE_URL}/${id}/thumb.jpg`}*/}
+      {/*    style={styles.img}*/}
+      {/*    cachePolicy="disk"*/}
+      {/*    onLoad={() => setIsImageLoaded(true)}*/}
+      {/*    onError={() => setHasImageError(true)}*/}
+      {/*  />*/}
+      {/*)}*/}
+      <SkeletonBlock
+        url={`${STORAGE_URL}/${id}/thumb.jpg`}
+        containerStyle={styles.imageContainer}
+        skeletonStyle={styles.img}
+        imageStyle={styles.img}
       />
       <View style={styles.info}>
         <View style={styles.label_container}>

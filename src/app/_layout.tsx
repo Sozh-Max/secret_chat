@@ -1,7 +1,6 @@
 import { DarkTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-get-random-values';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
@@ -27,6 +26,7 @@ import { useDevice } from '@/src/hooks/useDevice';
 import { PaymentsProvider } from '@/src/contexts/PaymentsContext';
 import * as SplashScreen from 'expo-splash-screen';
 import { FullscreenLoader } from '@/src/components/Loaders/FullscreenLoader/FullscreenLoader';
+import { EaseView } from 'react-native-ease';
 
 const GOOGLE_WEB_AUTH_CLIENT_ID = Constants.expoConfig?.extra?.GOOGLE_WEB_AUTH_CLIENT_ID;
 const APPSFLYER_DEV_KEY = Constants.expoConfig?.extra?.APPSFLYER_DEV_KEY;
@@ -88,22 +88,9 @@ function RootNavigator() {
     <Stack
       screenOptions={{
         headerShown: false,
-        cardStyleInterpolator: ({ current, layouts }) => ({
-          cardStyle: {
-            transform: [
-              {
-                translateX: current.progress.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [-layouts.screen.width, 0],
-                }),
-              },
-            ],
-          },
-        }),
-        transitionSpec: {
-          open: { animation: 'spring', config: { duration: 200 } },
-          close: { animation: 'spring', config: { duration: 200 } },
-        },
+        animation: 'fade',
+        gestureEnabled: true,
+        // contentStyle: { backgroundColor: 'transparent' },
       }}
     >
       <Stack.Screen name="login" />
