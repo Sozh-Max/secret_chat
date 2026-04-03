@@ -1,5 +1,3 @@
-import { ImageSourcePropType } from 'react-native';
-
 export const enum AGENT_KEYS {
   wendy = 'wendy',
   ashley = 'ashley',

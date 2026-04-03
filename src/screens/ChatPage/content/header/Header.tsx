@@ -5,7 +5,6 @@ import { useRef, useState } from 'react';
 
 import { IconBackBtn } from '@/src/components/icons/IconBackBtn';
 import { IconRemove } from '@/src/components/icons/IconRemove';
-import { ThemedText } from '@/src/components/ThemedText';
 import { IdTypeProps } from '@/src/interfaces/global';
 import { styles } from '@/src/screens/ChatPage/content/header/styles';
 import { useGlobal } from '@/src/contexts/GlobalContext';
@@ -40,9 +39,7 @@ const Header = ({
   const isActiveComplaint = Boolean(dialog?.dialog.length) && !dialog?.isComplaint;
 
   const handlePressBackBtn = () => {
-    setTimeout(() => {
-      router.push('/');
-    }, 50);
+    router.replace('/');
   };
 
   const handleComplaint = () => {
@@ -115,7 +112,7 @@ const Header = ({
       />
       <View style={styles.info}>
         <View style={styles.label_container}>
-          <ThemedText style={styles.label}>{id}</ThemedText>
+          <Text style={styles.label}>{id}</Text>
           <View style={styles.badges}>
             {(dialog?.isBlocked || dialog?.isComplaint) && <IconBlock />}
             {dialog?.verified && <IconVerified size={18} />}

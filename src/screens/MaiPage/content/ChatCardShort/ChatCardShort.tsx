@@ -22,7 +22,7 @@ const ChatCardShort = ({
   data: IDialogPreview;
 }) => {
   const handlePress = () => {
-    router.push({
+    router.replace({
       pathname: '/chat',
       params: { id: data.id },
     });

@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { AGENT_KEYS } from '@/src/constants/agents-data';
 import Constants from 'expo-constants';
 import { ChatMediaSkeleton } from '@/src/components/ChatMediaSkeleton/ChatMediaSkeleton';
+import { SkeletonBlock } from '@/src/components/skeleton-block/SkeletonBlock';
 
 const STORAGE_URL = Constants.expoConfig?.extra?.STORAGE_URL;
 
@@ -20,8 +21,8 @@ export const VideoContent = ({
 }) => {
   const { activeChatVideoId, setActiveChatVideoId} = useGlobal();
   const [tempId, setTempId] = useState<number>(Date.now() * Number(num));
-  const [isPosterLoaded, setIsPosterLoaded] = useState(false);
-  const [hasPosterError, setHasPosterError] = useState(false);
+  // const [isPosterLoaded, setIsPosterLoaded] = useState(false);
+  // const [hasPosterError, setHasPosterError] = useState(false);
 
   const isActiveVideo = tempId === activeChatVideoId;
 
@@ -33,10 +34,10 @@ export const VideoContent = ({
     setTempId(id);
   }
 
-  useEffect(() => {
-    setIsPosterLoaded(false);
-    setHasPosterError(false);
-  }, [thumbImg]);
+  // useEffect(() => {
+  //   setIsPosterLoaded(false);
+  //   setHasPosterError(false);
+  // }, [thumbImg]);
 
   return (
     <View style={styles.wrapper}>
@@ -47,17 +48,24 @@ export const VideoContent = ({
         <View
           style={styles.imageWrapper}
         >
-          {!isPosterLoaded && <ChatMediaSkeleton style={styles.imageSkeleton} />}
-          {!hasPosterError && (
-            <Image
-              source={thumbImg}
-              style={styles.image}
-              contentFit="cover"
-              cachePolicy="disk"
-              onLoad={() => setIsPosterLoaded(true)}
-              onError={() => setHasPosterError(true)}
-            />
-          )}
+          <SkeletonBlock
+            url={thumbImg}
+            containerStyle={styles.image}
+            skeletonStyle={styles.image}
+            imageStyle={styles.image}
+            contentFit="cover"
+          />
+          {/*{!isPosterLoaded && <ChatMediaSkeleton style={styles.imageSkeleton} />}*/}
+          {/*{!hasPosterError && (*/}
+          {/*  <Image*/}
+          {/*    source={thumbImg}*/}
+          {/*    style={styles.image}*/}
+          {/*    contentFit="cover"*/}
+          {/*    cachePolicy="disk"*/}
+          {/*    onLoad={() => setIsPosterLoaded(true)}*/}
+          {/*    onError={() => setHasPosterError(true)}*/}
+          {/*  />*/}
+          {/*)}*/}
             <Pressable
               style={styles.button}
               onPress={() => handlePress(Date.now())}
@@ -66,15 +74,6 @@ export const VideoContent = ({
             </Pressable>
         </View>
       )}
-
-      {/*{!isPlaying && (*/}
-      {/*  <Pressable*/}
-      {/*    style={styles.button}*/}
-      {/*    onPress={() => player.play()}*/}
-      {/*  >*/}
-      {/*    <Ionicons name="play-circle" size={64} color="white" />*/}
-      {/*  </Pressable>*/}
-      {/*)}*/}
     </View>
   );
 };

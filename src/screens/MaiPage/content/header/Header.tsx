@@ -12,9 +12,7 @@ export const Header = () => {
   const { tokens } = useGlobal();
 
   const handlePressSettings = () => {
-    setTimeout(() => {
-      router.push('/settings');
-    }, 50);
+    router.replace('/settings');
   }
 
   return (

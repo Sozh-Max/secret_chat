@@ -7,9 +7,7 @@ import { SUB_MAIN_ICON_COLOR } from '@/src/constants/Colors';
 
 export const Header = () => {
   const handlePressBackBtn = () => {
-    setTimeout(() => {
-      router.push('/');
-    }, 50);
+    router.replace('/');
   }
 
   return (
