@@ -5,13 +5,13 @@ import { Image, ImageContentFit, ImageStyle } from 'expo-image';
 
 type SkeletonBlockProps = {
   url: string;
-  containerStyle?: ViewStyle;
-  skeletonStyle?: ViewStyle;
+  containerStyle?: StyleProp<ViewStyle>;
+  skeletonStyle?: StyleProp<ViewStyle>;
   imageStyle?: StyleProp<ImageStyle>;
   contentFit?: ImageContentFit;
   cachePolicy?: 'none' | 'disk' | 'memory' | 'memory-disk' | null;
   handleError?: (value: boolean) => void;
-}
+};
 
 export const SkeletonBlock = ({
   url,
@@ -27,33 +27,35 @@ export const SkeletonBlock = ({
 
   const setError = (value: boolean) => {
     setHasError(value);
-    if (handleError) {
-      handleError(value)
-    }
-  }
+    handleError?.(value);
+  };
 
   return (
-    <View style={{
-      position: 'relative',
-      ...containerStyle,
-    }}>
-      {!isLoaded && <ChatMediaSkeleton
-        style={{
-          position: 'absolute',
-          left: 0,
-          top: 0,
-          ...skeletonStyle,
-        }}
-      />}
+    <View style={[{ position: 'relative' }, containerStyle]}>
+      {!isLoaded && (
+        <ChatMediaSkeleton
+          style={[
+            {
+              position: 'absolute',
+              left: 0,
+              top: 0,
+            },
+            skeletonStyle,
+          ]}
+        />
+      )}
+
       {!hasError && (
         <Image
           source={url}
-          style={{
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            ...imageStyle,
-          }}
+          style={[
+            {
+              position: 'absolute',
+              left: 0,
+              top: 0,
+            },
+            imageStyle,
+          ]}
           cachePolicy={cachePolicy}
           contentFit={contentFit}
           onLoad={() => setIsLoaded(true)}
@@ -61,5 +63,5 @@ export const SkeletonBlock = ({
         />
       )}
     </View>
-  )
-}
+  );
+};
