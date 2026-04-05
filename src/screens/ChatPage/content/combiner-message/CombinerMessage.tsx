@@ -8,17 +8,31 @@ import { AssistantMessage } from '@/src/screens/ChatPage/content/assistant-messa
 type CombinerMessageProps = {
   dialog: IDialogItem;
   id: AGENT_KEYS;
+  shouldAnimateContent?: boolean;
 };
 
 export const CombinerMessage = React.memo(
-  function CombinerMessage({ dialog, id }: CombinerMessageProps) {
-    return dialog?.replic.role === ROLES.USER
-      ? <UserMessage dialog={dialog} />
-      : <AssistantMessage dialog={dialog} id={id} />;
+  function CombinerMessage({
+    dialog,
+    id,
+    shouldAnimateContent = true,
+  }: CombinerMessageProps) {
+    return dialog?.replic.role === ROLES.USER ? (
+      <UserMessage
+        dialog={dialog}
+        shouldAnimateContent={shouldAnimateContent}
+      />
+    ) : (
+      <AssistantMessage
+        dialog={dialog}
+        id={id}
+      />
+    );
   },
   (prev, next) => {
     return (
       prev.id === next.id &&
+      prev.shouldAnimateContent === next.shouldAnimateContent &&
       prev.dialog.msgId === next.dialog.msgId &&
       prev.dialog.replic.role === next.dialog.replic.role &&
       prev.dialog.replic.content === next.dialog.replic.content &&

@@ -11,8 +11,8 @@ import { Balance } from '@/src/screens/SettingsPage/content/balance/Balance';
 import { AnimatedScreen } from '@/src/components/animated-screen/AnimatedScreen';
 
 export const SettingsScreen = () => (
-  <AnimatedScreen>
-    <SafeAreaInsectComponent>
+  <SafeAreaInsectComponent>
+    <AnimatedScreen>
       <LinearGradient
         colors={['rgb(5, 4, 4)', 'rgb(22, 22, 22)']}
         start={{ x: 0, y: 0 }}
@@ -55,7 +55,7 @@ export const SettingsScreen = () => (
           </View>
         </ScrollView>
       </LinearGradient>
-    </SafeAreaInsectComponent>
-  </AnimatedScreen>
+    </AnimatedScreen>
+  </SafeAreaInsectComponent>
 );
 

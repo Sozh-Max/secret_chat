@@ -1,5 +1,6 @@
-import React, { useEffect, useMemo, useRef } from 'react';
-import { Text, View, Animated } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Text, View } from 'react-native';
+import { EaseView } from 'react-native-ease';
 
 import { IDialogItem } from '@/src/contexts/GlobalContext';
 import { IconResponse } from '@/src/components/icons/IconResponse';
@@ -22,103 +23,68 @@ type Props = {
   isComplaint?: boolean;
 };
 
+const BUBBLE_DURATION = 180;
+const CONTENT_DELAY = 40;
+const CONTENT_DURATION = 140;
+const TYPING_DURATION = 140;
+
 const AssistantMessageImpl = ({ dialog, id, isBlocked, isComplaint }: Props) => {
   const { activateComplaint } = useComplaint();
 
   const content = dialog.replic.content || '';
+  const isTyping = dialog.replic.role === ROLES.TYPING;
+  const isComplaintDisabled = !!isComplaint || !!isBlocked;
 
-  // ---- Анимации
-  const bubble = useRef(new Animated.Value(0)).current; // 0..1
-  const typingOpacity = useRef(new Animated.Value(0)).current;
+  const [bubbleVisible, setBubbleVisible] = useState(false);
+  const [typingVisible, setTypingVisible] = useState(false);
+  const [contentVisible, setContentVisible] = useState(false);
 
-  const contentOpacity = useRef(new Animated.Value(0)).current;
-  const contentTranslateY = useRef(new Animated.Value(4)).current;
-
-  // ✅ чтобы в dev/StrictMode эффекты не запускались дважды
-  const didEnterBubble = useRef(false);
-  const didEnterContent = useRef(false);
-
-  useEffect(() => {
-    if (didEnterBubble.current) return;
-    didEnterBubble.current = true;
-
-    Animated.timing(bubble, {
-      toValue: 1,
-      duration: 180,
-      useNativeDriver: true,
-    }).start();
-  }, [bubble]);
+  const didStartBubble = useRef(false);
+  const didShowContent = useRef(false);
+  const delayTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (dialog.replic.role === ROLES.TYPING) {
-      typingOpacity.setValue(0);
-      Animated.timing(typingOpacity, {
-        toValue: 1,
-        duration: 140,
-        useNativeDriver: true,
-      }).start();
+    if (didStartBubble.current) return;
+    didStartBubble.current = true;
+
+    setBubbleVisible(true);
+
+    return () => {
+      if (delayTimer.current) {
+        clearTimeout(delayTimer.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (delayTimer.current) {
+      clearTimeout(delayTimer.current);
+      delayTimer.current = null;
+    }
+
+    if (isTyping) {
+      setTypingVisible(true);
+      setContentVisible(false);
       return;
     }
 
-    if (!didEnterContent.current) {
-      didEnterContent.current = true;
+    setTypingVisible(false);
 
-      contentOpacity.setValue(0);
-      contentTranslateY.setValue(4);
-
-      Animated.sequence([
-        Animated.delay(40),
-        Animated.parallel([
-          Animated.timing(contentOpacity, {
-            toValue: 1,
-            duration: 140,
-            useNativeDriver: true,
-          }),
-          Animated.timing(contentTranslateY, {
-            toValue: 0,
-            duration: 140,
-            useNativeDriver: true,
-          }),
-        ]),
-      ]).start();
+    if (!didShowContent.current) {
+      delayTimer.current = setTimeout(() => {
+        didShowContent.current = true;
+        setContentVisible(true);
+      }, CONTENT_DELAY);
     } else {
-      contentOpacity.setValue(1);
-      contentTranslateY.setValue(0);
+      setContentVisible(true);
     }
-  }, [
-    dialog.replic.role,
-    typingOpacity,
-    contentOpacity,
-    contentTranslateY,
-  ]);
 
-  const bubbleStyle = useMemo(() => {
-    const opacity = bubble;
-
-    const translateY = bubble.interpolate({
-      inputRange: [0, 1],
-      outputRange: [6, 0],
-    });
-
-    const scale = bubble.interpolate({
-      inputRange: [0, 1],
-      outputRange: [0.985, 1],
-    });
-
-    return {
-      opacity,
-      transform: [{ translateY }, { scale }],
+    return () => {
+      if (delayTimer.current) {
+        clearTimeout(delayTimer.current);
+      }
     };
-  }, [bubble]);
-
-  const contentAnimStyle = useMemo(() => {
-    return {
-      opacity: contentOpacity,
-      transform: [{ translateY: contentTranslateY }],
-    };
-  }, [contentOpacity, contentTranslateY]);
-
-  const isComplaintDisabled = !!isComplaint || !!isBlocked;
+  }, [isTyping]);
 
   const handlePressComplaint = () => {
     if (!isComplaintDisabled) {
@@ -127,12 +93,39 @@ const AssistantMessageImpl = ({ dialog, id, isBlocked, isComplaint }: Props) => 
   };
 
   return (
-    <Animated.View style={[styles.wrapper, bubbleStyle]}>
+    <EaseView
+      style={styles.wrapper}
+      initialAnimate={{
+        opacity: 0,
+        translateY: 6,
+        scaleX: 0.985,
+        scaleY: 0.985,
+      }}
+      animate={{
+        opacity: bubbleVisible ? 1 : 0,
+        translateY: bubbleVisible ? 0 : 6,
+        scaleX: bubbleVisible ? 1 : 0.985,
+        scaleY: bubbleVisible ? 1 : 0.985,
+      }}
+      transition={{
+        type: 'timing',
+        duration: BUBBLE_DURATION,
+        easing: 'easeOut',
+      }}
+    >
       <View style={styles.container}>
-        {dialog.replic.role === ROLES.TYPING ? (
-          <Animated.View style={{ opacity: typingOpacity }}>
+        {isTyping ? (
+          <EaseView
+            initialAnimate={{ opacity: 0 }}
+            animate={{ opacity: typingVisible ? 1 : 0 }}
+            transition={{
+              type: 'timing',
+              duration: TYPING_DURATION,
+              easing: 'easeOut',
+            }}
+          >
             <TypingDots />
-          </Animated.View>
+          </EaseView>
         ) : (
           <>
             <View style={styles.header}>
@@ -154,15 +147,29 @@ const AssistantMessageImpl = ({ dialog, id, isBlocked, isComplaint }: Props) => 
               </AnimatedPressBtn>
             </View>
 
-            <Animated.View style={contentAnimStyle}>
+            <EaseView
+              initialAnimate={{
+                opacity: 0,
+                translateY: 4,
+              }}
+              animate={{
+                opacity: contentVisible ? 1 : 0,
+                translateY: contentVisible ? 0 : 4,
+              }}
+              transition={{
+                type: 'timing',
+                duration: CONTENT_DURATION,
+                easing: 'easeOut',
+              }}
+            >
               <View style={{ gap: 4, flexWrap: 'wrap' }}>
                 <RenderParts part={content} id={id} />
               </View>
-            </Animated.View>
+            </EaseView>
           </>
         )}
       </View>
-    </Animated.View>
+    </EaseView>
   );
 };
 

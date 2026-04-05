@@ -38,7 +38,7 @@ export const ChatPage = () => {
     }
 
   }, [id, userId]);
-  
+
   useFocusEffect(
     useCallback(() => {
       return () => {
@@ -48,8 +48,8 @@ export const ChatPage = () => {
   );
 
   return (
-    <AnimatedScreen>
-      <SafeAreaInsectComponent>
+    <SafeAreaInsectComponent>
+      <AnimatedScreen>
         <FormScreenWrapper>
           <LinearGradient
             colors={['rgb(5, 4, 4)', 'rgb(22, 22, 22)']}
@@ -77,7 +77,7 @@ export const ChatPage = () => {
             </View>
           </LinearGradient>
         </FormScreenWrapper>
-      </SafeAreaInsectComponent>
-    </AnimatedScreen>
+      </AnimatedScreen>
+    </SafeAreaInsectComponent>
   );
 };

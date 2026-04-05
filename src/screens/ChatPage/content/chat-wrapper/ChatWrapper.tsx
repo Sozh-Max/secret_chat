@@ -19,39 +19,50 @@ import type { IDialogItem } from '@/src/contexts/GlobalContext';
 import Constants from 'expo-constants';
 
 const STORAGE_URL = Constants.expoConfig?.extra?.STORAGE_URL;
+const PAGE_SIZE = 8;
 
 export const ChatWrapper = ({ id }: IdTypeProps) => {
   const { dialogs, setDialogs } = useGlobal();
   const { showComplaintChat } = useComplaint();
 
-  const PAGE_SIZE = 8;
-
   const [page, setPage] = useState(1);
+  const [initialMessageIds, setInitialMessageIds] = useState<Set<string | number>>(new Set());
+  const [snapshotReady, setSnapshotReady] = useState(false);
 
   const dialog = dialogs[id];
   const isKeyboardVisible = useKeyboardStatus();
 
   const listRef = useRef<FlatList<IDialogItem>>(null);
 
-  // --- "умный" автоскролл ---
-  // inverted: "низ" списка = offset ~ 0
   const isAtBottomRef = useRef(true);
   const onEndReachedDuringMomentum = useRef(false);
 
-  // если меняем чат — начинаем с первой страницы, чтобы не рендерить гигантский список
+  const snapshotInitializedForChatRef = useRef<string | null>(null);
+
   useEffect(() => {
     setPage(1);
-    // при смене диалога логично считать, что мы "внизу"
     isAtBottomRef.current = true;
     onEndReachedDuringMomentum.current = false;
 
-    // скролл к низу после смены чата
+    snapshotInitializedForChatRef.current = null;
+    setInitialMessageIds(new Set());
+    setSnapshotReady(false);
+  }, [id]);
+
+  useEffect(() => {
+    if (snapshotInitializedForChatRef.current === id) return;
+
+    const ids = new Set((dialogs[id]?.dialog ?? []).map((item) => item.msgId));
+
+    setInitialMessageIds(ids);
+    setSnapshotReady(true);
+    snapshotInitializedForChatRef.current = id;
+
     requestAnimationFrame(() => {
       listRef.current?.scrollToOffset({ offset: 0, animated: false });
     });
-  }, [id]);
+  }, [id, dialogs]);
 
-  // ✅ reverse один раз
   const currentDialog: IDialogItem[] = useMemo(() => {
     return (dialog?.dialog ?? []).slice().reverse();
   }, [dialog?.dialog]);
@@ -62,7 +73,6 @@ export const ChatWrapper = ({ id }: IdTypeProps) => {
 
   useEffect(() => {
     const urls = collectDialogImageUrls(dialog?.dialog ?? [], id);
-
     void prefetchChatImages(urls);
   }, [dialog?.dialog, id]);
 
@@ -71,8 +81,7 @@ export const ChatWrapper = ({ id }: IdTypeProps) => {
 
     setDialogs((prev) => {
       const d = prev[id];
-      if (!d) return prev;
-      if (!d.isNotification) return prev;
+      if (!d || !d.isNotification) return prev;
 
       return {
         ...prev,
@@ -86,55 +95,58 @@ export const ChatWrapper = ({ id }: IdTypeProps) => {
 
   const onScroll = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const y = e.nativeEvent.contentOffset.y;
-    // порог можно подстроить: чем больше, тем чаще будем считать, что пользователь "внизу"
     isAtBottomRef.current = y < 40;
   }, []);
 
-  // автоскролл при новых сообщениях/системках:
-  // - если пользователь "внизу" ИЛИ
-  // - если открылась клавиатура (обычно пользователь пишет)
   useEffect(() => {
+    if (!snapshotReady) return;
+
     const shouldAutoScroll = isAtBottomRef.current || isKeyboardVisible;
     if (!shouldAutoScroll) return;
 
     requestAnimationFrame(() => {
       listRef.current?.scrollToOffset({ offset: 0, animated: true });
     });
-  }, [currentDialog.length, dialog?.isBlocked, dialog?.isComplaint, isKeyboardVisible]);
+  }, [snapshotReady, currentDialog.length, dialog?.isBlocked, dialog?.isComplaint, isKeyboardVisible]);
 
-  // при открытии клавиатуры чуть подталкиваем вниз (иногда layout не успевает)
   useEffect(() => {
-    if (!isKeyboardVisible) return;
+    if (!snapshotReady || !isKeyboardVisible) return;
 
     const t = setTimeout(() => {
       listRef.current?.scrollToOffset({ offset: 0, animated: true });
     }, 80);
 
     return () => clearTimeout(t);
-  }, [isKeyboardVisible]);
+  }, [snapshotReady, isKeyboardVisible]);
 
-  // loadMore: в inverted это подгрузка "сверху" (когда дошли до старых сообщений)
   const loadMore = useCallback(() => {
     if (messagesToRender.length < currentDialog.length) {
       setPage((prev) => prev + 1);
     }
   }, [messagesToRender.length, currentDialog.length]);
 
-  // ✅ ключ строго из msgId
   const keyExtractor = useCallback((item: IDialogItem) => String(item.msgId), []);
 
   const renderItem = useCallback(
-    ({ item }: { item: IDialogItem }) => <CombinerMessage dialog={item} id={id} />,
-    [id]
+    ({ item }: { item: IDialogItem }) => {
+      const shouldAnimateContent = !initialMessageIds.has(item.msgId);
+
+      return (
+        <CombinerMessage
+          dialog={item}
+          id={id}
+          shouldAnimateContent={shouldAnimateContent}
+        />
+      );
+    },
+    [id, initialMessageIds]
   );
 
   const header = useMemo(() => {
     return (
       <>
         {dialog?.isBlocked && <SystemMessage id={id} message={BLOCKED_TEXT} />}
-
         {id === showComplaintChat && <SystemMessage id={id} message={COMPLAINT_FAILED_TEXT} />}
-
         {dialog?.isComplaint && <SystemMessage id={id} message={COMPLAINT_SUCCEED_TEXT} />}
       </>
     );
@@ -143,6 +155,15 @@ export const ChatWrapper = ({ id }: IdTypeProps) => {
   const footer = useMemo(() => {
     return <SystemMessage id={id} isImage message={dialog?.description} />;
   }, [dialog?.description, id]);
+
+  if (!snapshotReady) {
+    return (
+      <ImageBackground
+        source={`${STORAGE_URL}/${id}/poster.webp`}
+        style={styles.image_background}
+      />
+    );
+  }
 
   return (
     <ImageBackground
@@ -161,18 +182,14 @@ export const ChatWrapper = ({ id }: IdTypeProps) => {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
         inverted
-
-        // --- плавность / производительность ---
         onScroll={onScroll}
         scrollEventThrottle={16}
         initialNumToRender={PAGE_SIZE}
         maxToRenderPerBatch={PAGE_SIZE}
         updateCellsBatchingPeriod={50}
         windowSize={7}
-        removeClippedSubviews={Platform.OS === 'android'} // безопаснее так
+        removeClippedSubviews={Platform.OS === 'android'}
         decelerationRate={Platform.OS === 'ios' ? 'fast' : 0.98}
-
-        // --- защита от дребезга onEndReached ---
         onMomentumScrollBegin={() => {
           onEndReachedDuringMomentum.current = false;
         }}

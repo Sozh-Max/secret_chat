@@ -11,7 +11,7 @@ import { SafeAreaInsectComponent } from '@/src/components/SafeAreaInsectComponen
 import { AnimatedScreen } from '@/src/components/animated-screen/AnimatedScreen';
 
 export const LoginPage = () => {
-  const { isAuthorized } = useUser()
+  const { isAuthorized } = useUser();
   const router = useRouter();
 
   useEffect(() => {
@@ -20,20 +20,20 @@ export const LoginPage = () => {
   }, [isAuthorized]);
 
   return (
-    <AnimatedScreen>
-      <SafeAreaInsectComponent>
+    <SafeAreaInsectComponent>
+      <AnimatedScreen>
         <LoginPageProvider>
           <View
             style={{
               flex: 1,
             }}
           >
-            <Header />
-            <LoginMain />
-            <Footer />
+            <Header/>
+            <LoginMain/>
+            <Footer/>
           </View>
         </LoginPageProvider>
-      </SafeAreaInsectComponent>
-    </AnimatedScreen>
-  )
-}
+      </AnimatedScreen>
+    </SafeAreaInsectComponent>
+  );
+};

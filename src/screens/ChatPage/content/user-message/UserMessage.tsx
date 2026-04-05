@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { View, Text, Image as RNImage, Pressable, ViewStyle, StyleProp } from 'react-native';
+import { View, Text, Image as RNImage, Pressable, StyleProp, ViewStyle } from 'react-native';
 import { EaseView } from 'react-native-ease';
+import { ImageStyle } from 'expo-image';
 
 import { IDialogItem } from '@/src/contexts/GlobalContext';
 import { styles } from '@/src/screens/ChatPage/content/user-message/styles';
@@ -8,11 +9,11 @@ import { IconResponse } from '@/src/components/icons/IconResponse';
 import { getHoursAndMinutesFromMs } from '@/src/services/message-service';
 import { router } from 'expo-router';
 import { SkeletonBlock } from '@/src/components/skeleton-block/SkeletonBlock';
-import { ImageStyle } from 'expo-image';
 
-const BUBBLE_DURATION = 50;
-const TEXT_DELAY = 30;
-const TEXT_DURATION = 50;
+type Props = {
+  dialog: IDialogItem;
+  shouldAnimateContent?: boolean;
+};
 
 type MediaBoxStyle = {
   width: '100%';
@@ -20,17 +21,23 @@ type MediaBoxStyle = {
   aspectRatio?: number;
 };
 
-const UserMessageImpl = ({ dialog }: { dialog: IDialogItem }) => {
+const BUBBLE_DURATION = 180;
+const TEXT_DELAY = 40;
+const TEXT_DURATION = 140;
+
+const UserMessageImpl = ({
+  dialog,
+  shouldAnimateContent = true,
+}: Props) => {
   const url = dialog.replic.image;
 
-  // const [isImageLoaded, setIsImageLoaded] = useState(false);
-  // const [hasImageError, setHasImageError] = useState(false);
   const [imgRatio, setImgRatio] = useState<number | null>(null);
 
   const [bubbleVisible, setBubbleVisible] = useState(false);
-  const [textVisible, setTextVisible] = useState(false);
+  const [textVisible, setTextVisible] = useState(!shouldAnimateContent);
 
   const didStart = useRef(false);
+  const didAnimateText = useRef(!shouldAnimateContent);
   const textDelayTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -47,15 +54,22 @@ const UserMessageImpl = ({ dialog }: { dialog: IDialogItem }) => {
   }, []);
 
   useEffect(() => {
+    if (!shouldAnimateContent) {
+      if (textDelayTimer.current) {
+        clearTimeout(textDelayTimer.current);
+        textDelayTimer.current = null;
+      }
+
+      didAnimateText.current = true;
+      setTextVisible(true);
+    }
+  }, [shouldAnimateContent]);
+
+  useEffect(() => {
     if (!url) {
       setImgRatio(null);
-      // setIsImageLoaded(false);
-      // setHasImageError(false);
       return;
     }
-    //
-    // setIsImageLoaded(false);
-    // setHasImageError(false);
 
     RNImage.getSize(
       url,
@@ -84,19 +98,20 @@ const UserMessageImpl = ({ dialog }: { dialog: IDialogItem }) => {
     };
   }, [imgRatio]);
 
-  const skeletonStyle = useMemo<StyleProp<ViewStyle>>(() => {
-    return [
-      mediaBoxStyle,
-      { borderRadius: 8 },
-    ];
-  }, [mediaBoxStyle]);
+  const containerStyle = useMemo<StyleProp<ViewStyle>>(
+    () => [mediaBoxStyle],
+    [mediaBoxStyle]
+  );
 
-  const imageStyle = useMemo<StyleProp<ImageStyle>>(() => {
-    return [
-      styles.image,
-      mediaBoxStyle,
-    ];
-  }, [mediaBoxStyle]);
+  const skeletonStyle = useMemo<StyleProp<ViewStyle>>(
+    () => [mediaBoxStyle, { borderRadius: 8 }],
+    [mediaBoxStyle]
+  );
+
+  const imageStyle = useMemo<StyleProp<ImageStyle>>(
+    () => [styles.image, mediaBoxStyle],
+    [mediaBoxStyle]
+  );
 
   const handlePressable = () => {
     if (!url) return;
@@ -108,9 +123,10 @@ const UserMessageImpl = ({ dialog }: { dialog: IDialogItem }) => {
   };
 
   const handleBubbleTransitionEnd = ({ finished }: { finished: boolean }) => {
-    if (!finished || textVisible) return;
+    if (!finished || didAnimateText.current || !shouldAnimateContent) return;
 
     textDelayTimer.current = setTimeout(() => {
+      didAnimateText.current = true;
       setTextVisible(true);
     }, TEXT_DELAY);
   };
@@ -153,27 +169,17 @@ const UserMessageImpl = ({ dialog }: { dialog: IDialogItem }) => {
             <SkeletonBlock
               url={url}
               contentFit="contain"
-              containerStyle={mediaBoxStyle}
+              containerStyle={containerStyle}
               skeletonStyle={skeletonStyle}
               imageStyle={imageStyle}
             />
-            {/*{!isImageLoaded && <ChatMediaSkeleton style={skeletonStyle} />}*/}
-
-            {/*<Image*/}
-            {/*  source={hasImageError ? null : url}*/}
-            {/*  style={hasImageError ? styles.imageHidden : imageStyle}*/}
-            {/*  contentFit="contain"*/}
-            {/*  cachePolicy="disk"*/}
-            {/*  onLoad={() => setIsImageLoaded(true)}*/}
-            {/*  onError={() => setHasImageError(true)}*/}
-            {/*/>*/}
           </Pressable>
         )}
 
         <EaseView
           initialAnimate={{
-            opacity: 0,
-            translateY: 4,
+            opacity: shouldAnimateContent ? 0 : 1,
+            translateY: shouldAnimateContent ? 4 : 0,
           }}
           animate={{
             opacity: textVisible ? 1 : 0,
@@ -196,6 +202,7 @@ export const UserMessage = React.memo(UserMessageImpl, (prev, next) => {
   return (
     prev.dialog.msgId === next.dialog.msgId &&
     prev.dialog.replic.content === next.dialog.replic.content &&
-    prev.dialog.replic.image === next.dialog.replic.image
+    prev.dialog.replic.image === next.dialog.replic.image &&
+    prev.shouldAnimateContent === next.shouldAnimateContent
   );
 });

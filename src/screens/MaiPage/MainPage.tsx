@@ -10,8 +10,8 @@ import { AnimatedScreen } from '@/src/components/animated-screen/AnimatedScreen'
 export const MainPage = () => {
 
   return (
-    <AnimatedScreen>
-      <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <AnimatedScreen>
         <LinearGradient
           colors={['rgb(5, 4, 4)', 'rgb(22, 22, 22)']}
           start={{ x: 0, y: 0 }}
@@ -22,10 +22,10 @@ export const MainPage = () => {
           <MainChatList></MainChatList>
           <Footer></Footer>
         </LinearGradient>
-      </SafeAreaView>
-    </AnimatedScreen>
-  )
-}
+      </AnimatedScreen>
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
   wrapper: {
