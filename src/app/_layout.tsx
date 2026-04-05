@@ -173,7 +173,7 @@ export default function RootLayout() {
                   >
                     <RootNavigator />
                     <FullscreenLoader />
-                    <StatusBar translucent style="light" backgroundColor="#000000" />
+                    <StatusBar style="light" backgroundColor="#000000" />
                   </LinearGradient>
                 </PaymentsProvider>
               </ComplaintProvider>

@@ -9,6 +9,7 @@ import { useUser } from '@/src/contexts/UserContext';
 import { LoginPageProvider } from '@/src/contexts/LoginPageContext';
 import { SafeAreaInsectComponent } from '@/src/components/SafeAreaInsectComponent/SafeAreaInsectComponent';
 import { AnimatedScreen } from '@/src/components/animated-screen/AnimatedScreen';
+import { FormScreenWrapper } from '@/src/components/FormScreenWrapper/FormScreenWrapper';
 
 export const LoginPage = () => {
   const { isAuthorized } = useUser();
@@ -23,15 +24,13 @@ export const LoginPage = () => {
     <SafeAreaInsectComponent>
       <AnimatedScreen>
         <LoginPageProvider>
-          <View
-            style={{
-              flex: 1,
-            }}
-          >
-            <Header/>
-            <LoginMain/>
-            <Footer/>
-          </View>
+          <FormScreenWrapper>
+            <View style={{ flex: 1 }}>
+              <Header />
+              <LoginMain />
+              <Footer />
+            </View>
+          </FormScreenWrapper>
         </LoginPageProvider>
       </AnimatedScreen>
     </SafeAreaInsectComponent>
