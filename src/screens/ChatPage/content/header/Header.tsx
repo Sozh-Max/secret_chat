@@ -1,6 +1,5 @@
 import { Pressable, Text, View } from 'react-native';
 import { router } from 'expo-router';
-import { Image } from 'expo-image';
 import { useRef, useState } from 'react';
 
 import { IconBackBtn } from '@/src/components/icons/IconBackBtn';
@@ -30,8 +29,6 @@ const Header = ({
   const { activateComplaint } = useComplaint();
   const { userId } = useUser();
   const { api, messageService } = useApi();
-  // const [isImageLoaded, setIsImageLoaded] = useState(false);
-  // const [hasImageError, setHasImageError] = useState(false);
 
   const dialog = dialogs[id];
 
@@ -94,16 +91,6 @@ const Header = ({
       >
         <IconBackBtn color={SUB_MAIN_ICON_COLOR} />
       </AnimatedPressBtn>
-      {/*{!isImageLoaded && <ChatMediaSkeleton style={styles.imageSkeleton} />}*/}
-      {/*{!hasImageError && (*/}
-      {/*  <Image*/}
-      {/*    source={`${STORAGE_URL}/${id}/thumb.jpg`}*/}
-      {/*    style={styles.img}*/}
-      {/*    cachePolicy="disk"*/}
-      {/*    onLoad={() => setIsImageLoaded(true)}*/}
-      {/*    onError={() => setHasImageError(true)}*/}
-      {/*  />*/}
-      {/*)}*/}
       <SkeletonBlock
         url={`${STORAGE_URL}/${id}/thumb.jpg`}
         containerStyle={styles.imageContainer}

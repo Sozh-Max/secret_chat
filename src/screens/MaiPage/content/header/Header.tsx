@@ -34,7 +34,6 @@ export const Header = () => {
         <AnimatedPressBtn
           style={styles.setting}
           onPress={handlePressSettings}
-          scaleEnd={0.8}
         >
           <IconMenu />
         </AnimatedPressBtn>
