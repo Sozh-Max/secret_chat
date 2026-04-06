@@ -1,9 +1,9 @@
-import { AGENT_KEYS } from '@/src/constants/agents-data';
 import { Dispatch, SetStateAction } from 'react';
 import { IDialogs, IDialog, IDialogItem } from '@/src/contexts/GlobalContext';
 import { ROLES } from '@/src/api/constants';
 import { IMessage } from '@/src/api/interfaces';
 import { Api } from '@/src/api/api';
+import { AgentId } from '@/src/interfaces/global';
 
 function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -27,7 +27,7 @@ const setData = ({
   role,
 }: {
   replic: IMessage | null;
-  id: AGENT_KEYS;
+  id: AgentId;
   setDialogs: Dispatch<SetStateAction<IDialogs>>;
   timestamp: number;
   isBlocked: boolean;
@@ -92,7 +92,7 @@ const removeTyping = ({
   id,
   setDialogs,
 }: {
-  id: AGENT_KEYS,
+  id: AgentId,
   setDialogs: Dispatch<SetStateAction<IDialogs>>;
 }) => {
   setDialogs((dialog: IDialogs) => {
@@ -110,7 +110,7 @@ const addTyping = ({
   id,
   setDialogs,
 }: {
-  id: AGENT_KEYS,
+  id: AgentId,
   setDialogs: Dispatch<SetStateAction<IDialogs>>;
 }) => {
   setDialogs((dialog: IDialogs) => {
@@ -147,7 +147,7 @@ export class MessageService {
     role = ROLES.USER,
     image = null,
   }: {
-    id: AGENT_KEYS;
+    id: AgentId;
     userId: string;
     message: string;
     setDialogs: Dispatch<SetStateAction<IDialogs>>;
@@ -251,7 +251,7 @@ export class MessageService {
     setDialogs,
     lastMsgId,
   }:  {
-    id: AGENT_KEYS;
+    id: AgentId;
     setDialogs: Dispatch<SetStateAction<IDialogs>>;
     lastMsgId: number;
   }): void {
@@ -281,7 +281,7 @@ export class MessageService {
     setDialogs,
   }: {
     setDialogs: Dispatch<SetStateAction<IDialogs>>,
-    id: AGENT_KEYS,
+    id: AgentId,
   }) {
     setDialogs((d: IDialogs) => {
       const current = {...d[id]};

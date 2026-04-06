@@ -2,7 +2,7 @@ import { Base64 } from 'js-base64';
 
 import { IMessagesRequest, IResponseUserData } from '@/src/api/interfaces';
 import { IDialog } from '@/src/contexts/GlobalContext';
-import { AGENT_KEYS } from '@/src/constants/agents-data';
+import { AgentId } from '@/src/interfaces/global';
 
 enum ErrorCodes {
   USER_WAS_REMOVE = 666,
@@ -144,7 +144,7 @@ export class Api {
     assistantId,
   }: {
     userId: string;
-    assistantId: AGENT_KEYS;
+    assistantId: AgentId;
   }) => {
     return await fetch(`${this.link}/stats/assists/selected`, {
       method: 'POST',
@@ -160,7 +160,7 @@ export class Api {
     assistantId,
   }: {
     userId: string;
-    assistantId: AGENT_KEYS;
+    assistantId: AgentId;
   }) => {
     return fetch(`${this.link}/user/dialogs/delete`, {
       method: 'DELETE',

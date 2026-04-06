@@ -1,13 +1,13 @@
 import React from 'react';
 import { IDialogItem } from '@/src/contexts/GlobalContext';
-import { AGENT_KEYS } from '@/src/constants/agents-data';
 import { ROLES } from '@/src/api/constants';
 import { UserMessage } from '@/src/screens/ChatPage/content/user-message/UserMessage';
 import { AssistantMessage } from '@/src/screens/ChatPage/content/assistant-message/AssistantMessage';
+import { AgentId } from '@/src/interfaces/global';
 
 type CombinerMessageProps = {
   dialog: IDialogItem;
-  id: AGENT_KEYS;
+  id: AgentId;
   shouldAnimateContent?: boolean;
 };
 

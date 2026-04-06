@@ -7,7 +7,7 @@ import { getNotifications, IMessageTemplate } from '@/src/utils/global';
 import { ROLES } from '@/src/api/constants';
 import { IDialogs } from '@/src/contexts/GlobalContext';
 import { useApi } from '@/src/contexts/ApiContext';
-import { AGENT_KEYS } from '@/src/constants/agents-data';
+import { AgentId } from '@/src/interfaces/global';
 
 const CHANEL_NAME = 'motivational_channel';
 
@@ -66,7 +66,7 @@ export const useInactivityNotification = ({
   const [permissionGranted, setPermissionGranted] = useState(false);
   const { userId } = useUser();
   const { messageService } = useApi();
-  const wasNotifiedAgentsRef = useRef<Set<AGENT_KEYS>>(new Set());
+  const wasNotifiedAgentsRef = useRef<Set<AgentId>>(new Set());
 
   const currentMessageRef = useRef<IMessageTemplate | null>(null);
   const currentMessageTimeRef = useRef<number>(0);

@@ -7,14 +7,14 @@ import Header from '@/src/screens/ChatPage/content/header/Header';
 import ChatInput from '@/src/screens/ChatPage/content/chat-input/ChatInput';
 import { ChatWrapper } from '@/src/screens/ChatPage/content/chat-wrapper/ChatWrapper';
 import { FormScreenWrapper } from '@/src/components/FormScreenWrapper/FormScreenWrapper';
-import { AGENT_KEYS } from '@/src/constants/agents-data';
 import { SafeAreaInsectComponent } from '@/src/components/SafeAreaInsectComponent/SafeAreaInsectComponent';
 import { useGlobal } from '@/src/contexts/GlobalContext';
 import { useUser } from '@/src/contexts/UserContext';
 import { useApi } from '@/src/contexts/ApiContext';
+import { AgentId } from '@/src/interfaces/global';
 
 export const ChatPage = () => {
-  const { id } = useLocalSearchParams<{ id: AGENT_KEYS }>();
+  const { id } = useLocalSearchParams<{ id: AgentId }>();
   const { userId } = useUser();
   const { api } = useApi();
 

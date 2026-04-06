@@ -1,16 +1,16 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { router } from 'expo-router';
 
-import { AGENT_KEYS } from '@/src/constants/agents-data';
 import { useGlobal } from '@/src/contexts/GlobalContext';
 import { useUser } from '@/src/contexts/UserContext';
 import { useApi } from '@/src/contexts/ApiContext';
+import { AgentId } from '@/src/interfaces/global';
 
 type ComplaintContextType = {
-  activeComplaint: AGENT_KEYS | null;
-  showComplaintChat: AGENT_KEYS | null;
-  activateComplaint: (id: AGENT_KEYS) => void;
-  setShowComplaintChat: (id: AGENT_KEYS | null) => void;
+  activeComplaint: AgentId | null;
+  showComplaintChat: AgentId | null;
+  activateComplaint: (id: AgentId) => void;
+  setShowComplaintChat: (id: AgentId | null) => void;
   disActiveComplaint: () => void;
   sendComplaint: () => void;
 }
@@ -25,11 +25,11 @@ export const ComplaintProvider = (
   const { userId } = useUser();
   const { messageService } = useApi();
 
-  const [activeComplaint, setActiveComplaint] = useState<AGENT_KEYS | null>(null);
-  const [showComplaintChat, setShowComplaintChat] = useState<AGENT_KEYS | null>(null);
+  const [activeComplaint, setActiveComplaint] = useState<AgentId | null>(null);
+  const [showComplaintChat, setShowComplaintChat] = useState<AgentId | null>(null);
   const [isShowComplaint, setShowComplaint] = useState<boolean>(false);
 
-  const activateComplaint = (id: AGENT_KEYS) => {
+  const activateComplaint = (id: AgentId) => {
     setShowComplaint(true);
     setActiveComplaint(id);
     setShowComplaintChat(null);
@@ -74,7 +74,7 @@ export const ComplaintProvider = (
     }
   };
 
-  const complaintFailed = (id?: AGENT_KEYS) => {
+  const complaintFailed = (id?: AgentId) => {
     if (id) {
       setShowComplaintChat(id);
     } else {
@@ -83,7 +83,7 @@ export const ComplaintProvider = (
     disActiveComplaint();
   };
 
-  const complaintSucceeded = (id: AGENT_KEYS) => {
+  const complaintSucceeded = (id: AgentId) => {
     messageService.complaintUserById({
       id,
       setDialogs,

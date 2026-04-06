@@ -1,5 +1,5 @@
-import { AGENT_KEYS } from '@/src/constants/agents-data';
 import { ROLES } from '@/src/api/constants';
+import { AgentId } from '@/src/interfaces/global';
 
 export interface IMessage {
   role: ROLES;
@@ -9,7 +9,7 @@ export interface IMessage {
 
 export interface IMessagesRequest {
   userId: string;
-  assistantId: AGENT_KEYS;
+  assistantId: AgentId;
   messages: IMessage[];
 }
 

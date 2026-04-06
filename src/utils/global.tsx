@@ -1,13 +1,14 @@
 import { AGENT_KEYS } from '@/src/constants/agents-data';
 import { IDialogs, IDialogItem, IDialog } from '@/src/contexts/GlobalContext';
 import { ROLES } from '@/src/api/constants';
+import { AgentId } from '@/src/interfaces/global';
 
 export interface IMessageTemplate {
   id: number;
   done: boolean;
   title: string;
   body: string;
-  agent: AGENT_KEYS;
+  agent: AgentId;
   active: boolean;
   seconds: number;
 }

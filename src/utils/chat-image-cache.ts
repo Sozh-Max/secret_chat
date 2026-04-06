@@ -1,8 +1,8 @@
 import Constants from 'expo-constants';
 import { Image } from 'expo-image';
 
-import { AGENT_KEYS } from '@/src/constants/agents-data';
 import { IDialogItem } from '@/src/contexts/GlobalContext';
+import { AgentId } from '@/src/interfaces/global';
 
 const STORAGE_URL = Constants.expoConfig?.extra?.STORAGE_URL;
 
@@ -11,13 +11,13 @@ const VIDEO_TOKEN_REGEXP = /{{2,3}video_(\d+)}{2,3}/g;
 
 const padMediaNum = (num: string) => num.padStart(2, '0');
 
-export const getAgentPhotoUrl = (id: AGENT_KEYS, num: string) =>
+export const getAgentPhotoUrl = (id: AgentId, num: string) =>
   STORAGE_URL ? `${STORAGE_URL}/${id}/photo/${padMediaNum(num)}.jpg` : '';
 
-export const getAgentVideoPosterUrl = (id: AGENT_KEYS, num: string) =>
+export const getAgentVideoPosterUrl = (id: AgentId, num: string) =>
   STORAGE_URL ? `${STORAGE_URL}/${id}/video/posters/${padMediaNum(num)}.jpg` : '';
 
-export const collectDialogImageUrls = (dialog: IDialogItem[], id: AGENT_KEYS) => {
+export const collectDialogImageUrls = (dialog: IDialogItem[], id: AgentId) => {
   const urls = new Set<string>();
 
   dialog.forEach((item) => {

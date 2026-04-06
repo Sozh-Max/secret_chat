@@ -4,9 +4,9 @@ import { styles } from '@/src/screens/ChatPage/content/assistant-message/content
 import { useGlobal } from '@/src/contexts/GlobalContext';
 import { VideoPlayer } from '@/src/screens/ChatPage/content/assistant-message/content/video-content/VideoPlayer';
 import { useState } from 'react';
-import { AGENT_KEYS } from '@/src/constants/agents-data';
 import Constants from 'expo-constants';
 import { SkeletonBlock } from '@/src/components/skeleton-block/SkeletonBlock';
+import { AgentId } from '@/src/interfaces/global';
 
 const STORAGE_URL = Constants.expoConfig?.extra?.STORAGE_URL;
 
@@ -14,7 +14,7 @@ export const VideoContent = ({
   id,
   num,
 }: {
-  id: AGENT_KEYS;
+  id: AgentId;
   num: string;
 }) => {
   const { activeChatVideoId, setActiveChatVideoId} = useGlobal();

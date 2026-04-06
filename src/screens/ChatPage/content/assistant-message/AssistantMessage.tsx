@@ -4,7 +4,6 @@ import { EaseView } from 'react-native-ease';
 
 import { IDialog, IDialogItem, useGlobal } from '@/src/contexts/GlobalContext';
 import { IconResponse } from '@/src/components/icons/IconResponse';
-import { AGENT_KEYS } from '@/src/constants/agents-data';
 import { styles } from '@/src/screens/ChatPage/content/assistant-message/styles';
 import { RenderParts } from '@/src/screens/ChatPage/content/assistant-message/content/render-parts/RenderParts';
 
@@ -15,10 +14,11 @@ import { IconComplaintFlag } from '@/src/components/icons/IconComplaintFlag';
 import { getHoursAndMinutesFromMs } from '@/src/services/message-service';
 import { ROLES } from '@/src/api/constants';
 import { TypingDots } from '@/src/screens/ChatPage/content/assistant-message/content/tree-dots/ThreeDots';
+import { AgentId } from '@/src/interfaces/global';
 
 type Props = {
   dialog: IDialogItem;
-  id: AGENT_KEYS;
+  id: AgentId;
   isBlocked?: boolean;
   isComplaint?: boolean;
 };

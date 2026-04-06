@@ -1,5 +1,5 @@
-import { AGENT_KEYS } from '@/src/constants/agents-data';
+export type AgentId = string;
 
 export interface IdTypeProps {
-  id: AGENT_KEYS;
+  id: AgentId;
 }

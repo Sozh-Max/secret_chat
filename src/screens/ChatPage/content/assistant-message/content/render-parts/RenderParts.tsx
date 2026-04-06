@@ -3,13 +3,13 @@ import { Text } from 'react-native';
 import { ImageContent } from '@/src/screens/ChatPage/content/assistant-message/content/image-content/ImageContent';
 import { VideoContent } from '@/src/screens/ChatPage/content/assistant-message/content/video-content/VideoContent';
 import { styles } from '@/src/screens/ChatPage/content/assistant-message/content/render-parts/styles';
-import { AGENT_KEYS } from '@/src/constants/agents-data';
+import { AgentId } from '@/src/interfaces/global';
 
 export const RenderParts = ({
   part,
   id,
 }: {
-  id: AGENT_KEYS;
+  id: AgentId;
   part: string;
 }) => {
   const match = part.match(/{{2,3}(photo|video)_(\d+)}{2,3}/);

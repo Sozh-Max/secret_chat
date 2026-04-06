@@ -1,4 +1,3 @@
-import { AGENT_KEYS, INIT_AGENT_LIST } from '@/src/constants/agents-data';
 import React, {
   createContext,
   Dispatch,
@@ -20,6 +19,7 @@ import { ROLES } from '@/src/api/constants';
 import { Platform, Vibration } from 'react-native';
 import { PLATFORM } from '@/src/services/constants';
 import { useApi } from '@/src/contexts/ApiContext';
+import { AgentId } from '@/src/interfaces/global';
 
 export interface IDialogItem {
   msgId: number;
@@ -29,7 +29,7 @@ export interface IDialogItem {
 
 export interface IDialog {
   dialog: IDialogItem[];
-  id: AGENT_KEYS;
+  id: AgentId;
   cost: number;
   isBlocked: boolean;
   isComplaint?: boolean;
@@ -41,7 +41,7 @@ export interface IDialog {
   verified: boolean;
 }
 
-export type IDialogs = { [key in AGENT_KEYS]?: IDialog }
+export type IDialogs = { [key in AgentId]?: IDialog }
 
 type GlobalContextType = {
   tokens: number | null;
@@ -60,7 +60,7 @@ type GlobalContextType = {
 }
 
 export interface IDialogPreview {
-  id: AGENT_KEYS;
+  id: AgentId;
   description: string;
   message: string;
   lastMessageTime: number;
@@ -80,7 +80,9 @@ const refreshChats = ({
   dialogs: IDialogs;
   setDialogPreview: Dispatch<SetStateAction<IDialogPreview[]>>;
 }) => {
-  setDialogPreview(INIT_AGENT_LIST.map((key: AGENT_KEYS) => {
+  const INIT_AGENT_LIST: AgentId[] = Object.keys(dialogs);
+
+  setDialogPreview(INIT_AGENT_LIST.map((key: AgentId) => {
     const dialog: IDialog = dialogs[key] as IDialog;
 
     const lastMessage: IDialogItem | undefined = dialog?.dialog?.[dialog.dialog.length - 1];
@@ -133,16 +135,16 @@ export const GlobalProvider = (
   useEffect(() => {
     const getInitData = async () => {
       try {
-        const dialogsData: Partial<Record<AGENT_KEYS, IDialog>> = {};
+        const dialogsData: Partial<Record<AgentId, IDialog>> = {};
 
         const requestInitData = await api.getInitData(userId);
 
         for (const key in requestInitData?.assistantsData) {
           const obj = requestInitData.assistantsData[key];
 
-          dialogsData[key as AGENT_KEYS] = {
+          dialogsData[key as AgentId] = {
             dialog: [],
-            id: key as AGENT_KEYS,
+            id: key as AgentId,
             cost: obj.cost ?? 10,
             isBlocked: false,
             isComplaint: false,
@@ -157,7 +159,7 @@ export const GlobalProvider = (
 
         if (requestDialogsData?.dialogs?.length) {
           for (let dialog of requestDialogsData.dialogs) {
-            const item: IDialog | undefined = dialogsData[dialog.id as AGENT_KEYS];
+            const item: IDialog | undefined = dialogsData[dialog.id as AgentId];
             if (item) {
               item.dialog = dialog.dialog.map((d: IDialogItem, index: number) => ({
                 ...d,
@@ -210,9 +212,9 @@ export const GlobalProvider = (
       const newDialogs: IDialogs = {};
 
       for (const key in dialogs) {
-        const value = dialogs[key as AGENT_KEYS];
+        const value = dialogs[key as AgentId];
         if (value) {
-          newDialogs[key as AGENT_KEYS] = {
+          newDialogs[key as AgentId] = {
             ...value,
             dialog: [],
             isBlocked: false,
@@ -235,7 +237,7 @@ export const GlobalProvider = (
   }, [userId]);
 
   useEffect(() => {
-    if (dialogs[AGENT_KEYS.wendy] && dialogs[AGENT_KEYS.ashley]) {
+    if (Object.keys(dialogs).length > 0) {
       refreshChats({
         dialogs,
         setDialogPreview,
