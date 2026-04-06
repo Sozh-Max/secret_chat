@@ -1,6 +1,6 @@
 import { StyleProp, View, ViewStyle } from 'react-native';
 import React, { useState } from 'react';
-import { ChatMediaSkeleton } from '@/src/components/ChatMediaSkeleton/ChatMediaSkeleton';
+import { ChatMediaSkeleton } from '@/src/components/chat-media-skeleton/ChatMediaSkeleton';
 import { Image, ImageContentFit, ImageStyle } from 'expo-image';
 
 type SkeletonBlockProps = {

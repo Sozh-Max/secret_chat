@@ -9,20 +9,15 @@ type Props = {
 export const ChatMediaSkeleton = ({ style }: Props) => {
   return (
     <EaseView
-      initialAnimate={{ opacity: 0.35 }}
-      animate={{ opacity: 0.65 }}
+      initialAnimate={{ backgroundColor: '#1e1e1e' }}
+      animate={{ backgroundColor: '#373737' }}
       transition={{
         type: 'timing',
         duration: 700,
         easing: 'easeInOut',
         loop: 'reverse',
       }}
-      style={[
-        {
-          backgroundColor: '#6A6A6A',
-        },
-        style,
-      ]}
+      style={style}
     />
   );
 };

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Text, View } from 'react-native';
 import { EaseView } from 'react-native-ease';
 
-import { IDialogItem } from '@/src/contexts/GlobalContext';
+import { IDialog, IDialogItem, useGlobal } from '@/src/contexts/GlobalContext';
 import { IconResponse } from '@/src/components/icons/IconResponse';
 import { AGENT_KEYS } from '@/src/constants/agents-data';
 import { styles } from '@/src/screens/ChatPage/content/assistant-message/styles';
@@ -28,12 +28,16 @@ const CONTENT_DELAY = 40;
 const CONTENT_DURATION = 140;
 const TYPING_DURATION = 140;
 
-const AssistantMessageImpl = ({ dialog, id, isBlocked, isComplaint }: Props) => {
+const AssistantMessageImpl = ({ dialog, id}: Props) => {
   const { activateComplaint } = useComplaint();
+
+  const { dialogs } = useGlobal();
+
+  const d = dialogs[id] as IDialog;
 
   const content = dialog.replic.content || '';
   const isTyping = dialog.replic.role === ROLES.TYPING;
-  const isComplaintDisabled = !!isComplaint || !!isBlocked;
+  const isComplaintDisabled = Boolean(d?.isComplaint || d.isBlocked);
 
   const [bubbleVisible, setBubbleVisible] = useState(false);
   const [typingVisible, setTypingVisible] = useState(false);
@@ -176,8 +180,6 @@ const AssistantMessageImpl = ({ dialog, id, isBlocked, isComplaint }: Props) => 
 export const AssistantMessage = React.memo(AssistantMessageImpl, (prev, next) => {
   return (
     prev.id === next.id &&
-    prev.isBlocked === next.isBlocked &&
-    prev.isComplaint === next.isComplaint &&
     prev.dialog.msgId === next.dialog.msgId &&
     prev.dialog.replic.role === next.dialog.replic.role &&
     prev.dialog.replic.content === next.dialog.replic.content &&

@@ -130,7 +130,6 @@ export const ChatWrapper = ({ id }: IdTypeProps) => {
   const renderItem = useCallback(
     ({ item }: { item: IDialogItem }) => {
       const shouldAnimateContent = !initialMessageIds.has(item.msgId);
-
       return (
         <CombinerMessage
           dialog={item}

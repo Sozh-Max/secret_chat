@@ -1,5 +1,4 @@
 import { View, Text, Pressable } from 'react-native';
-import { Image } from 'expo-image';
 
 import { styles } from '@/src/screens/ChatPage/content/system-message/styles';
 import { IconSystem } from '@/src/components/icons/IconSystem';
@@ -7,7 +6,6 @@ import { router } from 'expo-router';
 import { IdTypeProps } from '@/src/interfaces/global';
 import Constants from 'expo-constants';
 import React, { useState } from 'react';
-import { ChatMediaSkeleton } from '@/src/components/ChatMediaSkeleton/ChatMediaSkeleton';
 import { SkeletonBlock } from '@/src/components/skeleton-block/SkeletonBlock';
 
 interface SystemMessageType extends IdTypeProps {
@@ -58,16 +56,6 @@ export const SystemMessage = ({
               imageStyle={styles.img}
               handleError={setHasImageError}
             />
-            {/*{!isImageLoaded && <ChatMediaSkeleton style={styles.img} />}*/}
-            {/*{!hasImageError && (*/}
-            {/*  <Image*/}
-            {/*    source={`${STORAGE_URL}/${id}/preview.jpg`}*/}
-            {/*    style={styles.img}*/}
-            {/*    cachePolicy="disk"*/}
-            {/*    onLoad={() => setIsImageLoaded(true)}*/}
-            {/*    onError={() => setHasImageError(true)}*/}
-            {/*  />*/}
-            {/*)}*/}
           </Pressable>
         )}
       </View>

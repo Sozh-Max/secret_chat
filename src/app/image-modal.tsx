@@ -7,7 +7,7 @@ import * as NavigationBar from 'expo-navigation-bar';
 import { AGENT_KEYS } from '@/src/constants/agents-data';
 import { PLATFORM } from '@/src/services/constants';
 import Constants from 'expo-constants';
-import { ChatMediaSkeleton } from '@/src/components/ChatMediaSkeleton/ChatMediaSkeleton';
+import { ChatMediaSkeleton } from '@/src/components/chat-media-skeleton/ChatMediaSkeleton';
 
 type Size = { w: number; h: number };
 

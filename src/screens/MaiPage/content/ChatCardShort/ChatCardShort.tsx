@@ -1,17 +1,13 @@
-import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { Text, View, Pressable } from 'react-native';
 
 import { AGENT_KEYS } from '@/src/constants/agents-data';
 import { IDialogPreview } from '@/src/contexts/GlobalContext';
-// import { IconPlayShort } from '@/src/components/icons/IconPlayShort';
 import { IconBlock } from '@/src/components/icons/IconBlock';
 import { styles } from '@/src/screens/MaiPage/content/ChatCardShort/styles';
 import StarIcon from '@/assets/images/svg/star_icon.svg';
 import IconVerified from '@/src/components/icons/IconVerify';
 import Constants from 'expo-constants';
-import { useState } from 'react';
-import { ChatMediaSkeleton } from '@/src/components/ChatMediaSkeleton/ChatMediaSkeleton';
 import { SkeletonBlock } from '@/src/components/skeleton-block/SkeletonBlock';
 
 const STORAGE_URL = Constants.expoConfig?.extra?.STORAGE_URL;
