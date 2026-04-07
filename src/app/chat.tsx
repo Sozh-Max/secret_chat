@@ -1,10 +1,12 @@
 import { ChatPage } from '@/src/screens/ChatPage/ChatPage';
-import { View } from 'react-native';
+import { PageSlideWrapper } from '@/src/components/PageSlideWrapper/PageSlideWrapper';
 
 export default function Chat() {
   return (
-    <View style={{ flex: 1, backgroundColor: '#000000' }}>
-      <ChatPage />
-    </View>
+    <PageSlideWrapper>
+      {/*<View style={{ flex: 1, backgroundColor: '#000000' }}>*/}
+        <ChatPage />
+      {/*</View>*/}
+    </PageSlideWrapper>
   )
 }

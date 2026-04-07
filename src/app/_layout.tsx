@@ -16,8 +16,8 @@ import {
 } from '@expo-google-fonts/noto-sans';
 import { LinearGradient } from 'expo-linear-gradient';
 import { UserProvider, useUser } from '@/src/contexts/UserContext';
-import { useEffect, useRef } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { useCallback, useEffect, useRef } from 'react';
+import { View } from 'react-native';
 import { ComplaintProvider } from '@/src/contexts/ComplaintContext';
 import { ApiProvider } from '@/src/contexts/ApiContext';
 import appsFlyer from 'react-native-appsflyer';
@@ -26,7 +26,6 @@ import { useDevice } from '@/src/hooks/useDevice';
 import { PaymentsProvider } from '@/src/contexts/PaymentsContext';
 import * as SplashScreen from 'expo-splash-screen';
 import { FullscreenLoader } from '@/src/components/Loaders/FullscreenLoader/FullscreenLoader';
-import { EaseView } from 'react-native-ease';
 
 const GOOGLE_WEB_AUTH_CLIENT_ID = Constants.expoConfig?.extra?.GOOGLE_WEB_AUTH_CLIENT_ID;
 const APPSFLYER_DEV_KEY = Constants.expoConfig?.extra?.APPSFLYER_DEV_KEY;
@@ -41,86 +40,70 @@ GoogleSignin.configure({
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
 function RootNavigator() {
-  const { isAuthorized, isCheckAuthorized, userId } = useUser();
+  const { isAuthorized, isCheckAuthorized } = useUser();
   const { isAppReady } = useGlobal();
   const router = useRouter();
-
   const didHideSplash = useRef(false);
 
-  useEffect(() => {
-    const canHide =
-      isCheckAuthorized && (!isAuthorized ? true : isAppReady);
+  const isBootReady =
+    isCheckAuthorized && (!isAuthorized || isAppReady);
 
-    if (!canHide) return;
+  useEffect(() => {
+    if (!isBootReady) return;
+
+    router.replace(isAuthorized ? '/' : '/login');
+  }, [isBootReady, isAuthorized, router]);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (!isBootReady) return;
     if (didHideSplash.current) return;
 
     didHideSplash.current = true;
-    SplashScreen.hideAsync().catch(() => {});
-  }, [isCheckAuthorized, isAuthorized, isAppReady]);
+    await SplashScreen.hideAsync();
+  }, [isBootReady]);
 
-  useEffect(() => {
-    if (!isCheckAuthorized) return;
-
-    // навигация как у тебя
-    if (isAuthorized) {
-      router.replace('/');
-    } else {
-      router.replace('/login');
-    }
-  }, [isCheckAuthorized, isAuthorized, router]);
-
-  if (!isCheckAuthorized) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: 'black',
-        }}
-      >
-        <ActivityIndicator size="large" color="white" />
-      </View>
-    );
+  if (!isBootReady) {
+    return null;
   }
 
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-        animation: 'fade',
-        gestureEnabled: true,
-        // contentStyle: { backgroundColor: 'transparent' },
-      }}
-    >
-      <Stack.Screen name="login" />
-      <Stack.Screen name="index" />
-      <Stack.Screen name="chat" />
-      <Stack.Screen name="settings" />
-      <Stack.Screen name="+not-found" />
-
-      <Stack.Screen
-        name="image-modal"
-        options={{
-          presentation: 'transparentModal',
-          gestureEnabled: true,
+    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+      <Stack
+        screenOptions={{
           headerShown: false,
-          animation: 'fade',
-          contentStyle: { backgroundColor: 'transparent' },
+          animation: 'none',
+          gestureEnabled: false,
         }}
-      />
+      >
+        <Stack.Screen name="login" />
+        <Stack.Screen name="index" />
+        <Stack.Screen name="chat" />
+        <Stack.Screen name="settings" />
+        <Stack.Screen name="+not-found" />
 
-      <Stack.Screen
-        name="modal-bottom"
-        options={{
-          presentation: 'transparentModal',
-          gestureEnabled: true,
-          headerShown: false,
-          animation: 'fade',
-          contentStyle: { backgroundColor: 'transparent' },
-        }}
-      />
-    </Stack>
+        <Stack.Screen
+          name="image-modal"
+          options={{
+            presentation: 'transparentModal',
+            gestureEnabled: true,
+            headerShown: false,
+            animation: 'fade',
+            contentStyle: { backgroundColor: 'transparent' },
+          }}
+        />
+
+        <Stack.Screen
+          name="modal-bottom"
+          options={{
+            presentation: 'transparentModal',
+            gestureEnabled: true,
+            headerShown: false,
+            animation: 'fade',
+            contentStyle: { backgroundColor: 'transparent' },
+          }}
+        />
+      </Stack>
+    </View>
   );
 }
 
@@ -173,7 +156,7 @@ export default function RootLayout() {
                   >
                     <RootNavigator />
                     <FullscreenLoader />
-                    <StatusBar style="light" backgroundColor="#000000" />
+                    <StatusBar style="light" />
                   </LinearGradient>
                 </PaymentsProvider>
               </ComplaintProvider>

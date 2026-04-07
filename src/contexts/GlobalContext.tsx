@@ -152,41 +152,42 @@ export const GlobalProvider = (
             description: obj.description ?? '',
             verified: obj.verified ?? false,
             lastMsgId: 0,
-          }
+          };
         }
 
         const requestDialogsData = await api.getDialogs(userId);
 
         if (requestDialogsData?.dialogs?.length) {
-          for (let dialog of requestDialogsData.dialogs) {
-            const item: IDialog | undefined = dialogsData[dialog.id as AgentId];
-            if (item) {
-              item.dialog = dialog.dialog.map((d: IDialogItem, index: number) => ({
-                ...d,
-                msgId: index + 1,
-              })) as IDialogItem[];
-              item.isBlocked = dialog.isBlocked || false;
-              item.isComplaint = dialog.isComplaint || false;
-              item.lastMsgId = dialog.lastMsgId || 0;
-              item.isNotification = dialog.isNotification ?? false;
-              item.isNotificationSend = dialog.isNotificationSend ?? false;
-            }
+          for (const dialog of requestDialogsData.dialogs) {
+            const item = dialogsData[dialog.id as AgentId];
+            if (!item) continue;
+
+            item.dialog = dialog.dialog.map((d: IDialogItem, index: number) => ({
+              ...d,
+              msgId: index + 1,
+            })) as IDialogItem[];
+
+            item.isBlocked = dialog.isBlocked || false;
+            item.isComplaint = dialog.isComplaint || false;
+            item.lastMsgId = dialog.lastMsgId || 0;
+            item.isNotification = dialog.isNotification ?? false;
+            item.isNotificationSend = dialog.isNotificationSend ?? false;
           }
         }
+
         if (requestDialogsData?.lastMsgGlobalId) {
           setLastMsgGlobalId(requestDialogsData.lastMsgGlobalId);
         }
 
         const requestBalanceData = await api.getBalance(userId);
-
         setTokens(Number(requestBalanceData?.balance || 0));
 
-        setDialogs(dialogsData)
-
+        setDialogs(dialogsData);
         refreshChats({
           dialogs: dialogsData,
           setDialogPreview,
         });
+
         setIsAppReady(true);
         setShowGlobalLoader(false);
       } catch (e) {
@@ -194,13 +195,11 @@ export const GlobalProvider = (
       }
     };
 
-    const intervalId = setInterval(async () => {
-      if (isCheckAuthorized && userId) {
-        clearInterval(intervalId);
-        getInitData();
-      }
-    }, 100);
-  }, [userId, isCheckAuthorized]);
+    if (!isCheckAuthorized) return;
+    if (!userId) return;
+
+    getInitData();
+  }, [userId, isCheckAuthorized, api]);
 
   useEffect(() => {
     NavigationBar.setBackgroundColorAsync('#000000');

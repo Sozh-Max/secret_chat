@@ -1,5 +1,6 @@
-import { Animated, Pressable, PressableProps, StyleProp, ViewStyle } from 'react-native';
-import { ReactNode, RefObject, useRef } from 'react';
+import { Pressable, PressableProps, StyleProp, ViewStyle } from 'react-native';
+import { ReactNode, RefObject, useState } from 'react';
+import { EaseView } from 'react-native-ease';
 
 type AnimatedPressBtnProps = {
   style?: StyleProp<ViewStyle> | ((args: { pressed: boolean }) => StyleProp<ViewStyle>);
@@ -20,50 +21,35 @@ export const AnimatedPressBtn = ({
   customRef,
   disabled = false,
 }: AnimatedPressBtnProps) => {
-
-  const scale = useRef(new Animated.Value(1)).current;
-
-  const handlePressIn = () => {
-    Animated.spring(scale, {
-      toValue: scaleEnd,
-      useNativeDriver: true,
-      speed: 30,
-      bounciness: 0,
-    }).start();
-  };
-
-  const handlePressOut = () => {
-    Animated.spring(scale, {
-      toValue: 1,
-      useNativeDriver: true,
-      speed: 30,
-      bounciness: 0,
-    }).start();
-  }
+  const [isPressedIn, setIsPressedIn] = useState(false);
 
   return (
     <Pressable
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
+      onPressIn={() => setIsPressedIn(true)}
+      onPressOut={() => setIsPressedIn(false)}
       onPress={onPress}
       ref={customRef}
       style={wrapperStyle}
       disabled={disabled}
     >
-      {({ pressed }: { pressed: boolean }) => {
+      {({ pressed }) => {
         const baseStyle = typeof style === 'function' ? style({ pressed }) : style;
 
-        const animatedStyles = [
-          ...(Array.isArray(baseStyle) ? baseStyle : (baseStyle ? [baseStyle] : [])),
-          { transform: [{ scale }] },
-        ];
-
         return (
-          <Animated.View style={animatedStyles}>
+          <EaseView
+            animate={{ scale: isPressedIn && !disabled ? scaleEnd : 1 }}
+            transition={{
+              type: 'spring',
+              damping: 20,
+              stiffness: 250,
+              mass: 1,
+            }}
+            style={baseStyle}
+          >
             {children}
-          </Animated.View>
+          </EaseView>
         );
       }}
     </Pressable>
   );
-}
+};
