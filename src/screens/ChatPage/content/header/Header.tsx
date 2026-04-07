@@ -19,6 +19,7 @@ import { IconBlock } from '@/src/components/icons/IconBlock';
 
 import { SkeletonBlock } from '@/src/components/skeleton-block/SkeletonBlock';
 import { STORAGE_URL } from '@/src/constants/global';
+import { RippleButton } from '@/src/components/ripple-button/RippleButton';
 
 const Header = ({
   id,
@@ -85,12 +86,12 @@ const Header = ({
 
   return (
     <View style={styles.wrapper}>
-      <AnimatedPressBtn
+      <RippleButton
         style={styles.button}
         onPress={handlePressBackBtn}
       >
         <IconBackBtn color={SUB_MAIN_ICON_COLOR} />
-      </AnimatedPressBtn>
+      </RippleButton>
       <SkeletonBlock
         url={`${STORAGE_URL}/${id}/thumb.jpg`}
         containerStyle={styles.imageContainer}

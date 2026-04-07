@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { View, Text } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 
 import { useGlobal } from '@/src/contexts/GlobalContext';
 import { IconMenu } from '@/src/components/icons/IconMenu';
@@ -7,6 +7,7 @@ import { AnimatedPressBtn } from '@/src/components/AnimatedPressBtn/AnimatedPres
 import { router } from 'expo-router';
 import { styles } from '@/src/screens/MaiPage/content/header/styles';
 import { formatNumberWithCommas } from '@/src/utils/global';
+import { RippleButton } from '@/src/components/ripple-button/RippleButton';
 
 export const Header = () => {
   const { tokens } = useGlobal();
@@ -31,12 +32,12 @@ export const Header = () => {
         </View>
       )}
       <View>
-        <AnimatedPressBtn
-          style={styles.setting}
+        <RippleButton
           onPress={handlePressSettings}
+          style={styles.setting}
         >
           <IconMenu />
-        </AnimatedPressBtn>
+        </RippleButton>
       </View>
     </View>
   );

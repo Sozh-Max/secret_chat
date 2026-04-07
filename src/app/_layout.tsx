@@ -17,7 +17,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { UserProvider, useUser } from '@/src/contexts/UserContext';
 import { useCallback, useEffect, useRef } from 'react';
-import { View } from 'react-native';
+import { Keyboard, View } from 'react-native';
 import { ComplaintProvider } from '@/src/contexts/ComplaintContext';
 import { ApiProvider } from '@/src/contexts/ApiContext';
 import appsFlyer from 'react-native-appsflyer';
@@ -26,6 +26,7 @@ import { useDevice } from '@/src/hooks/useDevice';
 import { PaymentsProvider } from '@/src/contexts/PaymentsContext';
 import * as SplashScreen from 'expo-splash-screen';
 import { FullscreenLoader } from '@/src/components/Loaders/FullscreenLoader/FullscreenLoader';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 const GOOGLE_WEB_AUTH_CLIENT_ID = Constants.expoConfig?.extra?.GOOGLE_WEB_AUTH_CLIENT_ID;
 const APPSFLYER_DEV_KEY = Constants.expoConfig?.extra?.APPSFLYER_DEV_KEY;
@@ -67,6 +68,7 @@ function RootNavigator() {
   }
 
   return (
+    <KeyboardProvider>
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <Stack
         screenOptions={{
@@ -104,6 +106,7 @@ function RootNavigator() {
         />
       </Stack>
     </View>
+    </KeyboardProvider>
   );
 }
 
@@ -118,6 +121,16 @@ export default function RootLayout() {
 
   const { isDev } = useMode();
   const { isAndroid } = useDevice();
+
+  useEffect(() => {
+    const show = Keyboard.addListener('keyboardDidShow', () => {});
+    const hide = Keyboard.addListener('keyboardDidHide', () => {});
+
+    return () => {
+      show.remove();
+      hide.remove();
+    };
+  }, []);
 
   useEffect(() => {
     const options = {

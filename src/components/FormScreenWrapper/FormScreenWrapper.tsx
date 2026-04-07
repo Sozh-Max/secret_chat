@@ -9,8 +9,8 @@ export const FormScreenWrapper = ({ children }: { children: ReactNode }) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
-      // Смещение работает только когда клавиатура открыта
-      keyboardVerticalOffset={Platform.OS === 'android' && isKeyboardVisible ? 36 : 0}
+      keyboardVerticalOffset={isKeyboardVisible ? 0 : -50}
+      // keyboardVerticalOffset={Platform.OS === 'android' && isKeyboardVisible ? 36 : 0}
     >
       <View style={{ flex: 1 }}>
         {children}

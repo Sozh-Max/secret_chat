@@ -16,7 +16,7 @@ type Props = {
 
 export function PageSlideWrapper({
   children,
-  duration = 200,
+  duration = 300,
 }: Props) {
   const translateX = useSharedValue(width);
 

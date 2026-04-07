@@ -4,6 +4,8 @@ import { styles } from '@/src/screens/SettingsPage/content/header/styles';
 import { router } from 'expo-router';
 import { AnimatedPressBtn } from '@/src/components/AnimatedPressBtn/AnimatedPressBtn';
 import { SUB_MAIN_ICON_COLOR } from '@/src/constants/Colors';
+import { RippleButton } from '@/src/components/ripple-button/RippleButton';
+
 
 export const Header = () => {
   const handlePressBackBtn = () => {
@@ -12,12 +14,12 @@ export const Header = () => {
 
   return (
     <View style={styles.container}>
-      <AnimatedPressBtn
+      <RippleButton
         style={styles.button}
         onPress={handlePressBackBtn}
       >
         <IconBackBtn color={SUB_MAIN_ICON_COLOR} />
-      </AnimatedPressBtn>
+      </RippleButton>
       <Text style={styles.title}>App settings</Text>
     </View>
   )

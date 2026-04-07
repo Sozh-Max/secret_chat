@@ -23,7 +23,7 @@ module.exports = {
     android: {
       package: "com.itona.secretchat",
       permissions: ["NOTIFICATIONS", "SCHEDULE_EXACT_ALARM"],
-      softwareKeyboardLayoutMode: "adjustResize",
+      softwareKeyboardLayoutMode: "resize",
       // adaptiveIcon: {
       //   foregroundImage: "./assets/images/logo.png",
       // },
