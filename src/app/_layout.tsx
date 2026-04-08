@@ -27,6 +27,7 @@ import { PaymentsProvider } from '@/src/contexts/PaymentsContext';
 import * as SplashScreen from 'expo-splash-screen';
 import { FullscreenLoader } from '@/src/components/Loaders/FullscreenLoader/FullscreenLoader';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const GOOGLE_WEB_AUTH_CLIENT_ID = Constants.expoConfig?.extra?.GOOGLE_WEB_AUTH_CLIENT_ID;
 const APPSFLYER_DEV_KEY = Constants.expoConfig?.extra?.APPSFLYER_DEV_KEY;
@@ -37,7 +38,7 @@ GoogleSignin.configure({
   offlineAccess: true,
   forceCodeForRefreshToken: true,
 });
-
+console.log('GOOGLE_WEB_AUTH_CLIENT_ID', GOOGLE_WEB_AUTH_CLIENT_ID);
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
 function RootNavigator() {
@@ -161,16 +162,18 @@ export default function RootLayout() {
             <SafeAreaProvider>
               <ComplaintProvider>
                 <PaymentsProvider>
-                  <LinearGradient
-                    colors={['rgb(5, 4, 4)', 'rgb(22, 22, 22)']}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 0, y: 1 }}
-                    style={{ flex: 1 }}
-                  >
-                    <RootNavigator />
-                    <FullscreenLoader />
-                    <StatusBar style="light" />
-                  </LinearGradient>
+                  <GestureHandlerRootView>
+                    <LinearGradient
+                      colors={['rgb(5, 4, 4)', 'rgb(22, 22, 22)']}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 0, y: 1 }}
+                      style={{ flex: 1 }}
+                    >
+                      <RootNavigator />
+                      <FullscreenLoader />
+                      <StatusBar style="light" />
+                    </LinearGradient>
+                  </GestureHandlerRootView>
                 </PaymentsProvider>
               </ComplaintProvider>
             </SafeAreaProvider>

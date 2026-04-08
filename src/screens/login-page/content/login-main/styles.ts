@@ -1,27 +1,35 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-  wrapper: {
+  wrapperOuter: {
     flex: 1,
+    justifyContent: 'flex-end',
+    paddingBottom: 12,
+  },
+
+  wrapper: {
+    width: '100%',
+    alignSelf: 'center',
     flexDirection: 'column',
-    padding: 24,
-    paddingBottom: 16,
     justifyContent: 'flex-end',
     gap: 16,
-    position: 'relative',
+    paddingHorizontal: 24,
   },
+
   row: {
     justifyContent: 'space-between',
     alignItems: 'center',
     gap: 10,
     flexDirection: 'row',
   },
+
   line: {
     height: 1,
     backgroundColor: '#1e1e1e',
     marginVertical: 10,
     width: '39%',
   },
+
   text: {
     fontSize: 14,
     lineHeight: 20,
@@ -29,6 +37,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'NotoSans_400Regular',
   },
+
   emailInput: {
     width: '100%',
     paddingBottom: 10,
@@ -46,12 +55,14 @@ export const styles = StyleSheet.create({
     fontFamily: 'NotoSans_400Regular',
     fontSize: 14,
   },
+
   inputError: {
     borderBottomColor: '#ff0000',
     borderTopColor: '#ff0000',
     borderLeftColor: '#ff0000',
     borderRightColor: '#ff0000',
   },
+
   row_otp: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -59,15 +70,18 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 8,
   },
+
   col_otp: {
     width: '8%',
     flexGrow: 1,
   },
+
   text_otp: {
     fontFamily: 'NotoSans_400Regular',
     fontSize: 14,
-    color: '#373737'
+    color: '#373737',
   },
+
   input_otp: {
     paddingBottom: 10,
     paddingTop: 10,
@@ -86,6 +100,7 @@ export const styles = StyleSheet.create({
     fontFamily: 'NotoSans_400Regular',
     fontSize: 16,
   },
+
   text_enter: {
     textAlign: 'center',
     fontFamily: 'NotoSans_400Regular',
@@ -93,12 +108,14 @@ export const styles = StyleSheet.create({
     color: '#ffffff',
     marginBottom: 2,
   },
+
   text_email_code: {
     textAlign: 'center',
     fontFamily: 'NotoSans_400Regular',
     fontSize: 14,
     color: '#ffffff',
   },
+
   buttonBack: {
     width: 40,
     height: 40,

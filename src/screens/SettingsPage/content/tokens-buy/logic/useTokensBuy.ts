@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TOKEN_VALUES } from '@/src/screens/SettingsPage/content/tokens-buy/constants';
-import { Animated, StyleProp, TextStyle, ViewStyle } from 'react-native';
+import { StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { ITokenValue } from '@/src/screens/SettingsPage/content/tokens-buy/TokensBuy';
 import { PurchasesPackage } from 'react-native-purchases';
 import { usePayments } from '@/src/contexts/PaymentsContext';
@@ -27,23 +27,8 @@ export const useTokensBuy = () => {
 
   }, []);
 
-  const animatedValues = useRef<Record<number, Animated.Value>>(Object.fromEntries(
-    TOKEN_VALUES.map((val) => [val.id, new Animated.Value(val.id === active.id ? 1 : 0)])
-  )).current;
-
-  const animate = (value: ITokenValue) => {
-    TOKEN_VALUES.forEach((val) => {
-      Animated.timing(animatedValues[val.id], {
-        toValue: val.id === value.id ? 1 : 0,
-        duration: 200,
-        useNativeDriver: false,
-      }).start();
-    });
-  };
-
   const handlePress = (value: ITokenValue) => {
     setActive(value);
-    animate(value);
     setButtonStyle(value.buttonStyle);
     setButtonTextStyle(value.buttonTextStyle);
   };
@@ -61,7 +46,7 @@ export const useTokensBuy = () => {
   }
 
   return {
-    animatedValues,
+    active,
     handlePress,
     buttonStyle,
     buttonTextStyle,

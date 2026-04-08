@@ -58,8 +58,10 @@ module.exports = {
           icon: "./assets/images/notification-icon.png",
           color: "#ffffff",
         },
+
       ],
       "react-native-appsflyer",
+      "@react-native-google-signin/google-signin",
     ],
 
     experiments: {

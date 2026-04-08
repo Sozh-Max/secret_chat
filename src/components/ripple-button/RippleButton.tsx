@@ -21,7 +21,6 @@ export const RippleButton = ({
       }}
       style={({ pressed }) => [
         style || basicStyles.button,
-        // Эффект для iOS (так как android_ripple там не работает)
         Platform.OS === 'ios' && pressed && { backgroundColor: 'rgba(280, 280, 280, 0.15)' }
       ]}
     >

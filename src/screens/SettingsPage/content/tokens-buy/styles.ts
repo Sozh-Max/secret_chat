@@ -4,6 +4,10 @@ export const styles = StyleSheet.create({
   wrapper: {
     paddingBottom: 18,
   },
+  button: {
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
   container: {
     gap: 12,
     paddingBottom: 6,

@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { Animated, Pressable, View, StyleProp, ViewStyle, TextStyle } from 'react-native';
+import React from 'react';
+import { Pressable, View, StyleProp, ViewStyle, TextStyle } from 'react-native';
 
 import { CustomButton } from '@/src/components/CustomButton/CustomButton';
 import { CountItems } from '@/src/screens/SettingsPage/content/tokens-buy/content/count-items/CountItems';
 import { Price } from '@/src/screens/SettingsPage/content/tokens-buy/content/price/Price';
 import { OldPrice } from '@/src/screens/SettingsPage/content/tokens-buy/content/old-price/OldPrice';
 import { useTokensBuy } from '@/src/screens/SettingsPage/content/tokens-buy/logic/useTokensBuy';
-import { getAnimatedStyles } from '@/src/screens/SettingsPage/content/tokens-buy/logic/getAnimatedStyles';
 import { TOKEN_VALUES } from '@/src/screens/SettingsPage/content/tokens-buy/constants';
 
 import { styles } from '@/src/screens/SettingsPage/content/tokens-buy/styles';
-import { usePayments } from '@/src/contexts/PaymentsContext';
 import { PurchasesPackage } from 'react-native-purchases';
+import { MuiButton } from '@/src/screens/SettingsPage/content/tokens-buy/MuiButton';
 
 export interface ITokenValue {
   id: number;
@@ -29,7 +28,7 @@ export interface ITokenValue {
 
 export const TokensBuy = () => {
   const {
-    animatedValues,
+    active,
     handlePress,
     buttonStyle,
     buttonTextStyle,
@@ -45,17 +44,20 @@ export const TokensBuy = () => {
 
         {/*  if (!token) return null;*/}
 
-        {/*  const animatedStyle = getAnimatedStyles({*/}
-        {/*    token,*/}
-        {/*    animatedValues,*/}
-        {/*  });*/}
-
         {/*  return (*/}
         {/*    <Pressable*/}
         {/*      key={token.id}*/}
         {/*      onPress={() => handlePress(token)}*/}
         {/*    >*/}
-        {/*      <Animated.View style={[styles.item, animatedStyle]}>*/}
+        {/*      <View*/}
+        {/*        style={[*/}
+        {/*          styles.item,*/}
+        {/*          active.id === token.id && {*/}
+        {/*            backgroundColor: token.activeColorBg,*/}
+        {/*            borderColor: token.borderColor,*/}
+        {/*          },*/}
+        {/*        ]}*/}
+        {/*      >*/}
         {/*        <View style={styles.item_col}>*/}
         {/*          <CountItems item={token} />*/}
         {/*          {token.component}*/}
@@ -64,23 +66,28 @@ export const TokensBuy = () => {
         {/*          {token.oldPrice && <OldPrice value={token.oldPrice} />}*/}
         {/*          <Price value={offer.product.price} />*/}
         {/*        </View>*/}
-        {/*      </Animated.View>*/}
+        {/*      </View>*/}
         {/*    </Pressable>*/}
         {/*  );*/}
         {/*})}*/}
 
         {TOKEN_VALUES.map((token: ITokenValue) => {
-          const animatedStyle = getAnimatedStyles({
-            token,
-            animatedValues,
-          });
+          const isActive = active.id === token.id;
 
           return (
-            <Pressable
+            <MuiButton
               key={token.id}
               onPress={() => handlePress(token)}
+              styles={styles.button}
             >
-              <Animated.View style={[styles.item, animatedStyle]}>
+              <View
+                style={[
+                  styles.item,
+                  isActive && {
+                    backgroundColor: token.activeColorBg,
+                  },
+                ]}
+              >
                 <View style={styles.item_col}>
                   <CountItems item={token} />
                   {token.component}
@@ -89,8 +96,8 @@ export const TokensBuy = () => {
                   {token.oldPrice && <OldPrice value={token.oldPrice} />}
                   <Price value={token.price} />
                 </View>
-              </Animated.View>
-            </Pressable>
+              </View>
+            </MuiButton>
           );
         })}
       </View>

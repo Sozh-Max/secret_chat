@@ -35,6 +35,7 @@ export const LoginMain = () => {
     setEmailError,
     setLoadingSendEmail,
   } = useLoginPage();
+
   const { api } = useApi();
 
   const signIn = async () => {
@@ -60,7 +61,7 @@ export const LoginMain = () => {
             });
           }
 
-          setShowGlobalLoader(true)
+          setShowGlobalLoader(true);
         }
       }
     } catch (error: any) {
@@ -98,13 +99,15 @@ export const LoginMain = () => {
 
     setLoadingSendEmail(true);
 
-    api.sendAuthorizeByEmail(email.trim()).then((response) => {
-      if (response.ok) {
-        setCurrentStep(STEPS.OTP);
-      }
-    }).finally(() => {
-      setLoadingSendEmail(false);
-    });
+    api.sendAuthorizeByEmail(email.trim())
+      .then((response) => {
+        if (response.ok) {
+          setCurrentStep(STEPS.OTP);
+        }
+      })
+      .finally(() => {
+        setLoadingSendEmail(false);
+      });
   };
 
   const setEmailHandler = (value: string) => {
@@ -123,66 +126,79 @@ export const LoginMain = () => {
   };
 
   return (
-    <View style={{
-      flex: 1,
-      position: 'relative',
-    }}>
+    <View
+      style={{
+        flex: 1,
+        position: 'relative',
+      }}
+    >
       <VideoBackground />
+
       <LinearGradient
         colors={['rgba(0,0,0,1)', 'rgba(0,0,0,0.5)', 'transparent']}
         start={{ x: 0, y: 1 }}
         end={{ x: 0, y: 0 }}
-        style={{ flex: 1, position: 'absolute', zIndex: 2, top: 0, right: 0, left: 0, bottom: 0 }}
+        style={{
+          flex: 1,
+          position: 'absolute',
+          zIndex: 2,
+          top: 0,
+          right: 0,
+          left: 0,
+          bottom: 0,
+        }}
       >
-        <View style={styles.wrapper}>
-          {currentStep === STEPS.START && (
-            <>
-              <View>
-                <Text style={styles.text}>
-                  Enter your email to sign in
-                </Text>
-              </View>
-              <View>
-                <TextInput
-                  ref={emailRef}
-                  style={[styles.emailInput, emailError && styles.inputError]}
-                  placeholder={isEmailFocused ? "" : "email@example.com"}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  value={email}
-                  onChangeText={setEmailHandler}
-                  onFocus={handleEmailFocus}
-                  onBlur={handleEmailBlur}
-                  placeholderTextColor={MAIN_ICON_COLOR}
-                  cursorColor={MAIN_ICON_COLOR}
-                  textAlign={'center'}
-                />
-              </View>
-              <View>
-                <CustomButton
-                  text="Continue"
-                  handlePress={onContinuePress}
-                  disabled={loadingSendEmail}
-                />
-              </View>
-            </>
-          )}
+        <View style={styles.wrapperOuter}>
+          <View style={styles.wrapper}>
+            {currentStep === STEPS.START && (
+              <>
+                <View>
+                  <Text style={styles.text}>
+                    Enter your email to sign in
+                  </Text>
+                </View>
 
-          {currentStep === STEPS.OTP && (
-            <OtpContent />
-          )}
-          <View style={styles.row}>
-            <View style={styles.line} />
-            <Text style={styles.text}>
-              or
-            </Text>
-            <View style={styles.line} />
+                <View>
+                  <TextInput
+                    ref={emailRef}
+                    style={[styles.emailInput, emailError && styles.inputError]}
+                    placeholder={isEmailFocused ? '' : 'email@example.com'}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    value={email}
+                    onChangeText={setEmailHandler}
+                    onFocus={handleEmailFocus}
+                    onBlur={handleEmailBlur}
+                    placeholderTextColor={MAIN_ICON_COLOR}
+                    cursorColor={MAIN_ICON_COLOR}
+                    textAlign="center"
+                  />
+                </View>
+
+                <View>
+                  <CustomButton
+                    text="Continue"
+                    handlePress={onContinuePress}
+                    disabled={loadingSendEmail}
+                  />
+                </View>
+              </>
+            )}
+
+            {currentStep === STEPS.OTP && <OtpContent />}
+
+            <View style={styles.row}>
+              <View style={styles.line} />
+              <Text style={styles.text}>or</Text>
+              <View style={styles.line} />
+            </View>
+
+            <CustomButton
+              text="Continue with Google"
+              handlePress={signIn}
+            />
           </View>
-          <CustomButton
-            text="Continue with Google"
-            handlePress={signIn}
-          />
         </View>
       </LinearGradient>
     </View>
