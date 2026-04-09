@@ -17,14 +17,14 @@ export const MuiButton =({
       onPress={onPress}
       rippleColor="#ffffff66"
       underlayColor="#1565c0"
-      style={[styles, styles.button]}
+      style={[styles, currentStyles.button]}
     >
       {children}
     </RectButton>
   );
 }
 
-const styles = StyleSheet.create({
+const currentStyles = StyleSheet.create({
   screen: { flex: 1, justifyContent: 'center' },
   container: { alignItems: 'center' },
   button: {
