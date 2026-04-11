@@ -70,12 +70,12 @@ jobs:
 
           process.stdout.write(url);
           ")
-          echo \"Detected URL: $URL\"
-          if [ -z \"$URL\" ]; then
-            echo \"Failed to extract staging build URL from build id\"
+          echo "Detected URL: $URL"
+          if [ -z "$URL" ]; then
+            echo "Failed to extract staging build URL from build id"
             exit 1
           fi
-          echo \"build_page_url=$URL\" >> \"$GITHUB_OUTPUT\"
+          echo "build_page_url=$URL" >> "$GITHUB_OUTPUT"
 
   publish-pages:
     needs: build-staging
