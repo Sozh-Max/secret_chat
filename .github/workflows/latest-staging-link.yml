@@ -44,27 +44,38 @@ jobs:
         run: eas build --platform android --profile preview --non-interactive
 
       - name: Read latest EAS build list
-        run: eas build:list --platform android --limit 5 --json > latest-builds.json
+        run: eas build:list --platform android --limit 10 --json > latest-builds.json
 
       - name: Show latest builds JSON
         run: cat latest-builds.json
 
-      - name: Extract latest build page URL
+      - name: Extract latest staging build page URL
         id: extract
         shell: bash
         run: |
           URL=$(node -e "
           const fs = require('fs');
           const data = JSON.parse(fs.readFileSync('latest-builds.json', 'utf8'));
-          const item = data.find(x => x.status === 'finished' || x.status === 'new' || x.status === 'in-queue') || data[0] || {};
-          process.stdout.write(item.buildDetailsPageUrl || '');
+
+          const item =
+            data.find(x =>
+              (x.buildProfile === 'preview' || x.profile === 'preview') &&
+              x.platform === 'android'
+            ) || data[0] || {};
+
+          const id = item.id || item.buildId || '';
+          const url = id
+            ? 'https://expo.dev/accounts/sozh_max/projects/secret-chat/builds/' + id
+            : '';
+
+          process.stdout.write(url);
           ")
-          echo "Detected URL: $URL"
-          if [ -z "$URL" ]; then
-            echo "Failed to extract buildDetailsPageUrl"
+          echo \"Detected URL: $URL\"
+          if [ -z \"$URL\" ]; then
+            echo \"Failed to extract staging build URL from build id\"
             exit 1
           fi
-          echo "build_page_url=$URL" >> "$GITHUB_OUTPUT"
+          echo \"build_page_url=$URL\" >> \"$GITHUB_OUTPUT\"
 
   publish-pages:
     needs: build-staging
