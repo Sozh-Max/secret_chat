@@ -1,0 +1,18 @@
+name: Build staging manual
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        type: string
+        required: false
+        default: "Manual staging build"
+
+jobs:
+  build_android_staging:
+    name: Build Android staging
+    type: build
+    params:
+      platform: android
+      profile: preview
+      message: ${{ inputs.message }}

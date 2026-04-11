@@ -221,3 +221,18 @@ npm install jest @types/jest --save-dev
 - Поддержка локализации (i18n)
 
 - Улучшенный UI/UX
+
+
+## EAS Manual builds
+
+- prod
+
+```bash
+eas workflow:run build-production-manual.yml
+```
+
+- preview
+
+```bash
+eas workflow:run build-staging-manual.yml
+```
