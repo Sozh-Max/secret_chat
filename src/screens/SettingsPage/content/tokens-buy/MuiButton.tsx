@@ -15,7 +15,7 @@ export const MuiButton =({
 
     <RectButton
       onPress={onPress}
-      rippleColor='rgba(255, 255, 255, 0.15)'
+      rippleColor='rgba(255, 255, 255, 0.05)'
       //underlayColor="#1565c0"
       style={[styles, currentStyles.button]}
     >
