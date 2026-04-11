@@ -41,22 +41,30 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Start EAS production build
-        run: |
-          eas build --platform android --profile production --non-interactive --json > build-production.json
+        run: eas build --platform android --profile production --non-interactive
 
-      - name: Show build json
-        run: cat build-production.json
+      - name: Read latest EAS build list
+        run: eas build:list --platform android --limit 5 --json > latest-builds.json
 
-      - name: Get latest build URL
+      - name: Show latest builds JSON
+        run: cat latest-builds.json
+
+      - name: Extract latest build page URL
         id: extract
+        shell: bash
         run: |
-          URL=$(eas build:list --platform android --limit 1 --json | node -e "
-            const data = JSON.parse(require('fs').readFileSync(0, 'utf-8'));
-            const url = data[0]?.buildDetailsPageUrl || data[0]?.webUrl || '';
-            console.log(url);
+          URL=$(node -e "
+          const fs = require('fs');
+          const data = JSON.parse(fs.readFileSync('latest-builds.json', 'utf8'));
+          const item = data.find(x => x.status === 'finished' || x.status === 'new' || x.status === 'in-queue') || data[0] || {};
+          process.stdout.write(item.buildDetailsPageUrl || '');
           ")
-          echo "URL=$URL"
-          echo "build_page_url=$URL" >> $GITHUB_OUTPUT
+          echo "Detected URL: $URL"
+          if [ -z "$URL" ]; then
+            echo "Failed to extract buildDetailsPageUrl"
+            exit 1
+          fi
+          echo "build_page_url=$URL" >> "$GITHUB_OUTPUT"
 
   publish-pages:
     needs: build-production
