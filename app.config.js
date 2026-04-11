@@ -1,8 +1,10 @@
+const pkg = require("./package.json");
+
 module.exports = {
   expo: {
     name: "Secret Chat",
     slug: "secret-chat",
-    version: "1.0.0",
+    version: pkg.version, // versionName
 
     orientation: "portrait",
     icon: "./assets/images/splash-icon.png",

@@ -1,0 +1,69 @@
+name: Smart deploy (staging)
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      need_build: ${{ steps.filter.outputs.need_build }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect changes
+        id: filter
+        run: |
+          echo "Checking changes..."
+
+          CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
+          echo "$CHANGED_FILES"
+
+          NEED_BUILD=false
+
+          for file in $CHANGED_FILES; do
+            if [[ "$file" == android/* ]] ||
+               [[ "$file" == ios/* ]] ||
+               [[ "$file" == app.config.js ]] ||
+               [[ "$file" == eas.json ]] ||
+               [[ "$file" == package.json ]] ||
+               [[ "$file" == package-lock.json ]]; then
+              NEED_BUILD=true
+            fi
+          done
+
+          echo "need_build=$NEED_BUILD" >> $GITHUB_OUTPUT
+
+  deploy:
+    needs: detect-changes
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm ci
+
+      - uses: expo/expo-github-action@v8
+        with:
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Build (preview)
+        if: needs.detect-changes.outputs.need_build == 'true'
+        run: |
+          echo "Running BUILD..."
+          eas build --platform android --profile preview --non-interactive
+
+      - name: Update (preview)
+        if: needs.detect-changes.outputs.need_build != 'true'
+        run: |
+          echo "Running UPDATE..."
+          eas update --branch staging --environment preview --non-interactive
