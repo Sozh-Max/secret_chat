@@ -68,13 +68,22 @@ module.exports = {
       typedRoutes: true,
     },
 
+    updates: {
+      url: "https://u.expo.dev/61e342f3-7340-43ec-bcac-56835f1e7468"
+    },
+    runtimeVersion: {
+      policy: "appVersion"
+    },
+
     extra: {
-      GOOGLE_ANDROID_AUTH_CLIENT_ID: process.env.GOOGLE_ANDROID_AUTH_CLIENT_ID,
       GOOGLE_WEB_AUTH_CLIENT_ID: process.env.GOOGLE_WEB_AUTH_CLIENT_ID,
       REVENUE_CAT_API_KEY: process.env.REVENUE_CAT_API_KEY,
       APPSFLYER_DEV_KEY: process.env.APPSFLYER_DEV_KEY,
       STORAGE_URL: process.env.STORAGE_URL,
       ENV: process.env.MODE || "production",
+      eas: {
+        projectId: "61e342f3-7340-43ec-bcac-56835f1e7468"
+      }
     },
   },
 };

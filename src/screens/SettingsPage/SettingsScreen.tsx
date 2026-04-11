@@ -35,7 +35,7 @@ export const SettingsScreen = () => (
           <TemplateContent
             title="Star purchase"
           >
-            <TokensBuy/>
+            <TokensBuy />
           </TemplateContent>
 
           <TemplateContent

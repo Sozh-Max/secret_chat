@@ -14,14 +14,14 @@ export const RippleButton = ({
     <Pressable
       onPress={onPress}
       android_ripple={{
-        color: 'rgba(280, 280, 280, 0.15)',
+        color: 'rgba(255, 255, 255, 0.15)',
         borderless: true,
         radius: 25,
         foreground: true,
       }}
       style={({ pressed }) => [
         style || basicStyles.button,
-        Platform.OS === 'ios' && pressed && { backgroundColor: 'rgba(280, 280, 280, 0.15)' }
+        Platform.OS === 'ios' && pressed && { backgroundColor: 'rgba(255, 255, 255, 0.15)' }
       ]}
     >
       {children}
