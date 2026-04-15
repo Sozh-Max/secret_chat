@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect, useRef, useState, useCallback } from 'react';
-import { FlatList, NativeSyntheticEvent, NativeScrollEvent, Platform } from 'react-native';
+import { FlatList, NativeSyntheticEvent, NativeScrollEvent, Platform, ActivityIndicator, View } from 'react-native';
 import { ImageBackground } from 'expo-image';
 
 import { styles } from '@/src/screens/ChatPage/content/chat-wrapper/styles';
@@ -17,6 +17,7 @@ import {
 import { collectDialogImageUrls, prefetchChatImages } from '@/src/utils/chat-image-cache';
 import type { IDialogItem } from '@/src/contexts/GlobalContext';
 import Constants from 'expo-constants';
+import { MAIN_ICON_COLOR } from '@/src/constants/Colors';
 
 const STORAGE_URL = Constants.expoConfig?.extra?.STORAGE_URL;
 const PAGE_SIZE = 8;
@@ -119,11 +120,20 @@ export const ChatWrapper = ({ id }: IdTypeProps) => {
     return () => clearTimeout(t);
   }, [snapshotReady, isKeyboardVisible]);
 
+  const [loadingMore, setLoadingMore] = useState(false);
+
   const loadMore = useCallback(() => {
     if (messagesToRender.length < currentDialog.length) {
+      setLoadingMore(true);
       setPage((prev) => prev + 1);
     }
   }, [messagesToRender.length, currentDialog.length]);
+
+  useEffect(() => {
+    if (loadingMore) {
+      setLoadingMore(false);
+    }
+  }, [messagesToRender.length]);
 
   const keyExtractor = useCallback((item: IDialogItem) => String(item.msgId), []);
 
@@ -152,8 +162,18 @@ export const ChatWrapper = ({ id }: IdTypeProps) => {
   }, [dialog?.isBlocked, dialog?.isComplaint, id, showComplaintChat]);
 
   const footer = useMemo(() => {
-    return <SystemMessage id={id} isImage message={dialog?.description} />;
-  }, [dialog?.description, id]);
+    return (
+      <>
+        <SystemMessage id={id} isImage message={dialog?.description} />
+
+        {loadingMore && (
+          <View style={{ paddingVertical: 12, alignItems: 'center' }}>
+            <ActivityIndicator size={30} color={MAIN_ICON_COLOR} />
+          </View>
+        )}
+      </>
+    );
+  }, [dialog?.description, id, loadingMore]);
 
   if (!snapshotReady) {
     return (
