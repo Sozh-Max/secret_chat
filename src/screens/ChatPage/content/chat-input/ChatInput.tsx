@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { MAIN_ICON_COLOR, DISMISS_ICON_COLOR, SUB_MAIN_ICON_COLOR } from '@/src/constants/Colors';
 import { AnimatedPressBtn } from '@/src/components/AnimatedPressBtn/AnimatedPressBtn';
 import { IdTypeProps } from '@/src/interfaces/global';
-import { useGlobal } from '@/src/contexts/GlobalContext';
+import { AssistantModelType, useGlobal } from '@/src/contexts/GlobalContext';
 import { styles } from '@/src/screens/ChatPage/content/chat-input/styles';
 import { useUser } from '@/src/contexts/UserContext';
 import { CLEAR_HISTORY_SYMBOLS } from '@/src/constants/global';
@@ -40,7 +40,7 @@ const ChatInput = ({
 
 
   const selectPicture = async () => {
-    if (isBlocked || globalLoading || !dialog?.verified) return;
+    if (isBlocked || globalLoading || dialog?.type !== AssistantModelType.LLVA) return;
     try {
       const asset = await pickImage();
       if (asset) {
@@ -141,7 +141,7 @@ const ChatInput = ({
           style={[styles.button, styles.button_start]}
           onPress={selectPicture}
         >
-          <IconImage color={(isBlocked || !dialog?.verified) ? DISMISS_ICON_COLOR : MAIN_ICON_COLOR} />
+          <IconImage color={(isBlocked || dialog?.type !== AssistantModelType.LLVA) ? DISMISS_ICON_COLOR : MAIN_ICON_COLOR} />
         </AnimatedPressBtn>
       )}
 

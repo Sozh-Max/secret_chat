@@ -27,6 +27,11 @@ export interface IDialogItem {
   createTime: number;
 }
 
+export enum AssistantModelType {
+  LLVA = 'llva',
+  LLM = 'llm',
+}
+
 export interface IDialog {
   dialog: IDialogItem[];
   id: AgentId;
@@ -39,6 +44,7 @@ export interface IDialog {
   isNotification?: boolean;
   isNotificationSend?: boolean;
   verified: boolean;
+  type: AssistantModelType,
 }
 
 export type IDialogs = { [key in AgentId]?: IDialog }
@@ -71,6 +77,7 @@ export interface IDialogPreview {
   isNotification?: boolean;
   isNotificationSend?: boolean;
   verified: boolean;
+  type: AssistantModelType,
 }
 
 const refreshChats = ({
@@ -101,6 +108,7 @@ const refreshChats = ({
       isNotification: dialog.isNotification || false,
       isNotificationSend: dialog.isNotificationSend || false,
       verified: dialog.verified || false,
+      type: dialog.type,
     };
   }).sort((a, b) => b.lastMessageTime - a.lastMessageTime));
 }
@@ -151,6 +159,7 @@ export const GlobalProvider = (
             hasVideo: Boolean(obj.vid_count),
             description: obj.description ?? '',
             verified: obj.verified ?? false,
+            type: obj.type,
             lastMsgId: 0,
           };
         }

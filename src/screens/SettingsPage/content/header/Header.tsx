@@ -2,7 +2,6 @@ import { View, Text } from 'react-native';
 import { IconBackBtn } from '@/src/components/icons/IconBackBtn';
 import { styles } from '@/src/screens/SettingsPage/content/header/styles';
 import { router } from 'expo-router';
-import { AnimatedPressBtn } from '@/src/components/AnimatedPressBtn/AnimatedPressBtn';
 import { SUB_MAIN_ICON_COLOR } from '@/src/constants/Colors';
 import { RippleButton } from '@/src/components/ripple-button/RippleButton';
 

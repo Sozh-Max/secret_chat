@@ -132,12 +132,12 @@ const Header = ({
           </AnimatedPressBtn>
         )}
 
-      <AnimatedPressBtn
-        style={styles.button_mini}
-        onPress={handleComplaint}
-      >
-        <IconComplaint color={isActiveComplaint ? MAIN_ICON_COLOR : DISMISS_ICON_COLOR}/>
-      </AnimatedPressBtn>
+      {/*<AnimatedPressBtn*/}
+      {/*  style={styles.button_mini}*/}
+      {/*  onPress={handleComplaint}*/}
+      {/*>*/}
+      {/*  <IconComplaint color={isActiveComplaint ? MAIN_ICON_COLOR : DISMISS_ICON_COLOR}/>*/}
+      {/*</AnimatedPressBtn>*/}
     </View>
   );
 };

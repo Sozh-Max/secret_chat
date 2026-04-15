@@ -35,14 +35,14 @@ export const SettingsScreen = () => (
           <TemplateContent
             title="Star purchase"
           >
-            {/*<TokensBuy />*/}
+            <TokensBuy />
           </TemplateContent>
 
           <TemplateContent
             title="Account"
             description="To ensure privacy, message history is stored only on this device, we do not collect or store this type of data. Certain hidden features are available depending on the user's account level"
           >
-            {/*<log-account />*/}
+            {/*<LogAccount />*/}
             <AccountData/>
           </TemplateContent>
 

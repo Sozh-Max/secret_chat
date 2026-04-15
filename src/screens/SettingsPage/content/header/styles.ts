@@ -13,6 +13,7 @@ export const styles = StyleSheet.create({
   },
   title: {
     fontSize: 15,
+    marginLeft: 13,
     fontFamily: 'NotoSans_600SemiBold',
     color: '#fff',
   }
